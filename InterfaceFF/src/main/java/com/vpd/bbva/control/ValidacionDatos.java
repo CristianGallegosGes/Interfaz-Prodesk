@@ -257,6 +257,7 @@ public class ValidacionDatos {
 			if (errorPosicionD == "" && errorDatosO == "" && errorDatosD == "" && errorTipoD == "") {
 				log.info("Procesar linea: " + linea
 						+ " -> Metodo que validara si es el mismo consecutivo de carta y que los datos de carta y factura sean los mismos, para invocar el metodo de proceso a BD");
+				//Validacion de carta consecutiva y facturas
 				escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadena, 123456789, 22334455);
 			}
 		}
