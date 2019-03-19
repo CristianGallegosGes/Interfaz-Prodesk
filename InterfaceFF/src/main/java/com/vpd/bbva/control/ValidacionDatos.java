@@ -79,7 +79,7 @@ public class ValidacionDatos {
 				totalRegistroError++;
 			}
 			if (validarLongitudLineas.size() == 0) {
-				validarDatosO = validarDatosObligatorios(cadena);
+				validarDatosO = validarDatosObligatorios(cadena, linea);
 				for (Integer j : validarDatosO.keySet()) {
 					errorDatosO = validarDatosO.values().toString();
 					log.error("Identificador de error(Datos Obligatorios):" + j + " Descripcion de error: "
@@ -88,7 +88,7 @@ public class ValidacionDatos {
 				}
 
 				if (validarLongitudLineas.size() == 0 && validarDatosO.size() == 0) {
-					validarDatosD = validarDatosDependientes(cadena);
+					validarDatosD = validarDatosDependientes(cadena, linea);
 					for (Integer j : validarDatosD.keySet()) {
 						errorDatosD = validarDatosD.values().toString();
 						log.error("Identificador de error(Dependencia Campos):" + j + " Descripcion de error: "
@@ -98,7 +98,7 @@ public class ValidacionDatos {
 				}
 
 				if (validarLongitudLineas.size() == 0 && validarDatosO.size() == 0 && validarDatosD.size() == 0) {
-					validarTipoDato = validarTipoDato(cadena);
+					validarTipoDato = validarTiposDato(cadena, linea);
 					for (Integer j : validarTipoDato.keySet()) {
 						errorTipoD = validarTipoDato.values().toString();
 						log.error("Identificador de error(Tipo Dato):" + j + " Descripcion de error: "
@@ -324,141 +324,141 @@ public class ValidacionDatos {
 			log.info("Longitud correcta de caracteres");
 		} else {
 			log.info("Longitud incorrecta de caracteres");
-			validaPosicionDato.put(1, "La longuitud estalecida no corresponde en la linea: " + linea);
+			validaPosicionDato.put(1, "La longuitud estalecida de caracteres no corresponde en la linea: " + linea);
 		}
 
 		return validaPosicionDato;
 	}
 
-	public static HashMap<Integer, String> validarDatosObligatorios(String cadena) {
+	public static HashMap<Integer, String> validarDatosObligatorios(String cadena, int linea) {
 
 		log.info("Validar Datos Obligatorios de linea");
 		HashMap<Integer, String> validaCamposObli = new HashMap<Integer, String>();
 		try {
 			if (cadena.substring(0, 10).trim().equals("")) {
-				validaCamposObli.put(1, "El campo \"CONSECUTIVO ARCHIVO\" es obligatorio");
+				validaCamposObli.put(1, "El campo \"CONSECUTIVO ARCHIVO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(28, 30).trim().equals("")) {
-				validaCamposObli.put(2, "El campo \"TIPO REGISTRO\" es obligatorio");
+				validaCamposObli.put(2, "El campo \"TIPO REGISTRO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(30, 34).trim().equals("")) {
-				validaCamposObli.put(3, "El campo \"CONSECUTIVO NOTA/CONCEPTO\" es obligatorio");
+				validaCamposObli.put(3, "El campo \"CONSECUTIVO NOTA/CONCEPTO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(34, 36).trim().equals("")) {
-				validaCamposObli.put(4, "El campo \"TIPO CARTA\" es obligatorio");
+				validaCamposObli.put(4, "El campo \"TIPO CARTA\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(36, 38).trim().equals("")) {
-				validaCamposObli.put(5, "El campo \"TIPO PAGO\" es obligatorio");
+				validaCamposObli.put(5, "El campo \"TIPO PAGO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(38, 48).trim().equals("")) {
-				validaCamposObli.put(6, "El campo \"NUMERO DE PROVEEDOR\" es obligatorio");
+				validaCamposObli.put(6, "El campo \"NUMERO DE PROVEEDOR\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(48, 52).trim().equals("")) {
-				validaCamposObli.put(7, "El campo \"SOCIEDAD RECEPTORA\" es obligatorio");
+				validaCamposObli.put(7, "El campo \"SOCIEDAD RECEPTORA\" es obligatorio en la linea:" + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(52, 102).trim().equals("")) {
-				validaCamposObli.put(8, "El campo \"GLG\" es obligatorio");
+				validaCamposObli.put(8, "El campo \"GLG\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(157, 160).trim().equals("")) {
-				validaCamposObli.put(9, "El campo \"MONEDA\" es obligatorio");
+				validaCamposObli.put(9, "El campo \"MONEDA\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(182, 192).trim().equals("")) {
-				validaCamposObli.put(10, "El campo \"CUENTA GPS(CUENTA DE GASTO)\" es obligatorio");
+				validaCamposObli.put(10, "El campo \"CUENTA GPS(CUENTA DE GASTO)\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(192, 202).trim().equals("")) {
-				validaCamposObli.put(11, "El campo \"USUARIO CREADOR DE CARTA\" es obligatorio");
+				validaCamposObli.put(11, "El campo \"USUARIO CREADOR DE CARTA\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(202, 206).trim().equals("") || cadena.substring(202, 206).trim().equals("0")) {
-				validaCamposObli.put(12, "El campo \"CENTRO DE COSTOS\" es obligatorio");
+				validaCamposObli.put(12, "El campo \"CENTRO DE COSTOS\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(206, 306).trim().equals("")) {
-				validaCamposObli.put(13, "El campo \"DESCRIPCIÓN DEL SERVICIO\" es obligatorio");
+				validaCamposObli.put(13, "El campo \"DESCRIPCIÓN DEL SERVICIO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(306, 316).trim().equals("")) {
-				validaCamposObli.put(14, "El campo \"FECHA INICIO SERVICIO\" es obligatorio");
+				validaCamposObli.put(14, "El campo \"FECHA INICIO SERVICIO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(316, 326).trim().equals("")) {
-				validaCamposObli.put(15, "El campo \"FECHA FIN SERVICIO\" es obligatorio");
+				validaCamposObli.put(15, "El campo \"FECHA FIN SERVICIO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(326, 328).trim().equals("")) {
-				validaCamposObli.put(16, "El campo \"ESTADO\" es obligatorio");
+				validaCamposObli.put(16, "El campo \"ESTADO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(328, 340).trim().equals("")) {
-				validaCamposObli.put(17, "El campo \"IMPORTE UNITARIO\" es obligatorio");
+				validaCamposObli.put(17, "El campo \"IMPORTE UNITARIO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(340, 353).trim().equals("")) {
-				validaCamposObli.put(18, "El campo \"NÚMERO DE UNIDADES\" es obligatorio");
+				validaCamposObli.put(18, "El campo \"NÚMERO DE UNIDADES\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(353, 365).trim().equals("")) {
-				validaCamposObli.put(19, "El campo \"IVA\" es obligatorio");
+				validaCamposObli.put(19, "El campo \"IVA\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(427, 457).trim().equals("")) {
 				validaCamposObli.put(20,
-						"El campo \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\"");
+						"El campo \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(457, 467).trim().equals("")) {
 				validaCamposObli.put(21,
-						"El campo \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\"");
+						"El campo \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(467, 468).trim().equals("")) {
-				validaCamposObli.put(22, "El campo \"VIA DE PAGO\" es obligatorio");
+				validaCamposObli.put(22, "El campo \"VIA DE PAGO\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(468, 488).trim().equals("")) {
-				validaCamposObli.put(23, "El campo \"CUENTA BANCARIA\" es obligatorio");
+				validaCamposObli.put(23, "El campo \"CUENTA BANCARIA\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(518, 521).trim().equals("")) {
-				validaCamposObli.put(24, "El campo \"ESTATUS FACTURA\" Factura es obligatorio");
+				validaCamposObli.put(24, "El campo \"ESTATUS FACTURA\" Factura es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(521, 524).trim().equals("")) {
-				validaCamposObli.put(25, "El campo \"APLICATIVO ORIGEN\" es obligatorio");
+				validaCamposObli.put(25, "El campo \"APLICATIVO ORIGEN\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 		} catch (StringIndexOutOfBoundsException e) {
@@ -469,134 +469,129 @@ public class ValidacionDatos {
 		return validaCamposObli;
 	}
 
-	public static HashMap<Integer, String> validarDatosDependientes(String cadena) {
+	public static HashMap<Integer, String> validarDatosDependientes(String cadena, int linea) {
 
 		log.info("Validar Datos Dependientes de linea");
 		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
 
-		if (!(cadena.substring(34, 36).trim().equals("CG") || cadena.substring(30, 34).trim().equals("CI"))) {
-			validaCamposDepen.put(1, "El campo \"TIPO CARTA\", solo acepta valores CG o CI");
-			return validaCamposDepen;
-		} // No se debe de contemplar
-
 		boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 		if (validarNuPep) {
 			validaCamposDepen.put(2,
-					"El valor del campo \"NUMERO DE PEP\" es incorrecto, ya que no cuemple con el formato \"00000000-000\"");
+					"El valor del campo \"NUMERO DE PEP\" es incorrecto, ya que no cuemple con el formato \"00000000-000\" en la linea: " + linea);
 		}
 
 		if ((!cadena.substring(174, 182).trim().equals(""))
 				&& cadena.substring(174, 182).trim() == cadena.substring(38, 48).trim()) {
 			validaCamposDepen.put(3,
-					"El valor del campo \"RECEPTOR ALTERNATIVO\" debe de ser diferente al valor de \"NUMERO DE PROVEEDOR\"");
+					"El valor del campo \"RECEPTOR ALTERNATIVO\" debe de ser diferente al valor de \"NUMERO DE PROVEEDOR\" en la linea: " + linea);
 		}
 
 		boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(), cadena.substring(316, 326).trim());
 		if (validarFechaFin) {
 			validaCamposDepen.put(4,
-					"El valor del campo \"FECHA FIN SERVICIO\" debe ser mayor a la \"FECHA INICIO SERVICIO\"");
+					"El valor del campo \"FECHA FIN SERVICIO\" debe ser mayor a la \"FECHA INICIO SERVICIO\" en la linea: " + linea);
 		}
 
 		if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
-			validaCamposDepen.put(5, "El valor: SI, del campo \"COMPROBACION\" solo aplica para \"TIPO REGISTRO: NF\"");
+			validaCamposDepen.put(5, "El valor: SI, del campo \"COMPROBACION\" solo aplica para \"TIPO REGISTRO: NF\" en la linea: " + linea);
 		}
 
 		return validaCamposDepen;
 	}
 
-	public static HashMap<Integer, String> validarTipoDato(String cadena) {
+	public static HashMap<Integer, String> validarTiposDato(String cadena, int linea) {
 
 		log.info("Validar Tipo de Dato de linea");
 		HashMap<Integer, String> validaTipoDato = new HashMap<Integer, String>();
 		try {
 			if (!(isNumeric(cadena.substring(0, 10).trim()))) {
-				validaTipoDato.put(1, "El campo \"CONSECUTIVO ARCHIVO\" no es numerico.");
+				validaTipoDato.put(1, "El campo \"CONSECUTIVO ARCHIVO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(10, 19).trim().equals("") && !(isNumeric(cadena.substring(10, 19).trim()))) {
-				validaTipoDato.put(2, "El campo \"NUMERO DE CARTA\" no es numerico.");
+				validaTipoDato.put(2, "El campo \"NUMERO DE CARTA\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(19, 28).trim().equals("") && !(isNumeric(cadena.substring(19, 28).trim()))) {
-				validaTipoDato.put(3, "El campo \"NUMERO DE FACTURA\" no es numerico.");
+				validaTipoDato.put(3, "El campo \"NUMERO DE FACTURA\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isNumeric(cadena.substring(30, 34).trim()))) {
-				validaTipoDato.put(4, "El campo \"CONSECUTIVO NOTA\\CONCEPTO\" no es numerico.");
+				validaTipoDato.put(4, "El campo \"CONSECUTIVO NOTA\\CONCEPTO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isNumeric(cadena.substring(38, 48).trim()))) {
-				validaTipoDato.put(5, "El campo \"NUMERO DE PROVEEDOR\" no es numerico.");
+				validaTipoDato.put(5, "El campo \"NUMERO DE PROVEEDOR\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(164, 174).trim().equals("") && !(isNumeric(cadena.substring(164, 174).trim()))) {
-				validaTipoDato.put(6, "El campo \"CONTRATO\" no es numerico.");
+				validaTipoDato.put(6, "El campo \"CONTRATO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(174, 182).trim().equals("") && !(isNumeric(cadena.substring(174, 182).trim()))) {
-				validaTipoDato.put(7, "El campo \"RECEPTOR ALTERNATIVO\" no es numerico.");
+				validaTipoDato.put(7, "El campo \"RECEPTOR ALTERNATIVO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isNumeric(cadena.substring(182, 192).trim()))) {
-				validaTipoDato.put(8, "El campo \"CUENTA GPS\" no es numerico.");
+				validaTipoDato.put(8, "El campo \"CUENTA GPS\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isNumeric(cadena.substring(326, 328).trim()))) {
-				validaTipoDato.put(9, "El campo \"ESTADO\" no es numerico.");
+				validaTipoDato.put(9, "El campo \"ESTADO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isDecimal(cadena.substring(328, 340).trim()))) {
-				validaTipoDato.put(10, "El campo \"IMPORTE UNITARIO\" no es numerico.");
+				validaTipoDato.put(10, "El campo \"IMPORTE UNITARIO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isDecimal(cadena.substring(340, 353).trim()))) {
-				validaTipoDato.put(11, "El campo \"NUMERO DE UNIDADES\" no es numerico.");
+				validaTipoDato.put(11, "El campo \"NUMERO DE UNIDADES\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(365, 377).trim().equals("") && !(isDecimal(cadena.substring(365, 377).trim()))) {
-				validaTipoDato.put(12, "El campo \"ISR RETENIDO\" no es numerico.");
+				validaTipoDato.put(12, "El campo \"ISR RETENIDO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(377, 389).trim().equals("") && !(isDecimal(cadena.substring(377, 389).trim()))) {
-				validaTipoDato.put(13, "El campo \"IVA RETENIDO\" no es numerico.");
+				validaTipoDato.put(13, "El campo \"IVA RETENIDO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(389, 401).trim().equals("") && !(isDecimal(cadena.substring(389, 401).trim()))) {
-				validaTipoDato.put(14, "El campo \"IMPUESTO CEDULAR\" no es numerico.");
+				validaTipoDato.put(14, "El campo \"IMPUESTO CEDULAR\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(401, 413).trim().contentEquals("")
 					&& !(isDecimal(cadena.substring(401, 413).trim()))) {
-				validaTipoDato.put(15, "El campo \"OTROS IMPUESTOS\" no es numerico.");
+				validaTipoDato.put(15, "El campo \"OTROS IMPUESTOS\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(413, 425).trim().equals("") && !(isDecimal(cadena.substring(413, 425).trim()))) {
-				validaTipoDato.put(16, "El campo \"DESCUENTO\" no es numerico.");
+				validaTipoDato.put(16, "El campo \"DESCUENTO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!(isNumeric(cadena.substring(468, 488).trim()))) {
-				validaTipoDato.put(17, "El campo \"CUENTA BANCARIA\" no es numerico.");
+				validaTipoDato.put(17, "El campo \"CUENTA BANCARIA\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
 			if (!cadena.substring(498, 518).trim().equals("") && !(isNumeric(cadena.substring(498, 518).trim()))) {
-				validaTipoDato.put(18, "El campo \"NUMERO DE ACTIVO\" no es numerico.");
+				validaTipoDato.put(18, "El campo \"NUMERO DE ACTIVO\" no es numerico en la linea: " + linea);
 				return validaTipoDato;
 			}
 
