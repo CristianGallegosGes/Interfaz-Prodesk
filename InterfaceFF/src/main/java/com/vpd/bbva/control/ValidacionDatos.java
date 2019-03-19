@@ -300,7 +300,7 @@ public class ValidacionDatos {
 			}
 
 			FileWriter fw = new FileWriter(file, true);
-			fw.write(cadena.substring(0, 10) + numCarta + numFactura + cadena.substring(28, 524) + "\r\n");
+			fw.write(cadena + " [Numero de carta: " + numCarta + ", Numero de factura: " + numFactura + "]" + "\r\n");
 			fw.close();
 		} catch (IOException e) {
 			e.printStackTrace();
