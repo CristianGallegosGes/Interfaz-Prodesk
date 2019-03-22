@@ -42,7 +42,7 @@ public class ValidacionDatos {
 		BufferedReader br = new BufferedReader(new InputStreamReader(file, "UTF8"));
 		String cadena = null;
 
-		ArrayList<BeanFF> beanFF = new ArrayList<BeanFF>();
+		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
 		BeanFF registroBeanFF = null;
 		HashMap<Integer, String> validarLongitudLineas = null;
 		HashMap<Integer, String> validarDatosO = null;
@@ -58,6 +58,7 @@ public class ValidacionDatos {
 		String nuevoNombreArc = "LOG" + nombreArchivo;
 
 		while ((cadena = br.readLine()) != null) {
+			ArrayList<BeanFF> beanFFEnvioBD = new ArrayList<BeanFF>();
 			String errorPosicionD = "";
 			String errorDatosO = "";
 			String errorDatosD = "";
@@ -223,7 +224,7 @@ public class ValidacionDatos {
 
 								registroBeanFF.setEstatusF(cadena.substring(518, 521).trim());
 								registroBeanFF.setAplicativoOrg(cadena.substring(521, 524).trim());
-								beanFF.add(registroBeanFF);
+								beanFFDatosCorrectos.add(registroBeanFF);
 								totalRegistroCorrectos++;
 							} else {
 								System.out.println(errorTipoD);
@@ -241,7 +242,7 @@ public class ValidacionDatos {
 						escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorDatosO);
 					}
 					
-					System.out.println(beanFF.toString());
+					System.out.println(beanFFDatosCorrectos.toString());
 
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -257,7 +258,37 @@ public class ValidacionDatos {
 			if (errorPosicionD == "" && errorDatosO == "" && errorDatosD == "" && errorTipoD == "") {
 				log.info("Procesar linea: " + linea
 						+ " -> Metodo que validara si es el mismo consecutivo de carta y que los datos de carta y factura sean los mismos, para invocar el metodo de proceso a BD");
-				//Validacion de carta consecutiva y facturas
+				//Validacion de consecutivo archivo, la primera linea debe descartarse ya que a un no hay un valor anterior con el cual compararlo
+				if(linea == 1) {
+					beanFFDatosCorrectos.add(registroBeanFF);
+				} else {
+					
+					if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea -1).getConsecArch()) {
+						System.out.println("Es el mismo numero de consecutivo");
+						ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+						//Validar si son correctos los datos para la liena acutal, respecto a la enterior
+						boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF, beanFFDatosCorrectos.get(linea -1));
+						
+						if(validacionDatosCart) {
+							//Vaidar si corresponde al mismo consecutivo de factura
+							boolean validacionDatosFactura = false;
+							if(validacionDatosFactura) {
+								//Agregar al objeto beanFFEnvioBD los datos de facturas o notas de creidto
+								beanFFEnvioBD.add(registroBeanFF);
+							} else {
+								//Agregar error el error sobre datos de factura de la linea actual invocando al metodo de que escriba el archivo.
+							}
+						}else {
+							//Agregar error el error sobre datos de la carta de la linea actual invocando al metodo de que escriba el archivo.
+						}
+					} else {
+						
+					}
+					
+				}
+					
+				
+				
 				escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadena, 123456789, 22334455);
 			}
 		}
