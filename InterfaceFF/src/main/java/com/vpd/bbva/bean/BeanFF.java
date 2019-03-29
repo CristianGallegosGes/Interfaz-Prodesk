@@ -403,4 +403,51 @@ public class BeanFF {
 		this.aplicativoOrg = aplicativoOrg;
 	}
 
+	@Override
+	public String toString() {
+
+		return 	"consecArch"     + "{" + consecArch +  "}, "
+				+"nu_carta"    + "{" +  nu_carta    +  "}, "
+				+"nu_factura"     + "{" + nu_factura     +  "}, "
+				+"tp_registro"       + "{" +  tp_registro    +  "}, "
+				+"consecNota"      + "{" +  consecNota    +  "}, "
+				+"tp_carta"    + "{" + tp_carta     +  "}, "
+				+"tp_pago"   + "{" + tp_pago     +  "}, "
+				+"nu_proveedor"     + "{" +  nu_proveedor    +  "}, "
+				+"sociedadRec"       + "{" + sociedadRec     +  "}, "
+				+"glg" + "{" + glg     +  "}, "
+				+"empGasBursa" + "{" + empGasBursa     +  "}, "
+				+"fideicomiso" + "{" + fideicomiso     +  "}, "
+				+"nu_acreditado"         + "{" +  nu_acreditado    +  "}, "
+				+"nu_pep"  + "{" + nu_pep     +  "}, "
+				+"mondena"   + "{" + mondena     +  "}, "
+				+"periodificacion  "           + "{" + periodificacion     +  "}, "
+				+"proviEjerAnterior"             + "{" + proviEjerAnterior     +  "}, "
+				+"contrato "    + "{" +  contrato    +  "}, "
+				+"recAlternativo "          + "{" + recAlternativo     +  "}, "
+				+"cuentaGps "     + "{" + cuentaGps     +  "}, "
+				+"usuarioCreador "          + "{" +  usuarioCreador    +  "}, "
+				+"centroCostos "        + "{" + centroCostos     +  "}, "
+				+"descripServicio "           + "{" + descripServicio     +  "}, "
+				+"fechaInicio "       + "{" + fechaInicio     +  "}, "
+				+"fechaFin "    + "{" + fechaFin     +  "}, "
+				+"estado "  + "{" +   estado   +  "}, "
+				+"importeUn "     + "{" + importeUn     +  "}, "
+				+"nu_unidades "       + "{" +  nu_unidades    +  "}, "
+				+"iva " + "{" + iva     +  "}, "
+				+"isrRetenido "       + "{" +  isrRetenido    +  "}, "
+				+"ivaRetenido "       + "{" +   ivaRetenido   +  "}, "
+				+"impuestoCedular "           + "{" +  impuestoCedular    +  "}, "
+				+"otrosImpuestos "          + "{" +  otrosImpuestos    +  "}, "
+				+"descuento "     + "{" + descuento     +  "}, "
+				+"comprobacion "        + "{" +  comprobacion    +  "}, "
+				+"nu_anticipo "       + "{" +  nu_anticipo    +  "}, "
+				+"fecha_anticipo "          + "{" + fecha_anticipo     +  "}, "
+				+"viaP " + "{" +  viaP    +  "}, "
+				+"cuentaBanc "      + "{" + cuentaBanc     +  "}, "
+				+"tpBanco " + "{" +   tpBanco   +  "}, "
+				+"nu_activo "  + "{" +  nu_activo    +  "}, "
+				+"estatusF "  + "{" +  estatusF    +  "}, "
+				+"aplicativoOrg " + "{" +   aplicativoOrg   +  "}, ";
+	}
 }

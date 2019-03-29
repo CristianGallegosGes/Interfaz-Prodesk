@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -40,9 +41,13 @@ public class ValidacionDatos {
 		log.info("Leer archivo");
 		FileInputStream file = new FileInputStream(archivo);
 		BufferedReader br = new BufferedReader(new InputStreamReader(file, "UTF8"));
+		FileReader fr = new FileReader(archivo);
+		BufferedReader brTotalLineasS = new BufferedReader(fr);
 		String cadena = null;
 
 		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
+		ArrayList<BeanFF> beanFFEnvioBD = new ArrayList<BeanFF>();
+		ArrayList<BeanFF> beanFFError = new ArrayList<BeanFF>();
 		BeanFF registroBeanFF = null;
 		HashMap<Integer, String> validarLongitudLineas = null;
 		HashMap<Integer, String> validarDatosO = null;
@@ -52,18 +57,19 @@ public class ValidacionDatos {
 		int linea = 0;
 		int totalRegistroCorrectos = 0;
 		int totalRegistroError = 0;
+		long lineasTotal = brTotalLineasS.lines().count();
 		
 		String nombreArchivo = archivo.substring(archivo.length() - 22);
 		// Renombrar el archivo para la salida
 		String nuevoNombreArc = "LOG" + nombreArchivo;
 
 		while ((cadena = br.readLine()) != null) {
-			ArrayList<BeanFF> beanFFEnvioBD = new ArrayList<BeanFF>();
+
 			String errorPosicionD = "";
 			String errorDatosO = "";
 			String errorDatosD = "";
 			String errorTipoD = "";
-			
+
 			if (firstLine) {
 				cadena = removeUTF8BOM(cadena);
 				firstLine = false;
@@ -241,7 +247,7 @@ public class ValidacionDatos {
 						// mandar a llamar el meto que escribira el error que contenga la fila.
 						escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorDatosO);
 					}
-					
+
 					System.out.println(beanFFDatosCorrectos.toString());
 
 				} catch (Exception e) {
@@ -258,49 +264,117 @@ public class ValidacionDatos {
 			if (errorPosicionD == "" && errorDatosO == "" && errorDatosD == "" && errorTipoD == "") {
 				log.info("Procesar linea: " + linea
 						+ " -> Metodo que validara si es el mismo consecutivo de carta y que los datos de carta y factura sean los mismos, para invocar el metodo de proceso a BD");
-				//Validacion de consecutivo archivo, la primera linea debe descartarse ya que a un no hay un valor anterior con el cual compararlo
-				if(linea == 1) {
-					beanFFDatosCorrectos.add(registroBeanFF);
+
+				if (linea == 1) {
+					beanFFEnvioBD.add(registroBeanFF);
 				} else {
-					
-					if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea -1).getConsecArch()) {
-						System.out.println("Es el mismo numero de consecutivo");
+					// Validar datos consecutivos para una misma carta y la misma factura o nota credito
+					if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
+							&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
+									.getConsecNota())) {
+
 						ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-						//Validar si son correctos los datos para la liena acutal, respecto a la enterior
-						boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF, beanFFDatosCorrectos.get(linea -1));
-						
-						if(validacionDatosCart) {
-							//Vaidar si corresponde al mismo consecutivo de factura
-							boolean validacionDatosFactura = false;
-							if(validacionDatosFactura) {
-								//Agregar al objeto beanFFEnvioBD los datos de facturas o notas de creidto
-								beanFFEnvioBD.add(registroBeanFF);
-							} else {
-								//Agregar error el error sobre datos de factura de la linea actual invocando al metodo de que escriba el archivo.
-							}
-						}else {
-							//Agregar error el error sobre datos de la carta de la linea actual invocando al metodo de que escriba el archivo.
+						// Validar los datos de carta si son correctos los datos para la liena acutal, respecto a la annterior
+						boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
+								beanFFDatosCorrectos.get(linea - 2));
+						if (validacionDatosCart) {
+							// Agregar al objeto beanFFEnvioBD los datos de facturas o notas de credito
+							log.info("Se agrega informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta igual y factura.");
+							beanFFEnvioBD.add(registroBeanFF);
+						} else {
+							// Agregar el error sobre datos de la carta de la linea actual invocando
+							// al metodo de que escriba el archivo y llenar la lista beanFFError
 						}
-					} else {
 						
+					  //Validar datos consecutivos para una misma carta pero con consecutivo diferente de factura o nota credito
+					} else if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()	&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
+							.getConsecNota())){
+						
+						//Se valida si el arreglo a enviar al proceso de BD es mayor a 1 y si el orreglo de beanFFError es igual a 0 para hacer el registro en BD
+						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
+							//Invocar metodo de BD
+							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
+							//Se recibe respuesta del metodo invocado
+							//Se escribe sobre archivo en la linea correspondiente los valores recibidos 
+							//Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD = new ArrayList<BeanFF>();
+							//Agregar a la lista los datos de la linea actual
+							beanFFEnvioBD.add(registroBeanFF);
+						}
+					//Validar dato consecutivo diferente para una carta
+					} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2).getConsecArch()) {
+						
+						//Se valida si el arreglo a enviar a al proceso de BD es mayor a 1 para hacer el registro en BD
+						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
+							//Invocar metodo de BD
+							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta diferente al anterior.");
+							//Se recibe respuesta del metodo invocado
+							//Se valida si es correcto o no
+							//Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD = new ArrayList<BeanFF>();
+							//Agregar a la lista los datos de la linea actual
+							beanFFEnvioBD.add(registroBeanFF);
+						}
+					} 
+					
+					if (lineasTotal == linea) {
+						log.info("Procesar la ultima linea del archivo");
+												
+						if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
+								&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
+										.getConsecNota())) {
+							ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+							// Validar si son correctos los datos para la liena acutal, respecto a la
+							// annterior
+							boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
+									beanFFDatosCorrectos.get(linea - 2));
+
+							if (validacionDatosCart) {
+								//Invocar el metodo de proceso de BD, ya que es la ultima linea
+								log.info("Se invoca el proceso de BD, de la ultima linea.\n Con sus respectivas lineas:" + beanFFEnvioBD.toString() + "Ya que es un consecutivo de carta igual y factura.");
+
+							} else {
+								// Agregar error el error sobre datos de la carta de la linea actual invocando
+								// al metodo de que escriba el archivo.
+							}
+							
+						} else if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()	&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
+								.getConsecNota())){
+							
+							if (beanFFEnvioBD.size() >= 1) {
+								//Invocar metodo de BD
+								log.info("Se invoca el proceso de BD, de la ultima linea.\n Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
+								//Se recibe respuesta del metodo invocado
+								//Se valida si es correcto o no
+							}
+						//Validar dato consecutivo diferente para una carta
+						} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2).getConsecArch()) {
+							
+							//Validar datos de factura al anterior
+							
+							// Validar que sea => 1 el objeto como lista.
+							if (beanFFEnvioBD.size() >= 1) {
+								//Invocar metodo de BD
+								log.info("Se invoca el proceo de BD, de la ultima linea.\n Senvia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta diferente al anterior.");
+								//Se recibe respuesta del metodo invocado
+								//Se valida si es correcto o no
+							}
+						}
 					}
-					
 				}
-					
-				
-				
-				escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadena, 123456789, 22334455);
+
+				//escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadena, 123456789, 22334455);
 			}
 		}
 
-		copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
-		moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
+		//copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
+		//moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
 
 		log.info("Total de registros procesados: " + linea);
 		log.info("Total de registros enviados a BD: " + totalRegistroCorrectos);
 		log.info("Total de registros con error: " + totalRegistroError);
 		br.close();
-
+		brTotalLineasS.close();
 		log.info(
 				"Nota -> Eliminar archivo de la carpeta Entrada y mover el archivo de la ruta BKPSalida a la carpta de Salida, ya que se creo un nuevo archivo para escribir los errres y los datos de lo que se obtenga del proceso a BD.");
 		return null;
@@ -347,7 +421,7 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarLongitudLinea(String cadena, int linea) {
 
-		log.info("Validar Longitud de linea");
+		log.info("Validar Longitud de linea " + linea);
 		HashMap<Integer, String> validaPosicionDato = new HashMap<Integer, String>();
 		char[] arrayChar = cadena.toCharArray();
 		int caracteres = arrayChar.length;
@@ -363,7 +437,7 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarDatosObligatorios(String cadena, int linea) {
 
-		log.info("Validar Datos Obligatorios de linea");
+		log.info("Validar Datos Obligatorios de linea " + linea);
 		HashMap<Integer, String> validaCamposObli = new HashMap<Integer, String>();
 		try {
 			if (cadena.substring(0, 10).trim().equals("")) {
@@ -412,7 +486,8 @@ public class ValidacionDatos {
 			}
 
 			if (cadena.substring(182, 192).trim().equals("")) {
-				validaCamposObli.put(10, "El campo \"CUENTA GPS(CUENTA DE GASTO)\" es obligatorio en la linea: " + linea);
+				validaCamposObli.put(10,
+						"El campo \"CUENTA GPS(CUENTA DE GASTO)\" es obligatorio en la linea: " + linea);
 				return validaCamposObli;
 			}
 
@@ -463,13 +538,15 @@ public class ValidacionDatos {
 
 			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(427, 457).trim().equals("")) {
 				validaCamposObli.put(20,
-						"El campo \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: " + linea);
+						"El campo \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
+								+ linea);
 				return validaCamposObli;
 			}
 
 			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(457, 467).trim().equals("")) {
 				validaCamposObli.put(21,
-						"El campo \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: " + linea);
+						"El campo \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
+								+ linea);
 				return validaCamposObli;
 			}
 
@@ -502,29 +579,34 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarDatosDependientes(String cadena, int linea) {
 
-		log.info("Validar Datos Dependientes de linea");
+		log.info("Validar Datos Dependientes de linea " + linea);
 		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
 
 		boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 		if (validarNuPep) {
 			validaCamposDepen.put(2,
-					"El valor del campo \"NUMERO DE PEP\" es incorrecto, ya que no cuemple con el formato \"00000000-000\" en la linea: " + linea);
+					"El valor del campo \"NUMERO DE PEP\" es incorrecto, ya que no cuemple con el formato \"00000000-000\" en la linea: "
+							+ linea);
 		}
 
 		if ((!cadena.substring(174, 182).trim().equals(""))
 				&& cadena.substring(174, 182).trim() == cadena.substring(38, 48).trim()) {
 			validaCamposDepen.put(3,
-					"El valor del campo \"RECEPTOR ALTERNATIVO\" debe de ser diferente al valor de \"NUMERO DE PROVEEDOR\" en la linea: " + linea);
+					"El valor del campo \"RECEPTOR ALTERNATIVO\" debe de ser diferente al valor de \"NUMERO DE PROVEEDOR\" en la linea: "
+							+ linea);
 		}
 
 		boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(), cadena.substring(316, 326).trim());
 		if (validarFechaFin) {
 			validaCamposDepen.put(4,
-					"El valor del campo \"FECHA FIN SERVICIO\" debe ser mayor a la \"FECHA INICIO SERVICIO\" en la linea: " + linea);
+					"El valor del campo \"FECHA FIN SERVICIO\" debe ser mayor a la \"FECHA INICIO SERVICIO\" en la linea: "
+							+ linea);
 		}
 
 		if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
-			validaCamposDepen.put(5, "El valor: SI, del campo \"COMPROBACION\" solo aplica para \"TIPO REGISTRO: NF\" en la linea: " + linea);
+			validaCamposDepen.put(5,
+					"El valor: SI, del campo \"COMPROBACION\" solo aplica para \"TIPO REGISTRO: NF\" en la linea: "
+							+ linea);
 		}
 
 		return validaCamposDepen;
@@ -532,7 +614,7 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarTiposDato(String cadena, int linea) {
 
-		log.info("Validar Tipo de Dato de linea");
+		log.info("Validar Tipo de Dato de linea " + linea);
 		HashMap<Integer, String> validaTipoDato = new HashMap<Integer, String>();
 		try {
 			if (!(isNumeric(cadena.substring(0, 10).trim()))) {
