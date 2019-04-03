@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +46,8 @@ public class ValidacionDatos {
 		BufferedReader brTotalLineasS = new BufferedReader(fr);
 		String cadena = null;
 
+		List<String> cadenaProcesar = new ArrayList<String>();
+		List<String> cadenaErrorDatosCarta = new ArrayList<String>();
 		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
 		ArrayList<BeanFF> beanFFEnvioBD = new ArrayList<BeanFF>();
 		ArrayList<BeanFF> beanFFError = new ArrayList<BeanFF>();
@@ -58,7 +61,7 @@ public class ValidacionDatos {
 		int totalRegistroCorrectos = 0;
 		int totalRegistroError = 0;
 		long lineasTotal = brTotalLineasS.lines().count();
-		
+
 		String nombreArchivo = archivo.substring(archivo.length() - 22);
 		// Renombrar el archivo para la salida
 		String nuevoNombreArc = "LOG" + nombreArchivo;
@@ -235,17 +238,32 @@ public class ValidacionDatos {
 							} else {
 								System.out.println(errorTipoD);
 								// mandar a llamar el meto que escribira el error que contenga la fila.
-								escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorTipoD);
+								cadenaProcesar.add(cadena);
+
+								for (String cadenaL : cadenaProcesar) {
+									// mandar a llamar el meto que escribira el error que contenga la fila actual.
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorTipoD);
+								}
 							}
 						} else {
 							System.out.println(errorDatosD);
 							// mandar a llamar el meto que escribira el error que contenga la fila.
-							escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorDatosD);
+							cadenaProcesar.add(cadena);
+
+							for (String cadenaL : cadenaProcesar) {
+								// mandar a llamar el meto que escribira el error que contenga la fila actual.
+								escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorDatosD);
+							}
 						}
 					} else {
 						System.out.println(errorDatosO);
 						// mandar a llamar el meto que escribira el error que contenga la fila.
-						escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorDatosO);
+						cadenaProcesar.add(cadena);
+
+						for (String cadenaL : cadenaProcesar) {
+							// mandar a llamar el meto que escribira el error que contenga la fila actual.
+							escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorDatosO);
+						}
 					}
 
 					System.out.println(beanFFDatosCorrectos.toString());
@@ -267,108 +285,326 @@ public class ValidacionDatos {
 
 				if (linea == 1) {
 					beanFFEnvioBD.add(registroBeanFF);
+					cadenaProcesar.add(cadena);
 				} else {
-					// Validar datos consecutivos para una misma carta y la misma factura o nota credito
+					// Validar datos consecutivos para una misma carta y la misma factura o nota
+					// credito
 					if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
 							&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
 									.getConsecNota())) {
 
 						ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-						// Validar los datos de carta si son correctos los datos para la liena acutal, respecto a la annterior
-						boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
-								beanFFDatosCorrectos.get(linea - 2));
-						if (validacionDatosCart) {
+						HashMap<Integer, String> validacionDatosCart = null;
+						String errorDatosCart = "";
+						// Validar los datos de carta si son correctos los datos para la liena acutal,
+						// respecto a la annterior
+						validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
+								beanFFDatosCorrectos.get(linea - 2), (linea));
+						if (validacionDatosCart.size() == 0) {
 							// Agregar al objeto beanFFEnvioBD los datos de facturas o notas de credito
-							log.info("Se agrega informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta igual y factura.");
+							log.info("Se agrega informacion de lineas " + beanFFEnvioBD.toString()
+									+ ". Ya que es un consecutivo de carta y factura igual.");
 							beanFFEnvioBD.add(registroBeanFF);
+							cadenaProcesar.add(cadena);
 						} else {
 							// Agregar el error sobre datos de la carta de la linea actual invocando
 							// al metodo de que escriba el archivo y llenar la lista beanFFError
-						}
-						
-					  //Validar datos consecutivos para una misma carta pero con consecutivo diferente de factura o nota credito
-					} else if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()	&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
-							.getConsecNota())){
-						
-						//Se valida si el arreglo a enviar al proceso de BD es mayor a 1 y si el orreglo de beanFFError es igual a 0 para hacer el registro en BD
-						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-							//Invocar metodo de BD
-							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
-							//Se recibe respuesta del metodo invocado
-							//Se escribe sobre archivo en la linea correspondiente los valores recibidos 
-							//Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD = new ArrayList<BeanFF>();
-							//Agregar a la lista los datos de la linea actual
+							if(cadenaErrorDatosCarta.size() == 0) {
+								for (Integer j : validacionDatosCart.keySet()) {
+									errorDatosCart = validacionDatosCart.values().toString();
+									log.error("Identificador de error(Datos Carta Consecutivo):" + j
+											+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+											+ linea);
+									totalRegistroError++;
+								}
+							}
+
+							cadenaProcesar.add(cadena);
+							cadenaErrorDatosCarta.add(errorDatosCart);
+							
+							// Agregar lista beanFFError
+							beanFFError.add(registroBeanFF);
+							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
 							beanFFEnvioBD.add(registroBeanFF);
 						}
-					//Validar dato consecutivo diferente para una carta
+
+						// Validar datos consecutivos para una misma carta pero con consecutivo
+						// diferente de factura o nota credito
+					} else if (registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()
+							&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
+									.getConsecNota())) {
+
+						// Se valida si el arreglo a enviar al proceso de BD es mayor a 1 y si el
+						// arreglo de beanFFError es igual a 0 para hacer el registro en BD
+						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
+							// Invocar metodo de BD
+							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString()
+									+ ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
+							boolean respuestaBD = true;
+							// Se recibe respuesta del metodo invocado
+							// Se escribe sobre archivo en la linea correspondiente los valores recibidos
+							// Si es correcto
+							if (respuestaBD) {
+								for (String cadenaL : cadenaProcesar) {
+									escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+											123456789 + linea, 22334455 + linea);
+								}
+
+							} else {
+								for (String cadenaL : cadenaProcesar) {
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+											"Datos incorrectos");
+								}
+							}
+
+							// Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD.clear();
+							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
+							beanFFEnvioBD.add(registroBeanFF);
+							// Vaciar la lista de beanFFError
+							beanFFError.clear();
+							// Vaciar la lista de cadenaProcesar
+							cadenaProcesar.clear();
+							// Agregar a la lista cadenaProcesar los datos de la cadena actual
+							cadenaProcesar.add(cadena);
+						} else {
+							int cont = 0;
+							for (String cadenaL : cadenaProcesar) {
+								
+									// mandar a llamar el meto que escribira el error que contenga la fila actual.
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
+							}
+
+							// Vaciar lista cadenaProcesar
+							cadenaProcesar.clear();
+							// Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD.clear();
+							// Vaciar la lista de beanFFError
+							beanFFError.clear();
+							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
+							beanFFEnvioBD.add(registroBeanFF);
+							// Agregar a la lista cadenaProcesar los datos de la cadena actual
+							cadenaProcesar.add(cadena);
+						}
+
+						// Validar dato consecutivo diferente para una carta
 					} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2).getConsecArch()) {
-						
-						//Se valida si el arreglo a enviar a al proceso de BD es mayor a 1 para hacer el registro en BD
+
+						// Se valida si el arreglo a enviar a al proceso de BD es mayor a 1 para hacer
+						// el registro en BD
 						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-							//Invocar metodo de BD
-							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta diferente al anterior.");
-							//Se recibe respuesta del metodo invocado
-							//Se valida si es correcto o no
-							//Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD = new ArrayList<BeanFF>();
-							//Agregar a la lista los datos de la linea actual
+							// Invocar metodo de BD
+							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString()
+									+ ". Ya que es un consecutivo de carta diferente al anterior.");
+							// Se recibe respuesta del metodo invocado
+							// Se escribe sobre archivo en la linea correspondiente los valores recibidos
+							// Si es correcto
+							boolean respuestaBD = true;
+							if (respuestaBD) {
+								for (String cadenaL : cadenaProcesar) {
+									escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+											123456789 + linea, 22334455 + linea);
+								}
+							} else {
+								for (String cadenaL : cadenaProcesar) {
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+											"Datos incorrectos");
+								}
+							}
+
+							// Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD.clear();
+							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
 							beanFFEnvioBD.add(registroBeanFF);
+							// Vaciar la lista de beanFFError
+							beanFFError.clear();
+							// Vaciar la lista de cadenaProcesar
+							cadenaProcesar.clear();
+							// Agregar a la lista cadenaProcesar los datos de la cadena actual
+							cadenaProcesar.add(cadena);
+						} else {
+							int cont = 0;
+							for (String cadenaL : cadenaProcesar) {
+								
+								// mandar a llamar el meto que escribira el error que contenga la fila actual.
+								escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
+							}
+
+							// Vaciar lista cadenaProcesar
+							cadenaProcesar.clear();
+							// Vaciar la lista beanFFEnvioBD
+							beanFFEnvioBD.clear();
+							// Vaciar la lista de beanFFError
+							beanFFError.clear();
+							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
+							beanFFEnvioBD.add(registroBeanFF);
+							// Agregar a la lista cadenaProcesar los datos de la cadena actual
+							cadenaProcesar.add(cadena);
 						}
-					} 
-					
+
+					}
+
 					if (lineasTotal == linea) {
 						log.info("Procesar la ultima linea del archivo");
-												
+
 						if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
 								&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
 										.getConsecNota())) {
 							ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-							// Validar si son correctos los datos para la liena acutal, respecto a la
-							// annterior
-							boolean validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
-									beanFFDatosCorrectos.get(linea - 2));
-
-							if (validacionDatosCart) {
-								//Invocar el metodo de proceso de BD, ya que es la ultima linea
-								log.info("Se invoca el proceso de BD, de la ultima linea.\n Con sus respectivas lineas:" + beanFFEnvioBD.toString() + "Ya que es un consecutivo de carta igual y factura.");
+							HashMap<Integer, String> validacionDatosCart = null;
+							String errorDatosCart = "";
+							// Validar los datos de carta si son correctos los datos para la liena acutal,
+							// respecto a la annterior
+							validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
+									beanFFDatosCorrectos.get(linea - 2), linea);
+							if (validacionDatosCart.size() == 0) {
+								// Invocar el metodo de proceso de BD, ya que es la ultima linea
+								log.info("Se invoca el proceso de BD, de la ultima linea.\n Con sus respectivas lineas:"
+										+ beanFFEnvioBD.toString()
+										+ "Ya que es un consecutivo de carta igual y factura.");
+								// Se recibe respuesta del metodo invocado
+								// Se valida si es correcto o no
+								boolean respuestaBD = true;
+								if (respuestaBD) {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												123456789 + linea, 22334455 + linea);
+									}
+								} else {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												"Datos incorrectos");
+									}
+								}
 
 							} else {
-								// Agregar error el error sobre datos de la carta de la linea actual invocando
-								// al metodo de que escriba el archivo.
+								// Agregar el error sobre datos de la carta de la linea actual invocando
+								// al metodo de que escriba el archivo y llenar la lista beanFFError
+								if(cadenaErrorDatosCarta.size() == 0) {
+									for (Integer j : validacionDatosCart.keySet()) {
+										errorDatosCart = validacionDatosCart.values().toString();
+										log.error("Identificador de error(Datos Carta Consecutivo):" + j
+												+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+												+ linea);
+										totalRegistroError++;
+									}
+								}
+								cadenaProcesar.add(cadena);
+								cadenaErrorDatosCarta.add(errorDatosCart);
+								int cont = 0;
+								for (String cadenaL : cadenaProcesar) {
+									
+									// mandar a llamar el meto que escribira el error que contenga la fila actual.
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
+								}
+
+								// Vaciar la lista beanFFEnvioBD
+								beanFFEnvioBD.clear();
+								// Vaciar la lista de beanFFError
+								beanFFError.clear();
+								// Vaciar la lista cadenaProcesar
+								cadenaProcesar.clear();
 							}
-							
-						} else if(registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()	&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
-								.getConsecNota())){
-							
-							if (beanFFEnvioBD.size() >= 1) {
-								//Invocar metodo de BD
-								log.info("Se invoca el proceso de BD, de la ultima linea.\n Se envia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
-								//Se recibe respuesta del metodo invocado
-								//Se valida si es correcto o no
+
+						} else if (registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()
+								&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
+										.getConsecNota())) {
+
+							if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
+								// Invocar metodo de BD
+								log.info(
+										"Se invoca el proceso de BD, de la ultima linea.\n Se envia informacion de lineas "
+												+ beanFFEnvioBD.toString()
+												+ ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
+								// Se recibe respuesta del metodo invocado
+								// Se escribe sobre archivo en la linea correspondiente los valores recibidos
+								// Si es correcto
+								boolean respuestaBD = true;
+								if (respuestaBD) {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												123456789 + linea, 22334455 + linea);
+									}
+								} else {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												"Datos incorrectos");
+									}
+								}
+
+								// Vaciar la lista beanFFEnvioBD
+								beanFFEnvioBD.clear();
+								// Vaciar la lista de beanFFError
+								beanFFError.clear();
+								// Vaciar la lista cadenaProcesar
+								cadenaProcesar.clear();
+							} else {
+								int cont = 0;						
+								for (String cadenaL : cadenaProcesar) {
+									
+									// mandar a llamar el meto que escribira el error que contenga la fila actual.
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
+								}
+
+								// Vaciar la lista beanFFEnvioBD
+								beanFFEnvioBD.clear();
+								// Vaciar la lista de beanFFError
+								beanFFError.clear();
+								// Vaciar la lista cadenaProcesar
+								cadenaProcesar.clear();
 							}
-						//Validar dato consecutivo diferente para una carta
-						} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2).getConsecArch()) {
-							
-							//Validar datos de factura al anterior
-							
+							// Validar dato consecutivo diferente para una carta
+						} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2)
+								.getConsecArch()) {
+
+							// Validar datos de factura al anterior
+
 							// Validar que sea => 1 el objeto como lista.
-							if (beanFFEnvioBD.size() >= 1) {
-								//Invocar metodo de BD
-								log.info("Se invoca el proceo de BD, de la ultima linea.\n Senvia informacion de lineas " + beanFFEnvioBD.toString() + ". Ya que es un consecutivo de carta diferente al anterior.");
-								//Se recibe respuesta del metodo invocado
-								//Se valida si es correcto o no
+							if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
+								// Invocar metodo de BD
+								log.info(
+										"Se invoca el proceo de BD, de la ultima linea.\n Senvia informacion de lineas "
+												+ beanFFEnvioBD.toString()
+												+ ". Ya que es un consecutivo de carta diferente al anterior.");
+								// Se recibe respuesta del metodo invocado
+								// Se escribe sobre archivo en la linea correspondiente los valores recibidos
+								// Si es correcto
+								boolean respuestaBD = true;
+								if (respuestaBD) {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												123456789 + linea, 22334455 + linea);
+									}
+								} else {
+									for (String cadenaL : cadenaProcesar) {
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
+												"Datos incorrectos");
+									}
+								}
+							} else {
+								int cont = 0;
+								for (String cadenaL : cadenaProcesar) {
+									
+									// mandar a llamar el meto que escribira el error que contenga la fila actual.
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
+								}
+
+								// Vaciar la lista beanFFEnvioBD
+								beanFFEnvioBD.clear();
+								// Vaciar la lista de beanFFError
+								beanFFError.clear();
+								// Vaciar la lista cadenaProcesar
+								cadenaProcesar.clear();
 							}
 						}
 					}
 				}
-
-				//escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadena, 123456789, 22334455);
 			}
 		}
 
-		//copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
-		//moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
+		log.info("Objeto de Error" + beanFFError.toString());
+		// copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
+		// moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
 
 		log.info("Total de registros procesados: " + linea);
 		log.info("Total de registros enviados a BD: " + totalRegistroCorrectos);
