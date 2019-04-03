@@ -60,7 +60,7 @@ public class ValidaArregloDao {
 			if(beanFF.getNu_factura()>0 ) {  //Factura informada 
 				/*** Validar que la factura exista  ***/
 				// entra a metodo de validaciones de datos
-				
+				System.out.println("Prueba de Git");
 			}else {
 				// entra a metodo de validaciones de datos
 			}		
