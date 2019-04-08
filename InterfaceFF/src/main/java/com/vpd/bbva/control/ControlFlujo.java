@@ -39,7 +39,7 @@ public class ControlFlujo {
 					String rutaDirSBKP = properties.getPropertiesFile("archivos_salidabkp");
 					String rutaDirBkpE = properties.getPropertiesFile("archivos_bkpentrada");
 					String rutaDirS = properties.getPropertiesFile("archivos_salida");
-					validaD.obtenerDatos(archivo, rutaDirSBKP, rutaDirBkpE, rutaDirS);
+					validaD.procesarDatos(archivo, rutaDirSBKP, rutaDirBkpE, rutaDirS);
 				} catch (IOException e) {
 					e.printStackTrace();
 				}

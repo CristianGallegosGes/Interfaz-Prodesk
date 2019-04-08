@@ -36,7 +36,7 @@ public class ValidacionDatos {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Boolean obtenerDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
+	public void procesarDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
 			throws FileNotFoundException, IOException {
 
 		log.info("Leer archivo");
@@ -813,7 +813,6 @@ public class ValidacionDatos {
 		brTotalLineasS.close();
 		log.info(
 				"Nota -> Eliminar archivo de la carpeta Entrada y mover el archivo de la ruta BKPSalida a la carpta de Salida, ya que se creo un nuevo archivo para escribir los errres y los datos de lo que se obtenga del proceso a BD.");
-		return null;
 	}
 
 	public static String removeUTF8BOM(String s) {
