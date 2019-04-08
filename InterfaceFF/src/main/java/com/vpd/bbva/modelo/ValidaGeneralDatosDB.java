@@ -121,7 +121,7 @@ public class ValidaGeneralDatosDB {
 			call.setInt(5, 0);
 			for(BeanFF bean : dtArregloC) {
 				call.setString(6, bean.getTp_carta());
-				call.setString(7, bean.getTp_pago());/*Revisar si cambia a int*/
+				call.setInt(7, bean.getTp_pago());/*Revisar si cambia a int*/
 				call.setInt(8, bean.getNu_proveedor());
 				call.setString(9, bean.getSociedadRec());
 				call.setString(10, bean.getGlg());

@@ -14,7 +14,7 @@ public class BeanFF {
 	private String tp_registro;
 	private int consecNota;
 	private String tp_carta;
-	private String tp_pago;  /*	cambiar por int **/
+	private int tp_pago;  /*	cambiar por int **/
 	private int nu_proveedor; 
 	private String sociedadRec;
 	private String glg;
@@ -102,10 +102,10 @@ public class BeanFF {
 	public void setTp_carta(String tp_carta) {
 		this.tp_carta = tp_carta;
 	}
-	public String getTp_pago() {
+	public int getTp_pago() {
 		return tp_pago;
 	}
-	public void setTp_pago(String tp_pago) {
+	public void setTp_pago(int tp_pago) {
 		this.tp_pago = tp_pago;
 	}
 	public int getNu_proveedor() {
