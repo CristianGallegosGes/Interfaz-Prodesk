@@ -36,7 +36,7 @@ public class ValidacionDatos {
 		// TODO Auto-generated constructor stub
 	}
 
-	public Boolean obtenerDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
+	public void procesarDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
 			throws FileNotFoundException, IOException {
 
 		log.info("Leer archivo");
@@ -44,23 +44,24 @@ public class ValidacionDatos {
 		BufferedReader br = new BufferedReader(new InputStreamReader(file, "UTF8"));
 		FileReader fr = new FileReader(archivo);
 		BufferedReader brTotalLineasS = new BufferedReader(fr);
-		String cadena = null;
 
-		List<String> cadenaProcesar = new ArrayList<String>();
-		List<String> cadenaErrorDatosCarta = new ArrayList<String>();
-		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
-		ArrayList<BeanFF> beanFFEnvioBD = new ArrayList<BeanFF>();
-		ArrayList<BeanFF> beanFFError = new ArrayList<BeanFF>();
-		BeanFF registroBeanFF = null;
-		HashMap<Integer, String> validarLongitudLineas = null;
-		HashMap<Integer, String> validarDatosO = null;
-		HashMap<Integer, String> validarDatosD = null;
-		HashMap<Integer, String> validarTipoDato = null;
+		String cadena = null;
 		boolean firstLine = true;
 		int linea = 0;
 		int totalRegistroCorrectos = 0;
 		int totalRegistroError = 0;
 		long lineasTotal = brTotalLineasS.lines().count();
+
+		List<String> cadenaControl = new ArrayList<String>();
+		List<String> cadenasProcesar = new ArrayList<String>();
+		List<Integer> cadenaLinea = new ArrayList<Integer>();
+		List<String> lineasArchivo = new ArrayList<String>();
+		List<String> validacionCadenas = new ArrayList<String>();
+
+		HashMap<Integer, String> validarLongitudLineas = null;
+		HashMap<Integer, String> validarDatosO = null;
+		HashMap<Integer, String> validarDatosD = null;
+		HashMap<Integer, String> validarTipoDato = null;
 
 		String nombreArchivo = archivo.substring(archivo.length() - 22);
 		// Renombrar el archivo para la salida
@@ -79,530 +80,729 @@ public class ValidacionDatos {
 			}
 
 			linea++;
-			log.info("Linea" + linea + ": " + cadena);
+			// System.out.println("Linea" + linea.get(cont) + " " + cadena);
 
-			validarLongitudLineas = validarLongitudLinea(cadena, linea);
-			for (Integer j : validarLongitudLineas.keySet()) {
-				errorPosicionD = validarLongitudLineas.values().toString();
-				log.error("Identifiacdor de error (Posicion Datos): " + j + " Descripcion de error: "
-						+ validarLongitudLineas.values());
-				totalRegistroError++;
-			}
-			if (validarLongitudLineas.size() == 0) {
-				validarDatosO = validarDatosObligatorios(cadena, linea);
-				for (Integer j : validarDatosO.keySet()) {
-					errorDatosO = validarDatosO.values().toString();
-					log.error("Identificador de error(Datos Obligatorios):" + j + " Descripcion de error: "
-							+ validarDatosO.values() + " en la linea " + linea);
-					totalRegistroError++;
-				}
-
-				if (validarLongitudLineas.size() == 0 && validarDatosO.size() == 0) {
-					validarDatosD = validarDatosDependientes(cadena, linea);
-					for (Integer j : validarDatosD.keySet()) {
-						errorDatosD = validarDatosD.values().toString();
-						log.error("Identificador de error(Dependencia Campos):" + j + " Descripcion de error: "
-								+ validarDatosD.values() + " en la linea " + linea);
-						totalRegistroError++;
-					}
-				}
-
-				if (validarLongitudLineas.size() == 0 && validarDatosO.size() == 0 && validarDatosD.size() == 0) {
-					validarTipoDato = validarTiposDato(cadena, linea);
-					for (Integer j : validarTipoDato.keySet()) {
-						errorTipoD = validarTipoDato.values().toString();
-						log.error("Identificador de error(Tipo Dato):" + j + " Descripcion de error: "
-								+ validarTipoDato.values() + " en la linea " + linea);
-						totalRegistroError++;
-					}
-				}
-
-				try {
-					if (validarDatosO.size() == 0) {
-						if (validarDatosD.size() == 0) {
-							if (validarTipoDato.size() == 0) {
-								registroBeanFF = new BeanFF();
-
-								registroBeanFF.setConsecArch(Integer.parseInt(cadena.substring(0, 10).trim()));
-
-								if (!(cadena.substring(10, 19).trim().equals(""))) {
-									registroBeanFF.setNu_carta(Integer.parseInt(cadena.substring(10, 19).trim()));
-								}
-
-								if (!(cadena.substring(19, 28).trim().equals(""))) {
-									registroBeanFF.setNu_factura(Integer.parseInt(cadena.substring(19, 28).trim()));
-								}
-
-								registroBeanFF.setTp_registro(cadena.substring(28, 30).trim());
-								registroBeanFF.setConsecNota(Integer.parseInt(cadena.substring(30, 34).trim()));
-								registroBeanFF.setTp_carta(cadena.substring(34, 36).trim());
-								registroBeanFF.setTp_pago(cadena.substring(36, 38).trim());
-								registroBeanFF.setNu_proveedor(Integer.parseInt(cadena.substring(38, 48).trim()));
-								registroBeanFF.setSociedadRec(cadena.substring(48, 52).trim());
-								registroBeanFF.setGlg(cadena.substring(52, 102));
-
-								if (!(cadena.substring(102, 104).trim().equals(""))) {
-									registroBeanFF.setEmpGasBursa(cadena.substring(102, 104).trim());
-								}
-
-								if (!(cadena.substring(104, 125).trim().equals(""))) {
-									registroBeanFF.setFideicomiso(cadena.substring(104, 125).trim());
-								}
-
-								if (!(cadena.substring(125, 145).trim().equals(""))) {
-									registroBeanFF.setNu_acreditado(cadena.substring(125, 145).trim());
-								}
-
-								if (!(cadena.substring(145, 157).trim().equals(""))) {
-									registroBeanFF.setNu_pep(cadena.substring(145, 157).trim());
-								}
-
-								registroBeanFF.setMondena(cadena.substring(157, 160).trim());
-
-								if (!(cadena.substring(160, 162).trim().equals(""))) {
-									registroBeanFF.setPeriodificacion(cadena.substring(160, 162).trim());
-								}
-
-								if (!(cadena.substring(162, 164).trim().equals(""))) {
-									registroBeanFF.setProviEjerAnterior(cadena.substring(162, 164).trim());
-								}
-
-								if (!(cadena.substring(164, 174).trim().equals(""))) {
-									registroBeanFF.setContrato(Integer.parseInt(cadena.substring(164, 174).trim()));
-								}
-
-								if (!(cadena.substring(174, 182).trim().equals(""))) {
-									registroBeanFF
-											.setRecAlternativo(Integer.parseInt(cadena.substring(174, 182).trim()));
-								}
-
-								registroBeanFF.setCuentaGps(Integer.parseInt(cadena.substring(182, 192).trim()));
-								registroBeanFF.setUsuarioCreador(cadena.substring(192, 202).trim());
-								registroBeanFF.setCentroCostos(cadena.substring(202, 206).trim());
-								registroBeanFF.setDescripServicio(cadena.substring(206, 306).trim());
-								registroBeanFF.setFechaInicio(cadena.substring(306, 316).trim());
-								registroBeanFF.setFechaFin(cadena.substring(316, 326).trim());
-								registroBeanFF.setEstado(Integer.parseInt(cadena.substring(326, 328).trim()));
-								registroBeanFF.setImporteUn(new BigDecimal(cadena.substring(328, 340).trim()));
-								registroBeanFF.setNu_unidades(new BigDecimal(cadena.substring(340, 353).trim()));
-								registroBeanFF.setIva(cadena.substring(353, 365).trim());
-
-								if (!(cadena.substring(365, 377).trim().equals(""))) {
-									registroBeanFF.setIsrRetenido(new BigDecimal(cadena.substring(365, 377).trim()));
-								}
-
-								if (!(cadena.substring(377, 389).trim().equals(""))) {
-									registroBeanFF.setIvaRetenido(new BigDecimal(cadena.substring(377, 389).trim()));
-								}
-
-								if (!(cadena.substring(389, 401).trim().equals(""))) {
-									registroBeanFF
-											.setImpuestoCedular(new BigDecimal(cadena.substring(389, 401).trim()));
-								}
-
-								if (!(cadena.substring(401, 413).trim().equals(""))) {
-									registroBeanFF.setOtrosImpuestos(new BigDecimal(cadena.substring(401, 413).trim()));
-								}
-
-								if (!(cadena.substring(413, 425).trim().equals(""))) {
-									registroBeanFF.setDescuento(new BigDecimal(cadena.substring(413, 425).trim()));
-								}
-
-								if (!(cadena.substring(425, 427).trim().equals(""))) {
-									registroBeanFF.setComprobacion(cadena.substring(425, 427).trim());
-								}
-
-								if (!(cadena.substring(427, 457).trim().equals(""))) {
-									registroBeanFF.setNu_anticipo(cadena.substring(427, 457).trim());
-								}
-
-								if (!(cadena.substring(457, 467).trim().equals(""))) {
-									registroBeanFF.setFecha_anticipo(cadena.substring(457, 467).trim());
-								}
-
-								registroBeanFF.setViaP(cadena.substring(467, 468).trim());
-								registroBeanFF.setCuentaBanc(Integer.parseInt(cadena.substring(468, 488).trim()));
-
-								if (!(cadena.substring(488, 498).trim().equals(""))) {
-									registroBeanFF.setTpBanco(cadena.substring(488, 498).trim());
-								}
-
-								if (!(cadena.substring(498, 518).trim().equals(""))) {
-									registroBeanFF.setNu_activo(Integer.parseInt(cadena.substring(498, 518).trim()));
-								}
-
-								registroBeanFF.setEstatusF(cadena.substring(518, 521).trim());
-								registroBeanFF.setAplicativoOrg(cadena.substring(521, 524).trim());
-								beanFFDatosCorrectos.add(registroBeanFF);
-								totalRegistroCorrectos++;
-							} else {
-								System.out.println(errorTipoD);
-								// mandar a llamar el meto que escribira el error que contenga la fila.
-								cadenaProcesar.add(cadena);
-
-								for (String cadenaL : cadenaProcesar) {
-									// mandar a llamar el meto que escribira el error que contenga la fila actual.
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorTipoD);
-								}
-							}
-						} else {
-							System.out.println(errorDatosD);
-							// mandar a llamar el meto que escribira el error que contenga la fila.
-							cadenaProcesar.add(cadena);
-
-							for (String cadenaL : cadenaProcesar) {
-								// mandar a llamar el meto que escribira el error que contenga la fila actual.
-								escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorDatosD);
-							}
-						}
-					} else {
-						System.out.println(errorDatosO);
-						// mandar a llamar el meto que escribira el error que contenga la fila.
-						cadenaProcesar.add(cadena);
-
-						for (String cadenaL : cadenaProcesar) {
-							// mandar a llamar el meto que escribira el error que contenga la fila actual.
-							escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, errorDatosO);
-						}
-					}
-
-					System.out.println(beanFFDatosCorrectos.toString());
-
-				} catch (Exception e) {
-					e.printStackTrace();
-					log.error("Error al al obtner informacíon de la linea" + linea + ": " + e.getMessage());
-				}
-
+			if (linea == 1) {
+				// Agregar cadena a lista control
+				cadenaControl.add(cadena);
+				// Agregar cadena a lista de procesamiento
+				cadenasProcesar.add(cadena);
+				// Agregar valor de linea actual posicion
+				cadenaLinea.add(linea);
+				// Agregar cadena a lista archivo
+				lineasArchivo.add(cadena);
 			} else {
 
-				escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadena, errorPosicionD);
-				System.out.println(errorPosicionD);
-			}
+				if (cadena.substring(0, 10).trim().equals(lineasArchivo.get(linea - 2).substring(0, 10).trim())
+						&& cadena.substring(30, 34).trim()
+								.equals(lineasArchivo.get(linea - 2).substring(30, 34).trim())) {
 
-			if (errorPosicionD == "" && errorDatosO == "" && errorDatosD == "" && errorTipoD == "") {
-				log.info("Procesar linea: " + linea
-						+ " -> Metodo que validara si es el mismo consecutivo de carta y que los datos de carta y factura sean los mismos, para invocar el metodo de proceso a BD");
+					// Agregar cadena a lista control
+					cadenaControl.add(cadena);
+					// Agregar cadena a lista de procesamiento
+					cadenasProcesar.add(cadena);
+					// Agregar valor de linea actual posicion
+					cadenaLinea.add(linea);
+					// Agregar cadena a lista archivo
+					lineasArchivo.add(cadena);
 
-				if (linea == 1) {
-					beanFFEnvioBD.add(registroBeanFF);
-					cadenaProcesar.add(cadena);
-				} else {
-					// Validar datos consecutivos para una misma carta y la misma factura o nota
-					// credito
-					if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
-							&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
-									.getConsecNota())) {
+				} else if (cadena.substring(0, 10).trim().equals(lineasArchivo.get(linea - 2).substring(0, 10).trim())
+						&& !cadena.substring(30, 34).trim()
+								.equals(lineasArchivo.get(linea - 2).substring(30, 34).trim())) {
 
-						ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-						HashMap<Integer, String> validacionDatosCart = null;
-						String errorDatosCart = "";
-						// Validar los datos de carta si son correctos los datos para la liena acutal,
-						// respecto a la annterior
-						validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
-								beanFFDatosCorrectos.get(linea - 2), (linea));
-						if (validacionDatosCart.size() == 0) {
-							// Agregar al objeto beanFFEnvioBD los datos de facturas o notas de credito
-							log.info("Se agrega informacion de lineas " + beanFFEnvioBD.toString()
-									+ ". Ya que es un consecutivo de carta y factura igual.");
-							beanFFEnvioBD.add(registroBeanFF);
-							cadenaProcesar.add(cadena);
-						} else {
-							// Agregar el error sobre datos de la carta de la linea actual invocando
-							// al metodo de que escriba el archivo y llenar la lista beanFFError
-							if(cadenaErrorDatosCarta.size() == 0) {
-								for (Integer j : validacionDatosCart.keySet()) {
-									errorDatosCart = validacionDatosCart.values().toString();
-									log.error("Identificador de error(Datos Carta Consecutivo):" + j
-											+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-											+ linea);
-									totalRegistroError++;
-								}
-							}
-
-							cadenaProcesar.add(cadena);
-							cadenaErrorDatosCarta.add(errorDatosCart);
-							
-							// Agregar lista beanFFError
-							beanFFError.add(registroBeanFF);
-							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
-							beanFFEnvioBD.add(registroBeanFF);
+					if (cadenaControl.size() > 0) {
+						for (String cadenaP : cadenasProcesar) {
+							validacionCadenas.add(cadenaP);
 						}
 
-						// Validar datos consecutivos para una misma carta pero con consecutivo
-						// diferente de factura o nota credito
-					} else if (registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()
-							&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
-									.getConsecNota())) {
+						// Validar Longuitud de Cadena
+						validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
+						if (validarLongitudLineas.size() == 0) {
+							// Validar Datos Obligatorios
+							validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
+							if (validarDatosO.size() == 0) {
+								// Validar Datos Dependientes
+								validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
+								if (validarDatosD.size() == 0) {
+									// Validar Tipo de Dato
+									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
+									if (validarTipoDato.size() == 0) {
+										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+										//Validar datos de carta de este bloque, que sean iguales
+										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+										HashMap<Integer, String> validacionDatosCart = null;
+										String errorDatosCart = "";
+										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+										if(validacionDatosCart.size() == 0) {
+											// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+											// Se recibe respuesta del metodo invocado
+											// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+											// Factura
 
-						// Se valida si el arreglo a enviar al proceso de BD es mayor a 1 y si el
-						// arreglo de beanFFError es igual a 0 para hacer el registro en BD
-						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-							// Invocar metodo de BD
-							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString()
-									+ ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
-							boolean respuestaBD = true;
-							// Se recibe respuesta del metodo invocado
-							// Se escribe sobre archivo en la linea correspondiente los valores recibidos
-							// Si es correcto
-							if (respuestaBD) {
-								for (String cadenaL : cadenaProcesar) {
-									escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-											123456789 + linea, 22334455 + linea);
-								}
+											boolean banderaInvocacion = true;
+											if (banderaInvocacion) {
+												// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+												// lineas enviadas
+												for (String cadenaP : cadenasProcesar) {
 
-							} else {
-								for (String cadenaL : cadenaProcesar) {
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-											"Datos incorrectos");
-								}
-							}
+													escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															1111111, 2222222);
+												}
 
-							// Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD.clear();
-							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
-							beanFFEnvioBD.add(registroBeanFF);
-							// Vaciar la lista de beanFFError
-							beanFFError.clear();
-							// Vaciar la lista de cadenaProcesar
-							cadenaProcesar.clear();
-							// Agregar a la lista cadenaProcesar los datos de la cadena actual
-							cadenaProcesar.add(cadena);
-						} else {
-							int cont = 0;
-							for (String cadenaL : cadenaProcesar) {
-								
-									// mandar a llamar el meto que escribira el error que contenga la fila actual.
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
-							}
+											} else {
+												// En caso de que una de sas banderas venga en false se da por hecho que no
+												// se proeco correctamente los registros y se debe de imprimir el error a
+												// todas las lineas enviadas.
+												for (String cadenaP : cadenasProcesar) {
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															"Error recibido en la respuesta del metodo invocado");
+												}
+											}
+										} else {
+											for (Integer j : validacionDatosCart.keySet()) {
+												errorDatosCart = validacionDatosCart.values().toString();
+												log.error("Identificador de error(Datos Carta Consecutivo):" + j
+														+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+														+ linea);
+												totalRegistroError++;
+											}
+											
+											for (String cadenaP : cadenasProcesar) {
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosCart);
+											}
+										}
+										
+										// Eliminar datos de la lista listaBeanFF
+										listaBeanFF.clear();
 
-							// Vaciar lista cadenaProcesar
-							cadenaProcesar.clear();
-							// Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD.clear();
-							// Vaciar la lista de beanFFError
-							beanFFError.clear();
-							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
-							beanFFEnvioBD.add(registroBeanFF);
-							// Agregar a la lista cadenaProcesar los datos de la cadena actual
-							cadenaProcesar.add(cadena);
-						}
-
-						// Validar dato consecutivo diferente para una carta
-					} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2).getConsecArch()) {
-
-						// Se valida si el arreglo a enviar a al proceso de BD es mayor a 1 para hacer
-						// el registro en BD
-						if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-							// Invocar metodo de BD
-							log.info("Se envia informacion de lineas " + beanFFEnvioBD.toString()
-									+ ". Ya que es un consecutivo de carta diferente al anterior.");
-							// Se recibe respuesta del metodo invocado
-							// Se escribe sobre archivo en la linea correspondiente los valores recibidos
-							// Si es correcto
-							boolean respuestaBD = true;
-							if (respuestaBD) {
-								for (String cadenaL : cadenaProcesar) {
-									escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-											123456789 + linea, 22334455 + linea);
-								}
-							} else {
-								for (String cadenaL : cadenaProcesar) {
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-											"Datos incorrectos");
-								}
-							}
-
-							// Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD.clear();
-							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
-							beanFFEnvioBD.add(registroBeanFF);
-							// Vaciar la lista de beanFFError
-							beanFFError.clear();
-							// Vaciar la lista de cadenaProcesar
-							cadenaProcesar.clear();
-							// Agregar a la lista cadenaProcesar los datos de la cadena actual
-							cadenaProcesar.add(cadena);
-						} else {
-							int cont = 0;
-							for (String cadenaL : cadenaProcesar) {
-								
-								// mandar a llamar el meto que escribira el error que contenga la fila actual.
-								escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
-							}
-
-							// Vaciar lista cadenaProcesar
-							cadenaProcesar.clear();
-							// Vaciar la lista beanFFEnvioBD
-							beanFFEnvioBD.clear();
-							// Vaciar la lista de beanFFError
-							beanFFError.clear();
-							// Agregar a la lista beanFFEnvioBD los datos de la linea actual
-							beanFFEnvioBD.add(registroBeanFF);
-							// Agregar a la lista cadenaProcesar los datos de la cadena actual
-							cadenaProcesar.add(cadena);
-						}
-
-					}
-
-					if (lineasTotal == linea) {
-						log.info("Procesar la ultima linea del archivo");
-
-						if ((registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch())
-								&& (registroBeanFF.getConsecNota() == beanFFDatosCorrectos.get(linea - 2)
-										.getConsecNota())) {
-							ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-							HashMap<Integer, String> validacionDatosCart = null;
-							String errorDatosCart = "";
-							// Validar los datos de carta si son correctos los datos para la liena acutal,
-							// respecto a la annterior
-							validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(registroBeanFF,
-									beanFFDatosCorrectos.get(linea - 2), linea);
-							if (validacionDatosCart.size() == 0) {
-								// Invocar el metodo de proceso de BD, ya que es la ultima linea
-								log.info("Se invoca el proceso de BD, de la ultima linea.\n Con sus respectivas lineas:"
-										+ beanFFEnvioBD.toString()
-										+ "Ya que es un consecutivo de carta igual y factura.");
-								// Se recibe respuesta del metodo invocado
-								// Se valida si es correcto o no
-								boolean respuestaBD = true;
-								if (respuestaBD) {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												123456789 + linea, 22334455 + linea);
+									} else {
+										for (Integer j : validarTipoDato.keySet()) {
+											errorTipoD = validarTipoDato.values().toString();
+											for (String cadenaP : cadenasProcesar) {
+												log.error("Identificador de error(Tipo Dato):" + j
+														+ " Descripcion de error: " + validarTipoDato.values()
+														+ " en la linea " + linea);
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosD);
+												totalRegistroError++;
+											}
+										}
 									}
 								} else {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												"Datos incorrectos");
+									for (Integer j : validarDatosD.keySet()) {
+										errorDatosD = validarDatosD.values().toString();
+										for (String cadenaP : cadenasProcesar) {
+											log.error("Identificador de error(Dependencia Campos):" + j
+													+ " Descripcion de error: " + validarDatosD.values()
+													+ " en la linea " + linea);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosD);
+											totalRegistroError++;
+										}
 									}
 								}
-
 							} else {
-								// Agregar el error sobre datos de la carta de la linea actual invocando
-								// al metodo de que escriba el archivo y llenar la lista beanFFError
-								if(cadenaErrorDatosCarta.size() == 0) {
-									for (Integer j : validacionDatosCart.keySet()) {
-										errorDatosCart = validacionDatosCart.values().toString();
-										log.error("Identificador de error(Datos Carta Consecutivo):" + j
-												+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+								for (Integer j : validarDatosO.keySet()) {
+									errorDatosO = validarDatosO.values().toString();
+									for (String cadenaP : cadenasProcesar) {
+										log.error("Identificador de error(Datos Obligatorios):" + j
+												+ " Descripcion de error: " + validarDatosO.values() + " en la linea "
 												+ linea);
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosO);
 										totalRegistroError++;
 									}
 								}
-								cadenaProcesar.add(cadena);
-								cadenaErrorDatosCarta.add(errorDatosCart);
-								int cont = 0;
-								for (String cadenaL : cadenaProcesar) {
-									
-									// mandar a llamar el meto que escribira el error que contenga la fila actual.
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
-								}
-
-								// Vaciar la lista beanFFEnvioBD
-								beanFFEnvioBD.clear();
-								// Vaciar la lista de beanFFError
-								beanFFError.clear();
-								// Vaciar la lista cadenaProcesar
-								cadenaProcesar.clear();
 							}
-
-						} else if (registroBeanFF.getConsecArch() == beanFFDatosCorrectos.get(linea - 2).getConsecArch()
-								&& (registroBeanFF.getConsecNota() != beanFFDatosCorrectos.get(linea - 2)
-										.getConsecNota())) {
-
-							if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-								// Invocar metodo de BD
-								log.info(
-										"Se invoca el proceso de BD, de la ultima linea.\n Se envia informacion de lineas "
-												+ beanFFEnvioBD.toString()
-												+ ". Ya que es un consecutivo de factura diferente pero pertenece a la misma carta.");
-								// Se recibe respuesta del metodo invocado
-								// Se escribe sobre archivo en la linea correspondiente los valores recibidos
-								// Si es correcto
-								boolean respuestaBD = true;
-								if (respuestaBD) {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												123456789 + linea, 22334455 + linea);
-									}
-								} else {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												"Datos incorrectos");
-									}
+						} else {
+							for (Integer j : validarLongitudLineas.keySet()) {
+								errorPosicionD = validarLongitudLineas.values().toString();
+								for (String cadenaP : cadenasProcesar) {
+									log.error("Identifiacdor de error (Posicion Datos): " + j
+											+ " Descripcion de error: " + validarLongitudLineas.values());
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorPosicionD);
+									totalRegistroError++;
 								}
-
-								// Vaciar la lista beanFFEnvioBD
-								beanFFEnvioBD.clear();
-								// Vaciar la lista de beanFFError
-								beanFFError.clear();
-								// Vaciar la lista cadenaProcesar
-								cadenaProcesar.clear();
-							} else {
-								int cont = 0;						
-								for (String cadenaL : cadenaProcesar) {
-									
-									// mandar a llamar el meto que escribira el error que contenga la fila actual.
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
-								}
-
-								// Vaciar la lista beanFFEnvioBD
-								beanFFEnvioBD.clear();
-								// Vaciar la lista de beanFFError
-								beanFFError.clear();
-								// Vaciar la lista cadenaProcesar
-								cadenaProcesar.clear();
-							}
-							// Validar dato consecutivo diferente para una carta
-						} else if (registroBeanFF.getConsecArch() != beanFFDatosCorrectos.get(linea - 2)
-								.getConsecArch()) {
-
-							// Validar datos de factura al anterior
-
-							// Validar que sea => 1 el objeto como lista.
-							if (beanFFEnvioBD.size() >= 1 && beanFFError.size() == 0) {
-								// Invocar metodo de BD
-								log.info(
-										"Se invoca el proceo de BD, de la ultima linea.\n Senvia informacion de lineas "
-												+ beanFFEnvioBD.toString()
-												+ ". Ya que es un consecutivo de carta diferente al anterior.");
-								// Se recibe respuesta del metodo invocado
-								// Se escribe sobre archivo en la linea correspondiente los valores recibidos
-								// Si es correcto
-								boolean respuestaBD = true;
-								if (respuestaBD) {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												123456789 + linea, 22334455 + linea);
-									}
-								} else {
-									for (String cadenaL : cadenaProcesar) {
-										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL,
-												"Datos incorrectos");
-									}
-								}
-							} else {
-								int cont = 0;
-								for (String cadenaL : cadenaProcesar) {
-									
-									// mandar a llamar el meto que escribira el error que contenga la fila actual.
-									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaL, cadenaErrorDatosCarta.get(cont));
-								}
-
-								// Vaciar la lista beanFFEnvioBD
-								beanFFEnvioBD.clear();
-								// Vaciar la lista de beanFFError
-								beanFFError.clear();
-								// Vaciar la lista cadenaProcesar
-								cadenaProcesar.clear();
 							}
 						}
+
+						System.out.println("Se hace peticion de esta linea o lineas ^------");
+					}
+
+					// Eliminar datos de la lista control
+					cadenaControl.clear();
+					// Agregar cadena a lista control
+					cadenaControl.add(cadena);
+					// Eliminar datos de la lista proceso
+					cadenasProcesar.clear();
+					// Agregar cadena a lista de procesamiento
+					cadenasProcesar.add(cadena);
+					// Eliminar datos de lista lineas
+					cadenaLinea.clear();
+					// Agregar valor de linea actual posicion
+					cadenaLinea.add(linea);
+					// Agregar cadena a lista archivo
+					lineasArchivo.add(cadena);
+					// Eliminar datos de la lista validacionCadenas
+					validacionCadenas.clear();
+				} else if (cadena.substring(0, 10).trim() != lineasArchivo.get(linea - 2).substring(0, 10).trim()) {
+					if (cadenaControl.size() > 0) {
+						for (String cadenaP : cadenasProcesar) {
+							validacionCadenas.add(cadenaP);
+						}
+
+						// Validar Longuitud de Cadena
+						validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
+						if (validarLongitudLineas.size() == 0) {
+							// Validar Datos Obligatorios
+							// Validar Datos Obligatorios
+							validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
+							if (validarDatosO.size() == 0) {
+								// Validar Datos Dependientes
+								validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
+								if (validarDatosD.size() == 0) {
+									// Validar Tipo de Dato
+									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
+									if (validarTipoDato.size() == 0) {
+										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+										//Validar datos de carta de este bloque, que sean iguales
+										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+										HashMap<Integer, String> validacionDatosCart = null;
+										String errorDatosCart = "";
+										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+										if(validacionDatosCart.size() == 0) {
+											// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+											// Se recibe respuesta del metodo invocado
+											// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+											// Factura
+
+											boolean banderaInvocacion = true;
+											if (banderaInvocacion) {
+												// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+												// lineas enviadas
+												for (String cadenaP : cadenasProcesar) {
+
+													escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															1111111, 2222222);
+												}
+
+											} else {
+												// En caso de que una de sas banderas venga en false se da por hecho que no
+												// se proeco correctamente los registros y se debe de imprimir el error a
+												// todas las lineas enviadas.
+												for (String cadenaP : cadenasProcesar) {
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															"Error recibido en la respuesta del metodo invocado");
+												}
+											}
+										} else {
+											for (Integer j : validacionDatosCart.keySet()) {
+												errorDatosCart = validacionDatosCart.values().toString();
+												log.error("Identificador de error(Datos Carta Consecutivo):" + j
+														+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+														+ linea);
+												totalRegistroError++;
+											}
+											
+											for (String cadenaP : cadenasProcesar) {
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosCart);
+											}
+										}
+										
+										// Eliminar datos de la lista listaBeanFF
+										listaBeanFF.clear();
+
+									} else {
+										for (Integer j : validarTipoDato.keySet()) {
+											errorTipoD = validarTipoDato.values().toString();
+											for (String cadenaP : cadenasProcesar) {
+												log.error("Identificador de error(Tipo Dato):" + j
+														+ " Descripcion de error: " + validarTipoDato.values()
+														+ " en la linea " + linea);
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorTipoD);
+												totalRegistroError++;
+											}
+										}
+									}
+								} else {
+									for (Integer j : validarDatosD.keySet()) {
+										errorDatosD = validarDatosD.values().toString();
+										for (String cadenaP : cadenasProcesar) {
+											log.error("Identificador de error(Dependencia Campos):" + j
+													+ " Descripcion de error: " + validarDatosD.values()
+													+ " en la linea " + linea);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+													errorDatosD);
+											totalRegistroError++;
+										}
+									}
+								}
+							} else {
+								for (Integer j : validarDatosO.keySet()) {
+									errorDatosO = validarDatosO.values().toString();
+									for (String cadenaP : cadenasProcesar) {
+										log.error("Identificador de error(Datos Obligatorios):" + j
+												+ " Descripcion de error: " + validarDatosO.values() + " en la linea "
+												+ linea);
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosO);
+										totalRegistroError++;
+									}
+								}
+							}
+						} else {
+							for (Integer j : validarLongitudLineas.keySet()) {
+								errorPosicionD = validarLongitudLineas.values().toString();
+								for (String cadenaP : cadenasProcesar) {
+									log.error("Identificador de error(Datos Obligatorios):" + j
+											+ " Descripcion de error: " + validarLongitudLineas.values()
+											+ " en la linea " + linea);
+									escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorPosicionD);
+									totalRegistroError++;
+								}
+							}
+						}
+
+						System.out.println("Se hace peticion de esta linea o lineas ^------");
+					}
+
+					// Eliminar datos de la lista control
+					cadenaControl.clear();
+					// Agregar cadena a lista control
+					cadenaControl.add(cadena);
+					// Eliminar datos de la lista proceso
+					cadenasProcesar.clear();
+					// Agregar cadena a lista de procesamiento
+					cadenasProcesar.add(cadena);
+					// Eliminar datos de lista lineas
+					cadenaLinea.clear();
+					// Agregar valor de linea actual posicion
+					cadenaLinea.add(linea);
+					// Agregar cadena a lista archivo
+					lineasArchivo.add(cadena);
+					// Eliminar datos de la lista validacionCadenas
+					validacionCadenas.clear();
+					// Eliminar datos de la lista validacionCadenas
+					validacionCadenas.clear();
+				}
+
+				if (linea == lineasTotal) {
+					if (cadena.substring(0, 10).trim().equals(lineasArchivo.get(linea - 2).substring(0, 10).trim())
+							&& cadena.substring(30, 34).trim()
+									.equals(lineasArchivo.get(linea - 2).substring(30, 34).trim())) {
+						if (cadenaControl.size() > 0) {
+							for (String cadenaP : cadenasProcesar) {
+								validacionCadenas.add(cadenaP);
+							}
+
+							// Validar Longuitud de Cadena
+							validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
+							if (validarLongitudLineas.size() == 0) {
+								// Validar Datos Obligatorios
+								validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
+								if (validarDatosO.size() == 0) {
+									// Validar Datos Dependientes
+									validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
+									if (validarDatosD.size() == 0) {
+										// Validar Tipo de Dato
+										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
+										if (validarTipoDato.size() == 0) {
+											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+											//Validar datos de carta de este bloque, que sean iguales
+											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+											HashMap<Integer, String> validacionDatosCart = null;
+											String errorDatosCart = "";
+											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+											if(validacionDatosCart.size() == 0) {
+												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+												// Factura
+
+												boolean banderaInvocacion = true;
+												if (banderaInvocacion) {
+													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+													// lineas enviadas
+													for (String cadenaP : cadenasProcesar) {
+
+														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																1111111, 2222222);
+													}
+
+												} else {
+													// En caso de que una de sas banderas venga en false se da por hecho que no
+													// se proeco correctamente los registros y se debe de imprimir el error a
+													// todas las lineas enviadas.
+													for (String cadenaP : cadenasProcesar) {
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																"Error recibido en la respuesta del metodo invocado");
+													}
+												}
+											} else {
+												for (Integer j : validacionDatosCart.keySet()) {
+													errorDatosCart = validacionDatosCart.values().toString();
+													log.error("Identificador de error(Datos Carta Consecutivo):" + j
+															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+															+ linea);
+													totalRegistroError++;
+												}
+												
+												for (String cadenaP : cadenasProcesar) {
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorDatosCart);
+												}
+											}
+											
+											// Eliminar datos de la lista listaBeanFF
+											listaBeanFF.clear();
+
+										} else {
+											for (Integer j : validarTipoDato.keySet()) {
+												errorTipoD = validarTipoDato.values().toString();
+												for (String cadenaP : cadenasProcesar) {
+													log.error("Identificador de error(Tipo Dato):" + j
+															+ " Descripcion de error: " + validarTipoDato.values()
+															+ " en la linea " + linea);
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorTipoD);
+
+													totalRegistroError++;
+												}
+											}
+										}
+									} else {
+										for (Integer j : validarDatosD.keySet()) {
+											errorDatosD = validarDatosD.values().toString();
+											for (String cadenaP : cadenasProcesar) {
+												log.error("Identificador de error(Dependencia Campos):" + j
+														+ " Descripcion de error: " + validarDatosD.values()
+														+ " en la linea " + linea);
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosD);
+												totalRegistroError++;
+											}
+										}
+									}
+								} else {
+									for (Integer j : validarDatosO.keySet()) {
+										errorDatosO = validarDatosO.values().toString();
+										for (String cadenaP : cadenasProcesar) {
+											log.error("Identificador de error(Datos Obligatorios):" + j
+													+ " Descripcion de error: " + validarDatosO.values()
+													+ " en la linea " + linea);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+													errorDatosO);
+											totalRegistroError++;
+										}
+									}
+								}
+							} else {
+								for (Integer j : validarLongitudLineas.keySet()) {
+									errorPosicionD = validarLongitudLineas.values().toString();
+									for (String cadenaP : cadenasProcesar) {
+										log.error("Identificador de error(Datos Obligatorios):" + j
+												+ "	Descripcion de error: " + validarLongitudLineas.values()
+												+ " en la linea " + linea);
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorPosicionD);
+										totalRegistroError++;
+									}
+								}
+							}
+
+							log.info("Se hace peticion de esta linea o lineas ^------");
+						}
+
+						// Eliminar datos de la lista control
+						cadenaControl.clear();
+						// Eliminar datos de la lista procesamiento
+						cadenasProcesar.clear();
+						// Eliminar datos de lista lineas
+						cadenaLinea.clear();
+						// Eliminar datos de la lista validacionCadenas
+						validacionCadenas.clear();
+
+					} else if (cadena.substring(0, 10).trim()
+							.equals(lineasArchivo.get(linea - 2).substring(0, 10).trim())
+							&& !cadena.substring(30, 34).trim()
+									.equals(lineasArchivo.get(linea - 2).substring(30, 34).trim())) {
+
+						if (cadenaControl.size() > 0) {
+							for (String cadenaP : cadenasProcesar) {
+								validacionCadenas.add(cadenaP);
+							}
+
+							// Validar Longuitud de Cadena
+							validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
+							if (validarLongitudLineas.size() == 0) {
+								// Validar Datos Obligatorios
+								validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
+								if (validarDatosO.size() == 0) {
+									// Validar Datos Dependientes
+									validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
+									if (validarDatosD.size() == 0) {
+										// Validar Tipo de Dato
+										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
+										if (validarTipoDato.size() == 0) {
+											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+											//Validar datos de carta de este bloque, que sean iguales
+											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+											HashMap<Integer, String> validacionDatosCart = null;
+											String errorDatosCart = "";
+											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+											if(validacionDatosCart.size() == 0) {
+												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+												// Factura
+
+												boolean banderaInvocacion = true;
+												if (banderaInvocacion) {
+													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+													// lineas enviadas
+													for (String cadenaP : cadenasProcesar) {
+
+														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																1111111, 2222222);
+													}
+
+												} else {
+													// En caso de que una de sas banderas venga en false se da por hecho que no
+													// se proeco correctamente los registros y se debe de imprimir el error a
+													// todas las lineas enviadas.
+													for (String cadenaP : cadenasProcesar) {
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																"Error recibido en la respuesta del metodo invocado");
+													}
+												}
+											} else {
+												for (Integer j : validacionDatosCart.keySet()) {
+													errorDatosCart = validacionDatosCart.values().toString();
+													log.error("Identificador de error(Datos Carta Consecutivo):" + j
+															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+															+ linea);
+													totalRegistroError++;
+												}
+												
+												for (String cadenaP : cadenasProcesar) {
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorDatosCart);
+												}
+											}
+											
+											// Eliminar datos de la lista listaBeanFF
+											listaBeanFF.clear();
+
+										} else {
+											for (Integer j : validarTipoDato.keySet()) {
+												errorTipoD = validarTipoDato.values().toString();
+												for (String cadenaP : cadenasProcesar) {
+													log.error("Identificador de error(Tipo Dato):" + j
+															+ " Descripcion de error: " + validarTipoDato.values()
+															+ " en la linea " + linea);
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorTipoD);
+													totalRegistroError++;
+												}
+											}
+										}
+									} else {
+										for (Integer j : validarDatosD.keySet()) {
+											errorDatosD = validarDatosD.values().toString();
+											for (String cadenaP : cadenasProcesar) {
+												log.error("Identificador de error(Dependencia Campos):" + j
+														+ " Descripcion de error: " + validarDatosD.values()
+														+ " en la linea " + linea);
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosD);
+												totalRegistroError++;
+											}
+										}
+									}
+								} else {
+									for (Integer j : validarDatosO.keySet()) {
+										errorDatosO = validarDatosO.values().toString();
+										for (String cadenaP : cadenasProcesar) {
+											log.error("Identificador de error(Datos Obligatorios):" + j
+													+ "	Descripcion de error: " + validarDatosO.values()
+													+ " en la linea " + linea);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+													errorDatosO);
+											totalRegistroError++;
+
+										}
+									}
+								}
+							} else {
+								for (Integer j : validarLongitudLineas.keySet()) {
+									errorPosicionD = validarLongitudLineas.values().toString();
+									for (String cadenaP : cadenasProcesar) {
+										log.error("Identifiacdor de error (Posicion Datos): " + j
+												+ " Descripcion de error: " + validarLongitudLineas.values());
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorPosicionD);
+										totalRegistroError++;
+									}
+								}
+							}
+
+							System.out.println("Se hace peticion de esta linea o lineas ^------");
+						}
+
+						// Eliminar datos de la lista control
+						cadenaControl.clear();
+						// Eliminar datos de la lista procesamiento
+						cadenasProcesar.clear();
+						// Eliminar datos de lista lineas
+						cadenaLinea.clear();
+						// Eliminar datos de la lista validacionCadenas
+						validacionCadenas.clear();
+
+					} else if (cadena.substring(0, 10).trim() != lineasArchivo.get(linea - 2).substring(0, 10).trim()) {
+						if (cadenaControl.size() > 0) {
+							for (String cadenaP : cadenasProcesar) {
+								validacionCadenas.add(cadenaP);
+							}
+
+							// Validar Longuitud de Cadena
+							validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
+							if (validarLongitudLineas.size() == 0) {
+								// Validar Datos Obligatorios
+								// Validar Datos Obligatorios
+								validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
+								if (validarDatosO.size() == 0) {
+									// Validar Datos Dependientes
+									validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
+									if (validarDatosD.size() == 0) {
+										// Validar Tipo de Dato
+										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
+										if (validarTipoDato.size() == 0) {
+											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+											//Validar datos de carta de este bloque, que sean iguales
+											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+											HashMap<Integer, String> validacionDatosCart = null;
+											String errorDatosCart = "";
+											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+											if(validacionDatosCart.size() == 0) {
+												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+												// Factura
+
+												boolean banderaInvocacion = true;
+												if (banderaInvocacion) {
+													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+													// lineas enviadas
+													for (String cadenaP : cadenasProcesar) {
+
+														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																1111111, 2222222);
+													}
+
+												} else {
+													// En caso de que una de sas banderas venga en false se da por hecho que no
+													// se proeco correctamente los registros y se debe de imprimir el error a
+													// todas las lineas enviadas.
+													for (String cadenaP : cadenasProcesar) {
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																"Error recibido en la respuesta del metodo invocado");
+													}
+												}
+											} else {
+												for (Integer j : validacionDatosCart.keySet()) {
+													errorDatosCart = validacionDatosCart.values().toString();
+													log.error("Identificador de error(Datos Carta Consecutivo):" + j
+															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
+															+ linea);
+													totalRegistroError++;
+												}
+												
+												for (String cadenaP : cadenasProcesar) {
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorDatosCart);
+												}
+											}
+											
+											// Eliminar datos de la lista listaBeanFF
+											listaBeanFF.clear();
+
+										} else {
+											for (Integer j : validarTipoDato.keySet()) {
+												errorTipoD = validarTipoDato.values().toString();
+												for (String cadenaP : cadenasProcesar) {
+													log.error("Identificador de error(Tipo Dato):" + j
+															+ " Descripcion de error: " + validarTipoDato.values()
+															+ " en la linea " + linea);
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorTipoD);
+													totalRegistroError++;
+												}
+											}
+										}
+									} else {
+										for (Integer j : validarDatosD.keySet()) {
+											errorDatosD = validarDatosD.values().toString();
+											for (String cadenaP : cadenasProcesar) {
+												log.error("Identificador de error(Dependencia Campos):" + j
+														+ " Descripcion de error: " + validarDatosD.values()
+														+ " en la linea " + linea);
+												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+														errorDatosD);
+												totalRegistroError++;
+
+											}
+										}
+									}
+								} else {
+									for (Integer j : validarDatosO.keySet()) {
+										errorDatosO = validarDatosO.values().toString();
+										for (String cadenaP : cadenasProcesar) {
+											log.error("Identificador de error(Datos Obligatorios):" + j
+													+ "	Descripcion de error: " + validarDatosO.values()
+													+ " en la linea " + linea);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+													errorDatosO);
+											totalRegistroError++;
+										}
+									}
+								}
+							} else {
+								for (Integer j : validarLongitudLineas.keySet()) {
+									errorPosicionD = validarLongitudLineas.values().toString();
+									for (String cadenaP : cadenasProcesar) {
+										log.error("Identifiacdor de error (Posicion Datos): " + j
+												+ " Descripcion de error: " + validarLongitudLineas.values());
+										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorPosicionD);
+										totalRegistroError++;
+									}
+								}
+							}
+
+							log.info("Se hace peticion de esta linea o lineas ^------");
+						}
+
+						// Eliminar datos de la lista control
+						cadenaControl.clear();
+						// Eliminar datos de la lista procesamiento
+						cadenasProcesar.clear();
+						// Eliminar datos de lista lineas
+						cadenaLinea.clear();
+						// Eliminar datos de la lista validacionCadenas
+						validacionCadenas.clear();
 					}
 				}
 			}
+
 		}
 
-		log.info("Objeto de Error" + beanFFError.toString());
 		// copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
 		// moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
 
@@ -613,7 +813,498 @@ public class ValidacionDatos {
 		brTotalLineasS.close();
 		log.info(
 				"Nota -> Eliminar archivo de la carpeta Entrada y mover el archivo de la ruta BKPSalida a la carpta de Salida, ya que se creo un nuevo archivo para escribir los errres y los datos de lo que se obtenga del proceso a BD.");
-		return null;
+	}
+
+	public static String removeUTF8BOM(String s) {
+		if (s.startsWith(UTF8_BOM)) {
+			s = s.substring(1);
+		}
+		return s;
+	}
+
+	public static HashMap<Integer, String> validarLongitudLinea(List<String> cadenas, List<Integer> linea) {
+
+		HashMap<Integer, String> validaPosicionDato = new HashMap<Integer, String>();
+		int cont = 0;
+		for (String cadena : cadenas) {
+			if (validaPosicionDato.size() == 0) {
+				char[] arrayChar = cadena.toCharArray();
+				int caracteres = arrayChar.length;
+				if (caracteres == 524) {
+					log.info("Longitud correcta de caracteres");
+					
+				} else {
+					log.info("Longitud incorrecta de caracteres");
+					validaPosicionDato.put(1, "ERROR EN LA LINEA" + linea.get(cont)
+							+ " LA LONGUITUD DE CARACTERES NO CORRESPONDE A LA ESTABLECIDA");
+					return validaPosicionDato;
+				}
+				cont++;
+			}
+		}
+
+		return validaPosicionDato;
+	}
+
+	public static HashMap<Integer, String> validarDatosObligatorios(List<String> cadenas, List<Integer> linea) {
+
+		log.info("Validar Datos Obligatorios de linea " + linea);
+		HashMap<Integer, String> validaCamposObli = new HashMap<Integer, String>();
+		int cont = 0;
+		try {
+			for (String cadena : cadenas) {
+				if (validaCamposObli.size() == 0) {
+					if (cadena.substring(0, 10).trim().equals("")) {
+						validaCamposObli.put(1, "ERROR EN LA LINEA" + linea.get(cont)
+								+ ", EL CAMPO \"CONSECUTIVO ARCHIVO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(28, 30).trim().equals("")) {
+						validaCamposObli.put(2,
+								"ERROR EN LA LIENA" + linea.get(cont) + ", EL CAMPO \"TIPO REGISTRO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(30, 34).trim().equals("")) {
+						validaCamposObli.put(3, "ERROR EN LA LINEA" + linea.get(cont)
+								+ ", EL CAMPO \"CONSECUTIVO NOTA/CONCEPTO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(34, 36).trim().equals("")) {
+						validaCamposObli.put(4,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"TIPO CARTA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(36, 38).trim().equals("")) {
+						validaCamposObli.put(5,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"TIPO PAGO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(38, 48).trim().equals("")) {
+						validaCamposObli.put(6,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"NUMERO DE PROVEEDOR\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(48, 52).trim().equals("")) {
+						validaCamposObli.put(7,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"SOCIEDAD RECEPTORA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(52, 102).trim().equals("")) {
+						validaCamposObli.put(8,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"GLG\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(157, 160).trim().equals("")) {
+						validaCamposObli.put(9,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"MONEDA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(182, 192).trim().equals("")) {
+						validaCamposObli.put(10,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"CUENTA GPS(CUENTA DE GASTO)\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(192, 202).trim().equals("")) {
+						validaCamposObli.put(11,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"USUARIO CREADOR DE CARTA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(202, 206).trim().equals("") || cadena.substring(202, 206).trim().equals("0")) {
+						validaCamposObli.put(12,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"CENTRO DE COSTOS\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(206, 306).trim().equals("")) {
+						validaCamposObli.put(13,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"DESCRIPCIÓN DEL SERVICIO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(306, 316).trim().equals("")) {
+						validaCamposObli.put(14,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"FECHA INICIO SERVICIO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(316, 326).trim().equals("")) {
+						validaCamposObli.put(15,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"FECHA FIN SERVICIO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(326, 328).trim().equals("")) {
+						validaCamposObli.put(16,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"ESTADO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(328, 340).trim().equals("")) {
+						validaCamposObli.put(17,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"IMPORTE UNITARIO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(340, 353).trim().equals("")) {
+						validaCamposObli.put(18,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"NÚMERO DE UNIDADES\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(353, 365).trim().equals("")) {
+						validaCamposObli.put(19,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"IVA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(425, 427).trim().equals("SI")
+							&& cadena.substring(427, 457).trim().equals("")) {
+						validaCamposObli.put(20, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+								+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+								+ " EL CAMPO \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
+								+ linea);
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(425, 427).trim().equals("SI")
+							&& cadena.substring(457, 467).trim().equals("")) {
+						validaCamposObli.put(21, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+								+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+								+ " EL CAMPO \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
+								+ linea);
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(467, 468).trim().equals("")) {
+						validaCamposObli.put(22,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"VIA DE PAGO\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(468, 488).trim().equals("")) {
+						validaCamposObli.put(23,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA BANCARIA\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(518, 521).trim().equals("")) {
+						validaCamposObli.put(24,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"ESTATUS FACTURA\" Factura ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+
+					if (cadena.substring(521, 524).trim().equals("")) {
+						validaCamposObli.put(25,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"APLICATIVO ORIGEN\" ES OBLIGATORIO");
+						return validaCamposObli;
+					}
+					cont++;
+				}
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			log.info("Error al obtner los datos de la posicion: " + e.getLocalizedMessage());
+			validaCamposObli = null;
+			return validaCamposObli;
+		}
+		return validaCamposObli;
+	}
+
+	public static HashMap<Integer, String> validarDatosDependientes(List<String> cadenas, List<Integer> linea) {
+
+		log.info("Validar Datos Dependientes de linea " + linea);
+		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
+		int cont = 0;
+		for (String cadena : cadenas) {
+			if (validaCamposDepen.size() == 0) {
+				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
+				if (validarNuPep) {
+					validaCamposDepen.put(2, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+							+ " EL VALOR DEL CAMPO \"NUMERO DE PEP\" ES INCORRECTO, YA QUE NO CUMPLE CON EL FORMATO \"00000000-000\"");
+					return validaCamposDepen;
+				}
+
+				if ((!cadena.substring(174, 182).trim().equals(""))
+						&& cadena.substring(174, 182).trim() == cadena.substring(38, 48).trim()) {
+					validaCamposDepen.put(3, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+							+ " EL VALOR DEL CAMPO \"RECEPTOR ALTERNATIVO\" DEBE DE SER DIFERENTE AL VALOR DE \"NUMERO DE PROVEEDOR\"");
+					return validaCamposDepen;
+				}
+
+				boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(),
+						cadena.substring(316, 326).trim());
+				if (validarFechaFin) {
+					validaCamposDepen.put(4, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+							+ " EL VALOR DEL CAMPO \"FECHA FIN SERVICIO\" DEBE DE SER MAYOR AL CAMPO DE \"FECHA INICIO SERVICIO\"");
+					return validaCamposDepen;
+				}
+
+				if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
+					validaCamposDepen.put(5, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+							+ "EL VALOR: \"SI\", DEL CAMPO CAMPO \"COMPROBACION\" SOLO APLICA PARA \"TIPO REGISTRO\": \"NF\"");
+					return validaCamposDepen;
+				}
+				cont++;
+			}
+		}
+
+		return validaCamposDepen;
+	}
+
+	public static Boolean validaNupep(String nuPep) {
+		boolean validaP = false;
+		String regexPep = "^([\\d]{8})([-])([\\d]{3})$";
+		String valorPep = nuPep;
+
+		Pattern pattern = Pattern.compile(regexPep);
+		Matcher matcher = pattern.matcher(valorPep);
+
+		if (!matcher.find()) {
+			validaP = true;
+		}
+		return validaP;
+	}
+
+	public static Boolean validaFecha(String fechaInicio, String fechaFin) {
+		boolean fechaValida = true;
+		Date fechaIniParse = null;
+		Date fechaFinalParse = null;
+		SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
+
+		try {
+
+			fechaIniParse = parseador.parse(fechaInicio);
+			fechaFinalParse = parseador.parse(fechaFin);
+
+			if (fechaIniParse.before(fechaFinalParse)) {
+				fechaValida = false;
+			} else {
+				if (fechaFinalParse.before(fechaIniParse)) {
+					fechaValida = true;
+				} else {
+					fechaValida = false;
+				}
+			}
+		} catch (ParseException e) {
+			// log.error("Error al validar la Fecha Inicio y Final.");
+			e.printStackTrace();
+			return fechaValida;
+		}
+		return fechaValida;
+	}
+
+	public static HashMap<Integer, String> validarTiposDato(List<String> cadenas, List<Integer> linea) {
+
+		log.info("Validar Tipo de Dato de linea " + linea);
+		HashMap<Integer, String> validaTipoDato = new HashMap<Integer, String>();
+		int cont = 0;
+		try {
+			for (String cadena : cadenas) {
+				if (validaTipoDato.size() == 0) {
+					if (!(isNumeric(cadena.substring(0, 10).trim()))) {
+						validaTipoDato.put(1,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(10, 19).trim().equals("") && !(isNumeric(cadena.substring(10, 19).trim()))) {
+						validaTipoDato.put(2,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE CARTA\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(19, 28).trim().equals("") && !(isNumeric(cadena.substring(19, 28).trim()))) {
+						validaTipoDato.put(3,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE FACTURA\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isNumeric(cadena.substring(30, 34).trim()))) {
+						validaTipoDato.put(4,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"CONSECUTIVO NOTA\\CONCEPTO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isNumeric(cadena.substring(38, 48).trim()))) {
+						validaTipoDato.put(5,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"NUMERO DE PROVEEDOR\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(164, 174).trim().equals("")
+							&& !(isNumeric(cadena.substring(164, 174).trim()))) {
+						validaTipoDato.put(6,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"CONTRATO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(174, 182).trim().equals("")
+							&& !(isNumeric(cadena.substring(174, 182).trim()))) {
+						validaTipoDato.put(7,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34)
+										+ " EL CAMPO \"RECEPTOR ALTERNATIVO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isNumeric(cadena.substring(182, 192).trim()))) {
+						validaTipoDato.put(8,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA GPS\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isNumeric(cadena.substring(326, 328).trim()))) {
+						validaTipoDato.put(9,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"ESTADO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isDecimal(cadena.substring(328, 340).trim()))) {
+						validaTipoDato.put(10,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"IMPORTE UNITARIO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isDecimal(cadena.substring(340, 353).trim()))) {
+						validaTipoDato.put(11,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE UNIDADES\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(365, 377).trim().equals("")
+							&& !(isDecimal(cadena.substring(365, 377).trim()))) {
+						validaTipoDato.put(12,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"ISR RETENIDO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(377, 389).trim().equals("")
+							&& !(isDecimal(cadena.substring(377, 389).trim()))) {
+						validaTipoDato.put(13,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"IVA RETENIDO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(389, 401).trim().equals("")
+							&& !(isDecimal(cadena.substring(389, 401).trim()))) {
+						validaTipoDato.put(14,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"IMPUESTO CEDULAR\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(401, 413).trim().contentEquals("")
+							&& !(isDecimal(cadena.substring(401, 413).trim()))) {
+						validaTipoDato.put(15,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"OTROS IMPUESTOS\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(413, 425).trim().equals("")
+							&& !(isDecimal(cadena.substring(413, 425).trim()))) {
+						validaTipoDato.put(16,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"DESCUENTO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!(isNumeric(cadena.substring(468, 488).trim()))) {
+						validaTipoDato.put(17,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA BANCARIA\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+
+					if (!cadena.substring(498, 518).trim().equals("")
+							&& !(isNumeric(cadena.substring(498, 518).trim()))) {
+						validaTipoDato.put(18,
+								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE ACTIVO\" NO ES NUMERICO");
+						return validaTipoDato;
+					}
+					cont++;
+				}
+			}
+		} catch (StringIndexOutOfBoundsException e) {
+			log.info("Error al obtner los datos de la posicion: " + e.getLocalizedMessage());
+		}
+		return validaTipoDato;
+	}
+
+	public static boolean isNumeric(String valor) {
+
+		try {
+			Integer.parseInt(valor);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
+	}
+
+	public static boolean isDecimal(String valor) {
+
+		try {
+			new BigDecimal(valor);
+			return true;
+		} catch (NumberFormatException e) {
+			return false;
+		}
 	}
 
 	public static void escribirArchivoError(String archivo, String cadena, String error) {
@@ -647,371 +1338,7 @@ public class ValidacionDatos {
 			e.printStackTrace();
 		}
 	}
-
-	public static String removeUTF8BOM(String s) {
-		if (s.startsWith(UTF8_BOM)) {
-			s = s.substring(1);
-		}
-		return s;
-	}
-
-	public static HashMap<Integer, String> validarLongitudLinea(String cadena, int linea) {
-
-		log.info("Validar Longitud de linea " + linea);
-		HashMap<Integer, String> validaPosicionDato = new HashMap<Integer, String>();
-		char[] arrayChar = cadena.toCharArray();
-		int caracteres = arrayChar.length;
-		if (caracteres == 524) {
-			log.info("Longitud correcta de caracteres");
-		} else {
-			log.info("Longitud incorrecta de caracteres");
-			validaPosicionDato.put(1, "La longuitud estalecida de caracteres no corresponde en la linea: " + linea);
-		}
-
-		return validaPosicionDato;
-	}
-
-	public static HashMap<Integer, String> validarDatosObligatorios(String cadena, int linea) {
-
-		log.info("Validar Datos Obligatorios de linea " + linea);
-		HashMap<Integer, String> validaCamposObli = new HashMap<Integer, String>();
-		try {
-			if (cadena.substring(0, 10).trim().equals("")) {
-				validaCamposObli.put(1, "El campo \"CONSECUTIVO ARCHIVO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(28, 30).trim().equals("")) {
-				validaCamposObli.put(2, "El campo \"TIPO REGISTRO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(30, 34).trim().equals("")) {
-				validaCamposObli.put(3, "El campo \"CONSECUTIVO NOTA/CONCEPTO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(34, 36).trim().equals("")) {
-				validaCamposObli.put(4, "El campo \"TIPO CARTA\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(36, 38).trim().equals("")) {
-				validaCamposObli.put(5, "El campo \"TIPO PAGO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(38, 48).trim().equals("")) {
-				validaCamposObli.put(6, "El campo \"NUMERO DE PROVEEDOR\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(48, 52).trim().equals("")) {
-				validaCamposObli.put(7, "El campo \"SOCIEDAD RECEPTORA\" es obligatorio en la linea:" + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(52, 102).trim().equals("")) {
-				validaCamposObli.put(8, "El campo \"GLG\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(157, 160).trim().equals("")) {
-				validaCamposObli.put(9, "El campo \"MONEDA\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(182, 192).trim().equals("")) {
-				validaCamposObli.put(10,
-						"El campo \"CUENTA GPS(CUENTA DE GASTO)\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(192, 202).trim().equals("")) {
-				validaCamposObli.put(11, "El campo \"USUARIO CREADOR DE CARTA\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(202, 206).trim().equals("") || cadena.substring(202, 206).trim().equals("0")) {
-				validaCamposObli.put(12, "El campo \"CENTRO DE COSTOS\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(206, 306).trim().equals("")) {
-				validaCamposObli.put(13, "El campo \"DESCRIPCIÓN DEL SERVICIO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(306, 316).trim().equals("")) {
-				validaCamposObli.put(14, "El campo \"FECHA INICIO SERVICIO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(316, 326).trim().equals("")) {
-				validaCamposObli.put(15, "El campo \"FECHA FIN SERVICIO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(326, 328).trim().equals("")) {
-				validaCamposObli.put(16, "El campo \"ESTADO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(328, 340).trim().equals("")) {
-				validaCamposObli.put(17, "El campo \"IMPORTE UNITARIO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(340, 353).trim().equals("")) {
-				validaCamposObli.put(18, "El campo \"NÚMERO DE UNIDADES\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(353, 365).trim().equals("")) {
-				validaCamposObli.put(19, "El campo \"IVA\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(427, 457).trim().equals("")) {
-				validaCamposObli.put(20,
-						"El campo \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
-								+ linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(425, 427).trim().equals("SI") && cadena.substring(457, 467).trim().equals("")) {
-				validaCamposObli.put(21,
-						"El campo \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"Comprobacion\" en la linea: "
-								+ linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(467, 468).trim().equals("")) {
-				validaCamposObli.put(22, "El campo \"VIA DE PAGO\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(468, 488).trim().equals("")) {
-				validaCamposObli.put(23, "El campo \"CUENTA BANCARIA\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(518, 521).trim().equals("")) {
-				validaCamposObli.put(24, "El campo \"ESTATUS FACTURA\" Factura es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-
-			if (cadena.substring(521, 524).trim().equals("")) {
-				validaCamposObli.put(25, "El campo \"APLICATIVO ORIGEN\" es obligatorio en la linea: " + linea);
-				return validaCamposObli;
-			}
-		} catch (StringIndexOutOfBoundsException e) {
-			log.info("Error al obtner los datos de la posicion: " + e.getLocalizedMessage());
-			validaCamposObli = null;
-			return validaCamposObli;
-		}
-		return validaCamposObli;
-	}
-
-	public static HashMap<Integer, String> validarDatosDependientes(String cadena, int linea) {
-
-		log.info("Validar Datos Dependientes de linea " + linea);
-		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
-
-		boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
-		if (validarNuPep) {
-			validaCamposDepen.put(2,
-					"El valor del campo \"NUMERO DE PEP\" es incorrecto, ya que no cuemple con el formato \"00000000-000\" en la linea: "
-							+ linea);
-		}
-
-		if ((!cadena.substring(174, 182).trim().equals(""))
-				&& cadena.substring(174, 182).trim() == cadena.substring(38, 48).trim()) {
-			validaCamposDepen.put(3,
-					"El valor del campo \"RECEPTOR ALTERNATIVO\" debe de ser diferente al valor de \"NUMERO DE PROVEEDOR\" en la linea: "
-							+ linea);
-		}
-
-		boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(), cadena.substring(316, 326).trim());
-		if (validarFechaFin) {
-			validaCamposDepen.put(4,
-					"El valor del campo \"FECHA FIN SERVICIO\" debe ser mayor a la \"FECHA INICIO SERVICIO\" en la linea: "
-							+ linea);
-		}
-
-		if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
-			validaCamposDepen.put(5,
-					"El valor: SI, del campo \"COMPROBACION\" solo aplica para \"TIPO REGISTRO: NF\" en la linea: "
-							+ linea);
-		}
-
-		return validaCamposDepen;
-	}
-
-	public static HashMap<Integer, String> validarTiposDato(String cadena, int linea) {
-
-		log.info("Validar Tipo de Dato de linea " + linea);
-		HashMap<Integer, String> validaTipoDato = new HashMap<Integer, String>();
-		try {
-			if (!(isNumeric(cadena.substring(0, 10).trim()))) {
-				validaTipoDato.put(1, "El campo \"CONSECUTIVO ARCHIVO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(10, 19).trim().equals("") && !(isNumeric(cadena.substring(10, 19).trim()))) {
-				validaTipoDato.put(2, "El campo \"NUMERO DE CARTA\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(19, 28).trim().equals("") && !(isNumeric(cadena.substring(19, 28).trim()))) {
-				validaTipoDato.put(3, "El campo \"NUMERO DE FACTURA\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isNumeric(cadena.substring(30, 34).trim()))) {
-				validaTipoDato.put(4, "El campo \"CONSECUTIVO NOTA\\CONCEPTO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isNumeric(cadena.substring(38, 48).trim()))) {
-				validaTipoDato.put(5, "El campo \"NUMERO DE PROVEEDOR\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(164, 174).trim().equals("") && !(isNumeric(cadena.substring(164, 174).trim()))) {
-				validaTipoDato.put(6, "El campo \"CONTRATO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(174, 182).trim().equals("") && !(isNumeric(cadena.substring(174, 182).trim()))) {
-				validaTipoDato.put(7, "El campo \"RECEPTOR ALTERNATIVO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isNumeric(cadena.substring(182, 192).trim()))) {
-				validaTipoDato.put(8, "El campo \"CUENTA GPS\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isNumeric(cadena.substring(326, 328).trim()))) {
-				validaTipoDato.put(9, "El campo \"ESTADO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isDecimal(cadena.substring(328, 340).trim()))) {
-				validaTipoDato.put(10, "El campo \"IMPORTE UNITARIO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isDecimal(cadena.substring(340, 353).trim()))) {
-				validaTipoDato.put(11, "El campo \"NUMERO DE UNIDADES\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(365, 377).trim().equals("") && !(isDecimal(cadena.substring(365, 377).trim()))) {
-				validaTipoDato.put(12, "El campo \"ISR RETENIDO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(377, 389).trim().equals("") && !(isDecimal(cadena.substring(377, 389).trim()))) {
-				validaTipoDato.put(13, "El campo \"IVA RETENIDO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(389, 401).trim().equals("") && !(isDecimal(cadena.substring(389, 401).trim()))) {
-				validaTipoDato.put(14, "El campo \"IMPUESTO CEDULAR\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(401, 413).trim().contentEquals("")
-					&& !(isDecimal(cadena.substring(401, 413).trim()))) {
-				validaTipoDato.put(15, "El campo \"OTROS IMPUESTOS\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(413, 425).trim().equals("") && !(isDecimal(cadena.substring(413, 425).trim()))) {
-				validaTipoDato.put(16, "El campo \"DESCUENTO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!(isNumeric(cadena.substring(468, 488).trim()))) {
-				validaTipoDato.put(17, "El campo \"CUENTA BANCARIA\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-			if (!cadena.substring(498, 518).trim().equals("") && !(isNumeric(cadena.substring(498, 518).trim()))) {
-				validaTipoDato.put(18, "El campo \"NUMERO DE ACTIVO\" no es numerico en la linea: " + linea);
-				return validaTipoDato;
-			}
-
-		} catch (StringIndexOutOfBoundsException e) {
-			log.info("Error al obtner los datos de la posicion: " + e.getLocalizedMessage());
-		}
-		return validaTipoDato;
-	}
-
-	public static Boolean validaFecha(String fechaInicio, String fechaFin) {
-		boolean fechaValida = true;
-		Date fechaIniParse = null;
-		Date fechaFinalParse = null;
-		SimpleDateFormat parseador = new SimpleDateFormat("dd/MM/yyyy");
-
-		try {
-
-			fechaIniParse = parseador.parse(fechaInicio);
-			fechaFinalParse = parseador.parse(fechaFin);
-
-			if (fechaIniParse.before(fechaFinalParse)) {
-				fechaValida = false;
-			} else {
-				if (fechaFinalParse.before(fechaIniParse)) {
-					fechaValida = true;
-				} else {
-					fechaValida = false;
-				}
-			}
-		} catch (ParseException e) {
-			log.error("Error al validar la Fecha Inicio y Final.");
-			e.printStackTrace();
-			return fechaValida;
-		}
-		return fechaValida;
-	}
-
-	public static Boolean validaNupep(String nuPep) {
-		boolean validaP = false;
-		String regexPep = "^([\\d]{8})([-])([\\d]{3})$";
-		String valorPep = nuPep;
-
-		Pattern pattern = Pattern.compile(regexPep);
-		Matcher matcher = pattern.matcher(valorPep);
-
-		if (!matcher.find()) {
-			validaP = true;
-		}
-		return validaP;
-	}
-
-	public static boolean isNumeric(String valor) {
-
-		try {
-			Integer.parseInt(valor);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
-	public static boolean isDecimal(String valor) {
-
-		try {
-			new BigDecimal(valor);
-			return true;
-		} catch (NumberFormatException e) {
-			return false;
-		}
-	}
-
+	
 	public void moverArchivo(String archivoOrigen, String archvoDestino) {
 		Path FROM = Paths.get(archivoOrigen);
 		Path TO = Paths.get(archvoDestino);
