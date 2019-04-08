@@ -27,7 +27,7 @@ public class ValidaDatosCarta {
 
 				if (!listaCadenas.get(contLinea).getTp_pago().equals(listaCadenas.get(contLinea).getTp_pago())) {
 					validaCartaConse.put(1,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  " 
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO PAGO\"");
 					return validaCartaConse;
