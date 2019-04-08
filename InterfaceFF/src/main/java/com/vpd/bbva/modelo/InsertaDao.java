@@ -1,20 +1,33 @@
 package main.java.com.vpd.bbva.modelo;
 
-import java.util.ArrayList;
+import java.sql.CallableStatement;
+import java.sql.Connection;
 import java.util.List;
 
-public class InsertaDao {
+import main.java.com.vpd.bbva.bean.BeanFF;
+import main.java.com.vpd.bbva.bean.BeanRespuesta;
+import main.java.com.vpd.bbva.conexion.Conexion;
+import main.java.com.vpd.bbva.constantes.DBConstantes;
 
+public class InsertaDao {
+	Conexion obj ;
+	Connection con;
+	CallableStatement call;
 	
-	public ArrayList<String> CreaCarta(List<String> datosCarta){
-		
-		// Los datos entran al metodo donde se validan los datos
-		
-		
-		
-		// si son correctos entra al metodo de insertar carta
-		
-		
+	public BeanRespuesta CreaCarta(List<BeanFF> datosCarta) throws Exception{
+		con = obj.AbreConexion();
+		Integer cerror;	
+		try {
+			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_FACTURA);
+			for(BeanFF factura : datosCarta) {
+			call.setString(1, factura.getEstatusF());
+			call.execute();
+			}
+		cerror = new Integer(call.getObject("P_EXITO").toString());
+		}catch (Exception e) {
+			
+		}
+
 		
 		
 		return null;
