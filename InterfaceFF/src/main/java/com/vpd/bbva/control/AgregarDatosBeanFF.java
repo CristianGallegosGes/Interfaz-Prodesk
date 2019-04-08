@@ -28,7 +28,7 @@ public class AgregarDatosBeanFF {
 			registroBeanFF.setTp_registro(cadena.substring(28, 30).trim());
 			registroBeanFF.setConsecNota(Integer.parseInt(cadena.substring(30, 34).trim()));
 			registroBeanFF.setTp_carta(cadena.substring(34, 36).trim());
-			registroBeanFF.setTp_pago(cadena.substring(36, 38).trim());
+			registroBeanFF.setTp_pago(Integer.parseInt(cadena.substring(36, 38).trim()));
 			registroBeanFF.setNu_proveedor(Integer.parseInt(cadena.substring(38, 48).trim()));
 			registroBeanFF.setSociedadRec(cadena.substring(48, 52).trim());
 			registroBeanFF.setGlg(cadena.substring(52, 102));

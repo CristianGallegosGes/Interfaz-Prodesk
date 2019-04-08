@@ -21,6 +21,7 @@ public class ControlBloqueaDB {
 		if(cartaValidada == false) {
 			lstatusC = validaBO.ValidaCarta(listaBloque); /** Metodo para validar carta*/
 			if(lstatusC.GetBandera() == true) {
+				//Metodo para validar concepto
 				BeanRespuesta statusF	= validaBO.ValidaFactura(listaBloque);
 			if(statusF.GetBandera() == true) {
 				BeanRespuesta statusC = insert.CreaCarta(listaBloque);

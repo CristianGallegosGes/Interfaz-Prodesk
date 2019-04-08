@@ -25,7 +25,7 @@ public class ValidaDatosCarta {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getTp_pago().equals(listaCadenas.get(contLinea).getTp_pago())) {
+				if (!(listaCadenas.get(contLinea).getTp_pago() == (listaCadenas.get(contLinea).getTp_pago()))) {
 					validaCartaConse.put(1,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  " 
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -160,7 +160,7 @@ public class ValidaDatosCarta {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getTp_pago().equals(listaCadenas.get(i).getTp_pago())) {
+				if (!(listaCadenas.get(contLinea).getTp_pago() == (listaCadenas.get(i).getTp_pago()))) {
 					validaCartaConse.put(1,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
