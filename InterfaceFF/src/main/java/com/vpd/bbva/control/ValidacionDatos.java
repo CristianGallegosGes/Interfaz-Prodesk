@@ -62,6 +62,7 @@ public class ValidacionDatos {
 		HashMap<Integer, String> validarDatosO = null;
 		HashMap<Integer, String> validarDatosD = null;
 		HashMap<Integer, String> validarTipoDato = null;
+		HashMap<Integer, String> consecutivoMayor = null;
 
 		String nombreArchivo = archivo.substring(archivo.length() - 22);
 		// Renombrar el archivo para la salida
@@ -73,6 +74,7 @@ public class ValidacionDatos {
 			String errorDatosO = "";
 			String errorDatosD = "";
 			String errorTipoD = "";
+			String errorConsecutivoM = "";
 
 			if (firstLine) {
 				cadena = removeUTF8BOM(cadena);
@@ -127,23 +129,28 @@ public class ValidacionDatos {
 									// Validar Tipo de Dato
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
-										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
+										// Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar
+										// el memtodo de BD
 										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
 										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-										//Validar datos de carta de este bloque, que sean iguales
+										// Validar datos de carta de este bloque, que sean iguales
 										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
 										HashMap<Integer, String> validacionDatosCart = null;
 										String errorDatosCart = "";
-										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-										if(validacionDatosCart.size() == 0) {
-											// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
+										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF,
+												cadenaLinea);
+										if (validacionDatosCart.size() == 0) {
+											// Invocar el metodo de BD enviando la lista "listaBeanFF" como
+											// parametro
 											// Se recibe respuesta del metodo invocado
-											// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
+											// Se valida si el registro fue correcto, con la bandera de No. Carta y
+											// No.
 											// Factura
 
 											boolean banderaInvocacion = true;
 											if (banderaInvocacion) {
-												// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
+												// Si son true las banderas se pinta el No. Carta y No. Factura a
+												// todas las
 												// lineas enviadas
 												for (String cadenaP : cadenasProcesar) {
 
@@ -152,8 +159,10 @@ public class ValidacionDatos {
 												}
 
 											} else {
-												// En caso de que una de sas banderas venga en false se da por hecho que no
-												// se proeco correctamente los registros y se debe de imprimir el error a
+												// En caso de que una de sas banderas venga en false se da por hecho
+												// que no
+												// se proeco correctamente los registros y se debe de imprimir el
+												// error a
 												// todas las lineas enviadas.
 												for (String cadenaP : cadenasProcesar) {
 													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
@@ -164,20 +173,19 @@ public class ValidacionDatos {
 											for (Integer j : validacionDatosCart.keySet()) {
 												errorDatosCart = validacionDatosCart.values().toString();
 												log.error("Identificador de error(Datos Carta Consecutivo):" + j
-														+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-														+ linea);
+														+ " Descripcion de error: " + validacionDatosCart.values()
+														+ " en la linea " + linea);
 												totalRegistroError++;
 											}
-											
+
 											for (String cadenaP : cadenasProcesar) {
 												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 														errorDatosCart);
 											}
 										}
-										
+
 										// Eliminar datos de la lista listaBeanFF
 										listaBeanFF.clear();
-
 									} else {
 										for (Integer j : validarTipoDato.keySet()) {
 											errorTipoD = validarTipoDato.values().toString();
@@ -198,7 +206,8 @@ public class ValidacionDatos {
 											log.error("Identificador de error(Dependencia Campos):" + j
 													+ " Descripcion de error: " + validarDatosD.values()
 													+ " en la linea " + linea);
-											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosD);
+											escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+													errorDatosD);
 											totalRegistroError++;
 										}
 									}
@@ -232,10 +241,11 @@ public class ValidacionDatos {
 
 					// Eliminar datos de la lista control
 					cadenaControl.clear();
-					// Agregar cadena a lista control
-					cadenaControl.add(cadena);
+
 					// Eliminar datos de la lista proceso
 					cadenasProcesar.clear();
+					// Agregar cadena a lista control
+					cadenaControl.add(cadena);
 					// Agregar cadena a lista de procesamiento
 					cadenasProcesar.add(cadena);
 					// Eliminar datos de lista lineas
@@ -265,57 +275,81 @@ public class ValidacionDatos {
 									// Validar Tipo de Dato
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
-										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
-										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-										//Validar datos de carta de este bloque, que sean iguales
-										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-										HashMap<Integer, String> validacionDatosCart = null;
-										String errorDatosCart = "";
-										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-										if(validacionDatosCart.size() == 0) {
-											// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-											// Se recibe respuesta del metodo invocado
-											// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-											// Factura
+										// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
+										// archivo anterior
+										consecutivoMayor = validaConsecutivoMayor(cadena,
+												validacionCadenas, cadenaLinea);
+										if (consecutivoMayor.size() == 0) {
+											// Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar
+											// el memtodo de BD
+											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
+											// Validar datos de carta de este bloque, que sean iguales
+											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+											HashMap<Integer, String> validacionDatosCart = null;
+											String errorDatosCart = "";
+											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF,
+													cadenaLinea);
+											if (validacionDatosCart.size() == 0) {
+												// Invocar el metodo de BD enviando la lista "listaBeanFF" como
+												// parametro
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera de No. Carta y
+												// No.
+												// Factura
 
-											boolean banderaInvocacion = true;
-											if (banderaInvocacion) {
-												// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-												// lineas enviadas
-												for (String cadenaP : cadenasProcesar) {
+												boolean banderaInvocacion = true;
+												if (banderaInvocacion) {
+													// Si son true las banderas se pinta el No. Carta y No. Factura a
+													// todas las
+													// lineas enviadas
+													for (String cadenaP : cadenasProcesar) {
 
-													escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															1111111, 2222222);
+														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
+																cadenaP, 1111111, 2222222);
+													}
+
+												} else {
+													// En caso de que una de sas banderas venga en false se da por hecho
+													// que no
+													// se proeco correctamente los registros y se debe de imprimir el
+													// error a
+													// todas las lineas enviadas.
+													for (String cadenaP : cadenasProcesar) {
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																"Error recibido en la respuesta del metodo invocado");
+													}
+												}
+											} else {
+												for (Integer j : validacionDatosCart.keySet()) {
+													errorDatosCart = validacionDatosCart.values().toString();
+													log.error("Identificador de error(Datos Carta Consecutivo):" + j
+															+ " Descripcion de error: " + validacionDatosCart.values()
+															+ " en la linea " + linea);
+													totalRegistroError++;
 												}
 
-											} else {
-												// En caso de que una de sas banderas venga en false se da por hecho que no
-												// se proeco correctamente los registros y se debe de imprimir el error a
-												// todas las lineas enviadas.
 												for (String cadenaP : cadenasProcesar) {
 													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															"Error recibido en la respuesta del metodo invocado");
+															errorDatosCart);
 												}
 											}
+
+											// Eliminar datos de la lista listaBeanFF
+											listaBeanFF.clear();
 										} else {
-											for (Integer j : validacionDatosCart.keySet()) {
-												errorDatosCart = validacionDatosCart.values().toString();
-												log.error("Identificador de error(Datos Carta Consecutivo):" + j
-														+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-														+ linea);
-												totalRegistroError++;
-											}
-											
-											for (String cadenaP : cadenasProcesar) {
-												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-														errorDatosCart);
+											for (Integer j : consecutivoMayor.keySet()) {
+												errorConsecutivoM = consecutivoMayor.values().toString();
+												for (String cadenaP : cadenasProcesar) {
+													log.error("Identificador de error(Tipo Dato):" + j
+															+ " Descripcion de error: " + consecutivoMayor.values()
+															+ " en la linea " + linea);
+													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+															errorConsecutivoM);
+													totalRegistroError++;
+												}
 											}
 										}
-										
-										// Eliminar datos de la lista listaBeanFF
-										listaBeanFF.clear();
-
 									} else {
 										for (Integer j : validarTipoDato.keySet()) {
 											errorTipoD = validarTipoDato.values().toString();
@@ -369,13 +403,13 @@ public class ValidacionDatos {
 
 						System.out.println("Se hace peticion de esta linea o lineas ^------");
 					}
-
+					
 					// Eliminar datos de la lista control
 					cadenaControl.clear();
-					// Agregar cadena a lista control
-					cadenaControl.add(cadena);
 					// Eliminar datos de la lista proceso
 					cadenasProcesar.clear();
+					// Agregar cadena a lista control
+					cadenaControl.add(cadena);
 					// Agregar cadena a lista de procesamiento
 					cadenasProcesar.add(cadena);
 					// Eliminar datos de lista lineas
@@ -411,57 +445,84 @@ public class ValidacionDatos {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
+											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
+											// archivo anterior
+											consecutivoMayor = validaConsecutivoMayor(cadena,
+													validacionCadenas, cadenaLinea);
+											if (consecutivoMayor.size() == 0) {
+												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
+												// inovcar el memtodo de BD
+												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
+														.setCadenas(cadenasProcesar);
+												// Validar datos de carta de este bloque, que sean iguales
+												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												HashMap<Integer, String> validacionDatosCart = null;
+												String errorDatosCart = "";
+												validacionDatosCart = validaDatosC
+														.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+												if (validacionDatosCart.size() == 0) {
+													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
+													// parametro
+													// Se recibe respuesta del metodo invocado
+													// Se valida si el registro fue correcto, con la bandera de No.
+													// Carta y No.
+													// Factura
 
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
+													boolean banderaInvocacion = true;
+													if (banderaInvocacion) {
+														// Si son true las banderas se pinta el No. Carta y No. Factura
+														// a todas las
+														// lineas enviadas
+														for (String cadenaP : cadenasProcesar) {
 
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
+															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP, 1111111, 2222222);
+														}
+
+													} else {
+														// En caso de que una de sas banderas venga en false se da por
+														// hecho que no
+														// se proeco correctamente los registros y se debe de imprimir
+														// el error a
+														// todas las lineas enviadas.
+														for (String cadenaP : cadenasProcesar) {
+															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP,
+																	"Error recibido en la respuesta del metodo invocado");
+														}
+													}
+												} else {
+													for (Integer j : validacionDatosCart.keySet()) {
+														errorDatosCart = validacionDatosCart.values().toString();
+														log.error("Identificador de error(Datos Carta Consecutivo):" + j
+																+ " Descripcion de error: "
+																+ validacionDatosCart.values() + " en la linea "
+																+ linea);
+														totalRegistroError++;
 													}
 
-												} else {
-													// En caso de que una de sas banderas venga en false se da por hecho que no
-													// se proeco correctamente los registros y se debe de imprimir el error a
-													// todas las lineas enviadas.
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																"Error recibido en la respuesta del metodo invocado");
+																errorDatosCart);
 													}
 												}
+
+												// Eliminar datos de la lista listaBeanFF
+												listaBeanFF.clear();
 											} else {
-												for (Integer j : validacionDatosCart.keySet()) {
-													errorDatosCart = validacionDatosCart.values().toString();
-													log.error("Identificador de error(Datos Carta Consecutivo):" + j
-															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-															+ linea);
-													totalRegistroError++;
-												}
-												
-												for (String cadenaP : cadenasProcesar) {
-													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															errorDatosCart);
+												for (Integer j : consecutivoMayor.keySet()) {
+													errorConsecutivoM = consecutivoMayor.values().toString();
+													for (String cadenaP : cadenasProcesar) {
+														log.error("Identificador de error(Tipo Dato):" + j
+																+ " Descripcion de error: " + consecutivoMayor.values()
+																+ " en la linea " + linea);
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																errorConsecutivoM);
+														totalRegistroError++;
+													}
 												}
 											}
-											
-											// Eliminar datos de la lista listaBeanFF
-											listaBeanFF.clear();
-
 										} else {
 											for (Integer j : validarTipoDato.keySet()) {
 												errorTipoD = validarTipoDato.values().toString();
@@ -517,7 +578,7 @@ public class ValidacionDatos {
 
 							log.info("Se hace peticion de esta linea o lineas ^------");
 						}
-
+						
 						// Eliminar datos de la lista control
 						cadenaControl.clear();
 						// Eliminar datos de la lista procesamiento
@@ -549,57 +610,84 @@ public class ValidacionDatos {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
+											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
+											// archivo anterior
+											consecutivoMayor = validaConsecutivoMayor(cadena,
+													validacionCadenas, cadenaLinea);
+											if (consecutivoMayor.size() == 0) {
+												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
+												// inovcar el memtodo de BD
+												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
+														.setCadenas(cadenasProcesar);
+												// Validar datos de carta de este bloque, que sean iguales
+												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												HashMap<Integer, String> validacionDatosCart = null;
+												String errorDatosCart = "";
+												validacionDatosCart = validaDatosC
+														.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+												if (validacionDatosCart.size() == 0) {
+													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
+													// parametro
+													// Se recibe respuesta del metodo invocado
+													// Se valida si el registro fue correcto, con la bandera de No.
+													// Carta y No.
+													// Factura
 
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
+													boolean banderaInvocacion = true;
+													if (banderaInvocacion) {
+														// Si son true las banderas se pinta el No. Carta y No. Factura
+														// a todas las
+														// lineas enviadas
+														for (String cadenaP : cadenasProcesar) {
 
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
+															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP, 1111111, 2222222);
+														}
+
+													} else {
+														// En caso de que una de sas banderas venga en false se da por
+														// hecho que no
+														// se proeco correctamente los registros y se debe de imprimir
+														// el error a
+														// todas las lineas enviadas.
+														for (String cadenaP : cadenasProcesar) {
+															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP,
+																	"Error recibido en la respuesta del metodo invocado");
+														}
+													}
+												} else {
+													for (Integer j : validacionDatosCart.keySet()) {
+														errorDatosCart = validacionDatosCart.values().toString();
+														log.error("Identificador de error(Datos Carta Consecutivo):" + j
+																+ " Descripcion de error: "
+																+ validacionDatosCart.values() + " en la linea "
+																+ linea);
+														totalRegistroError++;
 													}
 
-												} else {
-													// En caso de que una de sas banderas venga en false se da por hecho que no
-													// se proeco correctamente los registros y se debe de imprimir el error a
-													// todas las lineas enviadas.
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																"Error recibido en la respuesta del metodo invocado");
+																errorDatosCart);
 													}
 												}
+
+												// Eliminar datos de la lista listaBeanFF
+												listaBeanFF.clear();
 											} else {
-												for (Integer j : validacionDatosCart.keySet()) {
-													errorDatosCart = validacionDatosCart.values().toString();
-													log.error("Identificador de error(Datos Carta Consecutivo):" + j
-															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-															+ linea);
-													totalRegistroError++;
-												}
-												
-												for (String cadenaP : cadenasProcesar) {
-													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															errorDatosCart);
+												for (Integer j : consecutivoMayor.keySet()) {
+													errorConsecutivoM = consecutivoMayor.values().toString();
+													for (String cadenaP : cadenasProcesar) {
+														log.error("Identificador de error(Tipo Dato):" + j
+																+ " Descripcion de error: " + consecutivoMayor.values()
+																+ " en la linea " + linea);
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																errorConsecutivoM);
+														totalRegistroError++;
+													}
 												}
 											}
-											
-											// Eliminar datos de la lista listaBeanFF
-											listaBeanFF.clear();
-
 										} else {
 											for (Integer j : validarTipoDato.keySet()) {
 												errorTipoD = validarTipoDato.values().toString();
@@ -683,57 +771,84 @@ public class ValidacionDatos {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
+											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
+											// archivo anterior
+											consecutivoMayor = validaConsecutivoMayor(cadena,
+													validacionCadenas, cadenaLinea);
+											if (consecutivoMayor.size() == 0) {
+												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
+												// inovcar el memtodo de BD
+												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
+														.setCadenas(cadenasProcesar);
+												// Validar datos de carta de este bloque, que sean iguales
+												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												HashMap<Integer, String> validacionDatosCart = null;
+												String errorDatosCart = "";
+												validacionDatosCart = validaDatosC
+														.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
+												if (validacionDatosCart.size() == 0) {
+													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
+													// parametro
+													// Se recibe respuesta del metodo invocado
+													// Se valida si el registro fue correcto, con la bandera de No.
+													// Carta y No.
+													// Factura
 
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
+													boolean banderaInvocacion = true;
+													if (banderaInvocacion) {
+														// Si son true las banderas se pinta el No. Carta y No. Factura
+														// a todas las
+														// lineas enviadas
+														for (String cadenaP : cadenasProcesar) {
 
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
+															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP, 1111111, 2222222);
+														}
+
+													} else {
+														// En caso de que una de sas banderas venga en false se da por
+														// hecho que no
+														// se proeco correctamente los registros y se debe de imprimir
+														// el error a
+														// todas las lineas enviadas.
+														for (String cadenaP : cadenasProcesar) {
+															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
+																	cadenaP,
+																	"Error recibido en la respuesta del metodo invocado");
+														}
+													}
+												} else {
+													for (Integer j : validacionDatosCart.keySet()) {
+														errorDatosCart = validacionDatosCart.values().toString();
+														log.error("Identificador de error(Datos Carta Consecutivo):" + j
+																+ " Descripcion de error: "
+																+ validacionDatosCart.values() + " en la linea "
+																+ linea);
+														totalRegistroError++;
 													}
 
-												} else {
-													// En caso de que una de sas banderas venga en false se da por hecho que no
-													// se proeco correctamente los registros y se debe de imprimir el error a
-													// todas las lineas enviadas.
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																"Error recibido en la respuesta del metodo invocado");
+																errorDatosCart);
 													}
 												}
+
+												// Eliminar datos de la lista listaBeanFF
+												listaBeanFF.clear();
 											} else {
-												for (Integer j : validacionDatosCart.keySet()) {
-													errorDatosCart = validacionDatosCart.values().toString();
-													log.error("Identificador de error(Datos Carta Consecutivo):" + j
-															+ " Descripcion de error: " + validacionDatosCart.values() + " en la linea "
-															+ linea);
-													totalRegistroError++;
-												}
-												
-												for (String cadenaP : cadenasProcesar) {
-													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															errorDatosCart);
+												for (Integer j : consecutivoMayor.keySet()) {
+													errorConsecutivoM = consecutivoMayor.values().toString();
+													for (String cadenaP : cadenasProcesar) {
+														log.error("Identificador de error(Tipo Dato):" + j
+																+ " Descripcion de error: " + consecutivoMayor.values()
+																+ " en la linea " + linea);
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																errorConsecutivoM);
+														totalRegistroError++;
+													}
 												}
 											}
-											
-											// Eliminar datos de la lista listaBeanFF
-											listaBeanFF.clear();
-
 										} else {
 											for (Integer j : validarTipoDato.keySet()) {
 												errorTipoD = validarTipoDato.values().toString();
@@ -832,7 +947,7 @@ public class ValidacionDatos {
 				int caracteres = arrayChar.length;
 				if (caracteres == 524) {
 					log.info("Longitud correcta de caracteres");
-					
+
 				} else {
 					log.info("Longitud incorrecta de caracteres");
 					validaPosicionDato.put(1, "ERROR EN LA LINEA" + linea.get(cont)
@@ -848,11 +963,11 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarDatosObligatorios(List<String> cadenas, List<Integer> linea) {
 
-		log.info("Validar Datos Obligatorios de linea " + linea);
 		HashMap<Integer, String> validaCamposObli = new HashMap<Integer, String>();
 		int cont = 0;
 		try {
 			for (String cadena : cadenas) {
+				//log.info("Validar Datos Obligatorios de linea " + linea.get(cont));
 				if (validaCamposObli.size() == 0) {
 					if (cadena.substring(0, 10).trim().equals("")) {
 						validaCamposObli.put(1, "ERROR EN LA LINEA" + linea.get(cont)
@@ -1048,10 +1163,10 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarDatosDependientes(List<String> cadenas, List<Integer> linea) {
 
-		log.info("Validar Datos Dependientes de linea " + linea);
 		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
 		int cont = 0;
 		for (String cadena : cadenas) {
+			//log.info("Validar Datos Dependientes de linea " + linea.get(cont));
 			if (validaCamposDepen.size() == 0) {
 				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 				if (validarNuPep) {
@@ -1135,11 +1250,11 @@ public class ValidacionDatos {
 
 	public static HashMap<Integer, String> validarTiposDato(List<String> cadenas, List<Integer> linea) {
 
-		log.info("Validar Tipo de Dato de linea " + linea);
 		HashMap<Integer, String> validaTipoDato = new HashMap<Integer, String>();
 		int cont = 0;
 		try {
 			for (String cadena : cadenas) {
+				//log.info("Validar Tipo de Dato de linea " + linea.get(cont));
 				if (validaTipoDato.size() == 0) {
 					if (!(isNumeric(cadena.substring(0, 10).trim()))) {
 						validaTipoDato.put(1,
@@ -1287,6 +1402,29 @@ public class ValidacionDatos {
 		return validaTipoDato;
 	}
 
+	public static HashMap<Integer, String> validaConsecutivoMayor(String cadenaAtual,
+			List<String> cadenasProcesar, List<Integer> linea) {
+
+		HashMap<Integer, String> validaConsecutivoMayor = new HashMap<Integer, String>();
+		int cont = 0;
+			for (String cadenaProcesar : cadenasProcesar) {
+				log.info("Validar consecutivo actual, sea mayor al consecutivo de la linea anterior, "
+						+ "de la linea" + linea);
+				if(!cadenaAtual.substring(0,10).trim().equals("")) {
+					if (!(Integer.parseInt((cadenaAtual.substring(0,10).trim().equals("")) ? "0" : cadenaAtual.substring(0, 10).trim()) > Integer
+							.parseInt(cadenaProcesar.substring(0, 10).trim()))) {
+						validaConsecutivoMayor.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadenaProcesar.substring(0, 10).trim()
+								+ "/" + cadenaProcesar.substring(30, 34).trim()
+								+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
+						return validaConsecutivoMayor;
+					}
+				}
+				cont++;
+			}
+		
+		return validaConsecutivoMayor;
+	}
+
 	public static boolean isNumeric(String valor) {
 
 		try {
@@ -1338,7 +1476,7 @@ public class ValidacionDatos {
 			e.printStackTrace();
 		}
 	}
-	
+
 	public void moverArchivo(String archivoOrigen, String archvoDestino) {
 		Path FROM = Paths.get(archivoOrigen);
 		Path TO = Paths.get(archvoDestino);
