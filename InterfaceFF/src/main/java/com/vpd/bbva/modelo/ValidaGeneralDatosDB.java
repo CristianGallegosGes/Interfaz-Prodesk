@@ -90,7 +90,7 @@ public class ValidaGeneralDatosDB {
 			call.setString(15, factura.getEstatusF());
 			//break;
 			}
-			nuerror = new Integer((int) call.getObject(1));
+			nuerror = new Integer((Integer) call.getObject(1));
 			if(nuerror == 0) {
 				listaRet.setBandera(true);
 			}else {

@@ -3,19 +3,22 @@ package main.java.com.vpd.bbva.vista;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.FilenameFilter;
 import java.io.IOException;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.mozilla.universalchardet.UniversalDetector;
+
+import main.java.com.vpd.bbva.conexion.Conexion;
 
 /**
  * Clase para validar extension del archivo
@@ -27,7 +30,8 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 	private static final Logger log = Logger.getLogger(ValidacionesArchivo.class);
 	private FileWriter fw = null;
-
+	static Connection con;
+	
 	@Override
 	public boolean accept(File archivo, String extension) {
 		log.info("Valida Extension de archivo: " + archivo);
@@ -53,10 +57,12 @@ public class ValidacionesArchivo implements FilenameFilter {
 		String diaA = nombreA.substring(12, 14);
 		String horaA = nombreA.substring(14, 16);
 		String numeroA = nombreA.substring(16, 18);
+		
+		boolean proyectoConsulta = validaBDAplicativo(proceso);
 
 		if (nombreA.length() == 18) {
 			if (proyecto.equals("VPD")) {
-				if (proceso.equals("PDK")) {
+				if (proyectoConsulta) {
 					if (anioA.equals(anio)) {
 						if (mesA.equals(mes)) {
 							if (diaA.equals(dia)) {
@@ -74,7 +80,25 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 		return validacionN;
 	}
-
+	
+	public boolean validaBDAplicativo(String aplicativo) {
+		boolean resultado = false;
+		try {
+			Conexion objs = new Conexion();
+			con = objs.AbreConexion();
+			Statement s = con.createStatement();
+			ResultSet rs = s.executeQuery("SELECT * FROM GORAPR.TXWV180_TP_CARGA_FF WHERE TP_PARAM = 1 AND CD_PARAM = '" + aplicativo + "'");
+			while(rs.next()) {
+				log.info("Existe registro de Aplicativo: " + aplicativo);
+				resultado = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return resultado;
+	}
+	
 	public boolean validaCodificacion(String rutaDir, String archivo, String rutaDirS, String rutaDirBkpE) {
 
 		log.info("Valida codificacion de archivo: " + archivo);
@@ -164,7 +188,7 @@ public class ValidacionesArchivo implements FilenameFilter {
 	public String obtenerFecha() {
 		String fecha = null;
 		Date objDate = new Date();
-		String strDateFormat = "YYYY-MM-dd-kk";
+		String strDateFormat = "yyyy-MM-dd-kk";
 		SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
 		fecha = objSDF.format(objDate);
 		return fecha;
@@ -188,24 +212,45 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 	public void moverArchivo(String rutaDir, String rutaDirS) {
 		
-		Path FROM = Paths.get(rutaDir);
-		Path TO = Paths.get(rutaDirS);
+		File from = new File(rutaDir);
+		File to = new File(rutaDirS);
 
-		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
+		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
 		try {
-			Files.move(FROM, TO, options);
+			InputStream in = new FileInputStream(from);
+			OutputStream out = new FileOutputStream(to);
+			
+			byte[] buf = new byte[1024];
+			int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+			//Files.copy(FROM, TO, options);
+            from.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
 	public void copiarArchivo(String rutaDir, String rutaDirS) {
-		Path FROM = Paths.get(rutaDir);
-		Path TO = Paths.get(rutaDirS);
+		File from = new File(rutaDir);
+		File to = new File(rutaDirS);
 
-		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
+		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
 		try {
-			Files.copy(FROM, TO, options);
+			InputStream in = new FileInputStream(from);
+			OutputStream out = new FileOutputStream(to);
+			
+			byte[] buf = new byte[1024];
+			int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+			//Files.copy(FROM, TO, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

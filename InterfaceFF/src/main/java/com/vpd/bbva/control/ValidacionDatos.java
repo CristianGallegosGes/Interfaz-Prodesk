@@ -4,16 +4,14 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.math.BigDecimal;
-import java.nio.file.CopyOption;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -50,7 +48,9 @@ public class ValidacionDatos {
 		int linea = 0;
 		int totalRegistroCorrectos = 0;
 		int totalRegistroError = 0;
-		long lineasTotal = brTotalLineasS.lines().count();
+		long lineasTotal = obtenerTotalLineas(fr, brTotalLineasS);
+		
+		int consecutivoArchivo = 0;
 
 		List<String> cadenaControl = new ArrayList<String>();
 		List<String> cadenasProcesar = new ArrayList<String>();
@@ -156,8 +156,9 @@ public class ValidacionDatos {
 
 													escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 															1111111, 2222222);
+													totalRegistroCorrectos++;
 												}
-
+												
 											} else {
 												// En caso de que una de sas banderas venga en false se da por hecho
 												// que no
@@ -167,7 +168,16 @@ public class ValidacionDatos {
 												for (String cadenaP : cadenasProcesar) {
 													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 															"Error recibido en la respuesta del metodo invocado");
+													totalRegistroError++;
 												}
+											}
+
+											if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+													: cadena.substring(0, 10).trim()) > Integer.parseInt(
+															validacionCadenas.get(0).substring(0, 10).trim())) {
+												// Agregar numero de archivo consecutivo
+												consecutivoArchivo = Integer
+														.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 											}
 										} else {
 											for (Integer j : validacionDatosCart.keySet()) {
@@ -175,12 +185,20 @@ public class ValidacionDatos {
 												log.error("Identificador de error(Datos Carta Consecutivo):" + j
 														+ " Descripcion de error: " + validacionDatosCart.values()
 														+ " en la linea " + linea);
-												totalRegistroError++;
 											}
 
 											for (String cadenaP : cadenasProcesar) {
 												escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 														errorDatosCart);
+												totalRegistroError++;
+											}
+
+											if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+													: cadena.substring(0, 10).trim()) > Integer.parseInt(
+															validacionCadenas.get(0).substring(0, 10).trim())) {
+												// Agregar numero de archivo consecutivo
+												consecutivoArchivo = Integer
+														.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 											}
 										}
 
@@ -198,6 +216,14 @@ public class ValidacionDatos {
 												totalRegistroError++;
 											}
 										}
+
+										if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+												: cadena.substring(0, 10).trim()) > Integer
+														.parseInt(validacionCadenas.get(0).substring(0, 10).trim())) {
+											// Agregar numero de archivo consecutivo
+											consecutivoArchivo = Integer
+													.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+										}
 									}
 								} else {
 									for (Integer j : validarDatosD.keySet()) {
@@ -211,6 +237,14 @@ public class ValidacionDatos {
 											totalRegistroError++;
 										}
 									}
+
+									if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+											: cadena.substring(0, 10).trim()) > Integer
+													.parseInt(validacionCadenas.get(0).substring(0, 10).trim())) {
+										// Agregar numero de archivo consecutivo
+										consecutivoArchivo = Integer
+												.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+									}
 								}
 							} else {
 								for (Integer j : validarDatosO.keySet()) {
@@ -222,6 +256,14 @@ public class ValidacionDatos {
 										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosO);
 										totalRegistroError++;
 									}
+								}
+
+								if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+										: cadena.substring(0, 10).trim()) > Integer
+												.parseInt(validacionCadenas.get(0).substring(0, 10).trim())) {
+									// Agregar numero de archivo consecutivo
+									consecutivoArchivo = Integer
+											.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 								}
 							}
 						} else {
@@ -266,7 +308,6 @@ public class ValidacionDatos {
 						validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
 						if (validarLongitudLineas.size() == 0) {
 							// Validar Datos Obligatorios
-							// Validar Datos Obligatorios
 							validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
 							if (validarDatosO.size() == 0) {
 								// Validar Datos Dependientes
@@ -277,7 +318,7 @@ public class ValidacionDatos {
 									if (validarTipoDato.size() == 0) {
 										// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 										// archivo anterior
-										consecutivoMayor = validaConsecutivoMayor(cadena,
+										consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
 												validacionCadenas, cadenaLinea);
 										if (consecutivoMayor.size() == 0) {
 											// Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar
@@ -307,8 +348,8 @@ public class ValidacionDatos {
 
 														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
 																cadenaP, 1111111, 2222222);
+														totalRegistroCorrectos++;
 													}
-
 												} else {
 													// En caso de que una de sas banderas venga en false se da por hecho
 													// que no
@@ -319,6 +360,15 @@ public class ValidacionDatos {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 																"Error recibido en la respuesta del metodo invocado");
 													}
+													
+													totalRegistroError++;
+												}
+
+												if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+														: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+													// Agregar numero de archivo consecutivo
+													consecutivoArchivo = Integer
+															.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 												}
 											} else {
 												for (Integer j : validacionDatosCart.keySet()) {
@@ -332,6 +382,13 @@ public class ValidacionDatos {
 												for (String cadenaP : cadenasProcesar) {
 													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 															errorDatosCart);
+												}
+
+												if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+														: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+													// Agregar numero de archivo consecutivo
+													consecutivoArchivo = Integer
+															.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 												}
 											}
 
@@ -349,6 +406,13 @@ public class ValidacionDatos {
 													totalRegistroError++;
 												}
 											}
+
+											if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+													: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+												// Agregar numero de archivo consecutivo
+												consecutivoArchivo = Integer
+														.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+											}
 										}
 									} else {
 										for (Integer j : validarTipoDato.keySet()) {
@@ -361,6 +425,13 @@ public class ValidacionDatos {
 														errorTipoD);
 												totalRegistroError++;
 											}
+										}
+
+										if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+												: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+											// Agregar numero de archivo consecutivo
+											consecutivoArchivo = Integer
+													.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 										}
 									}
 								} else {
@@ -375,6 +446,13 @@ public class ValidacionDatos {
 											totalRegistroError++;
 										}
 									}
+
+									if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+											: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+										// Agregar numero de archivo consecutivo
+										consecutivoArchivo = Integer
+												.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+									}
 								}
 							} else {
 								for (Integer j : validarDatosO.keySet()) {
@@ -386,6 +464,12 @@ public class ValidacionDatos {
 										escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP, errorDatosO);
 										totalRegistroError++;
 									}
+								}
+
+								if (Integer.parseInt(cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+									// Agregar numero de archivo consecutivo
+									consecutivoArchivo = Integer
+											.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 								}
 							}
 						} else {
@@ -403,7 +487,7 @@ public class ValidacionDatos {
 
 						System.out.println("Se hace peticion de esta linea o lineas ^------");
 					}
-					
+
 					// Eliminar datos de la lista control
 					cadenaControl.clear();
 					// Eliminar datos de la lista proceso
@@ -418,8 +502,6 @@ public class ValidacionDatos {
 					cadenaLinea.add(linea);
 					// Agregar cadena a lista archivo
 					lineasArchivo.add(cadena);
-					// Eliminar datos de la lista validacionCadenas
-					validacionCadenas.clear();
 					// Eliminar datos de la lista validacionCadenas
 					validacionCadenas.clear();
 				}
@@ -439,6 +521,9 @@ public class ValidacionDatos {
 								// Validar Datos Obligatorios
 								validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
 								if (validarDatosO.size() == 0) {
+									// Agregar numero de archivo consetuvio
+									consecutivoArchivo = Integer
+											.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
 									// Validar Datos Dependientes
 									validarDatosD = validarDatosDependientes(validacionCadenas, cadenaLinea);
 									if (validarDatosD.size() == 0) {
@@ -447,7 +532,7 @@ public class ValidacionDatos {
 										if (validarTipoDato.size() == 0) {
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
-											consecutivoMayor = validaConsecutivoMayor(cadena,
+											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
 													validacionCadenas, cadenaLinea);
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
@@ -478,8 +563,10 @@ public class ValidacionDatos {
 
 															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP, 1111111, 2222222);
+															totalRegistroCorrectos++;
 														}
-
+														
+														
 													} else {
 														// En caso de que una de sas banderas venga en false se da por
 														// hecho que no
@@ -490,7 +577,10 @@ public class ValidacionDatos {
 															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP,
 																	"Error recibido en la respuesta del metodo invocado");
+															totalRegistroError++;
 														}
+														
+														
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -499,12 +589,12 @@ public class ValidacionDatos {
 																+ " Descripcion de error: "
 																+ validacionDatosCart.values() + " en la linea "
 																+ linea);
-														totalRegistroError++;
 													}
 
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 																errorDatosCart);
+														totalRegistroError++;
 													}
 												}
 
@@ -578,7 +668,7 @@ public class ValidacionDatos {
 
 							log.info("Se hace peticion de esta linea o lineas ^------");
 						}
-						
+
 						// Eliminar datos de la lista control
 						cadenaControl.clear();
 						// Eliminar datos de la lista procesamiento
@@ -612,7 +702,7 @@ public class ValidacionDatos {
 										if (validarTipoDato.size() == 0) {
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
-											consecutivoMayor = validaConsecutivoMayor(cadena,
+											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
 													validacionCadenas, cadenaLinea);
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
@@ -643,6 +733,7 @@ public class ValidacionDatos {
 
 															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP, 1111111, 2222222);
+															totalRegistroCorrectos++;
 														}
 
 													} else {
@@ -655,6 +746,7 @@ public class ValidacionDatos {
 															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP,
 																	"Error recibido en la respuesta del metodo invocado");
+															totalRegistroError++;
 														}
 													}
 												} else {
@@ -664,12 +756,12 @@ public class ValidacionDatos {
 																+ " Descripcion de error: "
 																+ validacionDatosCart.values() + " en la linea "
 																+ linea);
-														totalRegistroError++;
 													}
 
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 																errorDatosCart);
+														totalRegistroError++;
 													}
 												}
 
@@ -762,7 +854,6 @@ public class ValidacionDatos {
 							validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
 							if (validarLongitudLineas.size() == 0) {
 								// Validar Datos Obligatorios
-								// Validar Datos Obligatorios
 								validarDatosO = validarDatosObligatorios(validacionCadenas, cadenaLinea);
 								if (validarDatosO.size() == 0) {
 									// Validar Datos Dependientes
@@ -773,7 +864,7 @@ public class ValidacionDatos {
 										if (validarTipoDato.size() == 0) {
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
-											consecutivoMayor = validaConsecutivoMayor(cadena,
+											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
 													validacionCadenas, cadenaLinea);
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
@@ -804,6 +895,7 @@ public class ValidacionDatos {
 
 															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP, 1111111, 2222222);
+															totalRegistroCorrectos++;
 														}
 
 													} else {
@@ -816,6 +908,7 @@ public class ValidacionDatos {
 															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
 																	cadenaP,
 																	"Error recibido en la respuesta del metodo invocado");
+															totalRegistroError++;
 														}
 													}
 												} else {
@@ -825,12 +918,12 @@ public class ValidacionDatos {
 																+ " Descripcion de error: "
 																+ validacionDatosCart.values() + " en la linea "
 																+ linea);
-														totalRegistroError++;
 													}
 
 													for (String cadenaP : cadenasProcesar) {
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
 																errorDatosCart);
+														totalRegistroError++;
 													}
 												}
 
@@ -918,16 +1011,30 @@ public class ValidacionDatos {
 
 		}
 
-		// copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
-		// moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
-
+		copiarArchivo(archivo, rutaDirBkpE + nombreArchivo);
+		moverArchivo(rutaArchivoSBKP + nuevoNombreArc, rutaDirS + nuevoNombreArc);
+		br.close();
+		eliminarArchivo(archivo);
 		log.info("Total de registros procesados: " + linea);
 		log.info("Total de registros enviados a BD: " + totalRegistroCorrectos);
 		log.info("Total de registros con error: " + totalRegistroError);
-		br.close();
-		brTotalLineasS.close();
-		log.info(
-				"Nota -> Eliminar archivo de la carpeta Entrada y mover el archivo de la ruta BKPSalida a la carpta de Salida, ya que se creo un nuevo archivo para escribir los errres y los datos de lo que se obtenga del proceso a BD.");
+	}
+
+	@SuppressWarnings("unused")
+	private long obtenerTotalLineas(FileReader fr, BufferedReader brTotalLineasS) {
+		long lineasTotal = 0;
+		String sCadena;
+		try {
+			while((sCadena = brTotalLineasS.readLine()) != null) {
+				lineasTotal++;
+			}
+			brTotalLineasS.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}		
+		
+		return lineasTotal;
 	}
 
 	public static String removeUTF8BOM(String s) {
@@ -967,7 +1074,7 @@ public class ValidacionDatos {
 		int cont = 0;
 		try {
 			for (String cadena : cadenas) {
-				//log.info("Validar Datos Obligatorios de linea " + linea.get(cont));
+				// log.info("Validar Datos Obligatorios de linea " + linea.get(cont));
 				if (validaCamposObli.size() == 0) {
 					if (cadena.substring(0, 10).trim().equals("")) {
 						validaCamposObli.put(1, "ERROR EN LA LINEA" + linea.get(cont)
@@ -1166,7 +1273,7 @@ public class ValidacionDatos {
 		HashMap<Integer, String> validaCamposDepen = new HashMap<Integer, String>();
 		int cont = 0;
 		for (String cadena : cadenas) {
-			//log.info("Validar Datos Dependientes de linea " + linea.get(cont));
+			// log.info("Validar Datos Dependientes de linea " + linea.get(cont));
 			if (validaCamposDepen.size() == 0) {
 				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 				if (validarNuPep) {
@@ -1254,7 +1361,7 @@ public class ValidacionDatos {
 		int cont = 0;
 		try {
 			for (String cadena : cadenas) {
-				//log.info("Validar Tipo de Dato de linea " + linea.get(cont));
+				// log.info("Validar Tipo de Dato de linea " + linea.get(cont));
 				if (validaTipoDato.size() == 0) {
 					if (!(isNumeric(cadena.substring(0, 10).trim()))) {
 						validaTipoDato.put(1,
@@ -1402,26 +1509,26 @@ public class ValidacionDatos {
 		return validaTipoDato;
 	}
 
-	public static HashMap<Integer, String> validaConsecutivoMayor(String cadenaAtual,
+	public static HashMap<Integer, String> validaConsecutivoMayor(String cadenaAtual, int consecutivoArchivo,
 			List<String> cadenasProcesar, List<Integer> linea) {
 
 		HashMap<Integer, String> validaConsecutivoMayor = new HashMap<Integer, String>();
 		int cont = 0;
-			for (String cadenaProcesar : cadenasProcesar) {
-				log.info("Validar consecutivo actual, sea mayor al consecutivo de la linea anterior, "
-						+ "de la linea" + linea);
-				if(!cadenaAtual.substring(0,10).trim().equals("")) {
-					if (!(Integer.parseInt((cadenaAtual.substring(0,10).trim().equals("")) ? "0" : cadenaAtual.substring(0, 10).trim()) > Integer
-							.parseInt(cadenaProcesar.substring(0, 10).trim()))) {
-						validaConsecutivoMayor.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadenaProcesar.substring(0, 10).trim()
-								+ "/" + cadenaProcesar.substring(30, 34).trim()
-								+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
-						return validaConsecutivoMayor;
-					}
+		for (String cadenaProcesar : cadenasProcesar) {
+			log.info("Validar consecutivo actual, sea mayor al consecutivo de la linea anterior, " + "de la linea"
+					+ linea);
+			if (!cadenaAtual.substring(0, 10).trim().equals("")) {
+				if (!(Integer.parseInt((cadenasProcesar.get(0).substring(0, 10).trim().equals("")) ? "0"
+						: cadenasProcesar.get(cont).substring(0, 10).trim()) > consecutivoArchivo)) {
+					validaConsecutivoMayor.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadenaProcesar.substring(0, 10).trim() + "/" + cadenaProcesar.substring(30, 34).trim()
+							+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR O IGUAL AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
+					return validaConsecutivoMayor;
 				}
-				cont++;
 			}
-		
+			cont++;
+		}
+
 		return validaConsecutivoMayor;
 	}
 
@@ -1477,27 +1584,58 @@ public class ValidacionDatos {
 		}
 	}
 
-	public void moverArchivo(String archivoOrigen, String archvoDestino) {
-		Path FROM = Paths.get(archivoOrigen);
-		Path TO = Paths.get(archvoDestino);
+public void moverArchivo(String rutaDirSBKP, String rutaDirS) {
+		
+		File from = new File(rutaDirSBKP);
+		File to = new File(rutaDirS);
 
-		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING };
+		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
 		try {
-			Files.move(FROM, TO, options);
+			InputStream in = new FileInputStream(from);
+			OutputStream out = new FileOutputStream(to);
+			
+			byte[] buf = new byte[1024];
+			int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
+			//Files.copy(FROM, TO, options);
+            from.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 
-	public void copiarArchivo(String archivoOrigen, String archvoDestino) {
-		Path FROM = Paths.get(archivoOrigen);
-		Path TO = Paths.get(archvoDestino);
+	public void copiarArchivo(String rutaDir, String rutaDirS) {
+		File from = new File(rutaDir);
+		File to = new File(rutaDirS);
 
-		CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING };
 		try {
-			Files.copy(FROM, TO, options);
+			InputStream in = new FileInputStream(from);
+			OutputStream out = new FileOutputStream(to);
+			
+			byte[] buf = new byte[1024];
+			int len;
+            while ((len = in.read(buf)) > 0) {
+                out.write(buf, 0, len);
+            }
+            in.close();
+            out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void eliminarArchivo(String archivoEntrada) {
+		File from = new File(archivoEntrada);
+		if(from.exists()) {
+			if(from.delete()) {
+				System.out.println("Se elimino el achivo: " + archivoEntrada);
+			} else {
+				System.out.println("No se elimino el achivo: " + archivoEntrada);
+			}
 		}
 	}
 }

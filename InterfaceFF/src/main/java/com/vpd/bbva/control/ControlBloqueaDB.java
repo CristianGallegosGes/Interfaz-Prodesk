@@ -13,7 +13,7 @@ public class ControlBloqueaDB {
 	
 	
 	public List<BeanRespuesta> BloqueaDB(List<BeanFF> listaBloque, boolean cartaValidada) throws Exception{
-		List<BeanRespuesta> ListAControlF = new ArrayList<>();
+		List<BeanRespuesta> ListAControlF = new ArrayList<BeanRespuesta>();
 		ValidaArregloBO validaBO = new ValidaArregloBO();
 		BeanRespuesta lstatusC  = new BeanRespuesta();
 		InsertaDao insert = new InsertaDao();

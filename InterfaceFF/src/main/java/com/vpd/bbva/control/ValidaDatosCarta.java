@@ -178,7 +178,7 @@ public class ValidaDatosCarta {
 
 				if (!listaCadenas.get(contLinea).getSociedadRec().equals(listaCadenas.get(i).getSociedadRec())) {
 					validaCartaConse.put(1,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"SOCIEDAD RECEPTORA\"");
 					return validaCartaConse;
