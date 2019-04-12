@@ -1,6 +1,8 @@
 package main.java.com.vpd.bbva.bean;
 
 import java.math.BigDecimal;
+import java.util.Date;
+
 
 public class BeanFF {
 	/*banderas de validacion*/
@@ -31,12 +33,12 @@ public class BeanFF {
 	private String usuarioCreador;
 	private String centroCostos;
 	private String descripServicio;
-	private String fechaInicio;
-	private String fechaFin;
+	private Date fechaInicio;
+	private Date fechaFin;
 	private int estado;
 	private BigDecimal importeUn;   /*con dos decimales*/
 	private BigDecimal nu_unidades; /*con dos decimales*/
-	private String iva;
+	private int iva;
 	private BigDecimal isrRetenido;
 	private BigDecimal ivaRetenido;
 	private BigDecimal impuestoCedular;
@@ -44,7 +46,7 @@ public class BeanFF {
 	private BigDecimal descuento;
 	private String comprobacion;
 	private String nu_anticipo;
-	private String fecha_anticipo;
+	private Date fecha_anticipo;    /* en la base de datos es un Date, en el SP de crear carta, espera igual un dato de tipo Date*/
 	private String viaP;
 	private int cuentaBanc;
 	private String tpBanco;
@@ -204,16 +206,16 @@ public class BeanFF {
 	public void setDescripServicio(String descripServicio) {
 		this.descripServicio = descripServicio;
 	}
-	public String getFechaInicio() {
+	public Date getFechaInicio() {
 		return fechaInicio;
 	}
-	public void setFechaInicio(String fechaInicio) {
+	public void setFechaInicio(Date fechaInicio) {
 		this.fechaInicio = fechaInicio;
 	}
-	public String getFechaFin() {
+	public Date getFechaFin() {
 		return fechaFin;
 	}
-	public void setFechaFin(String fechaFin) {
+	public void setFechaFin(Date fechaFin) {
 		this.fechaFin = fechaFin;
 	}
 	public int getEstado() {
@@ -234,10 +236,10 @@ public class BeanFF {
 	public void setNu_unidades(BigDecimal nu_unidades) {
 		this.nu_unidades = nu_unidades;
 	}
-	public String getIva() {
+	public int getIva() {
 		return iva;
 	}
-	public void setIva(String iva) {
+	public void setIva(int iva) {
 		this.iva = iva;
 	}
 	public BigDecimal getIsrRetenido() {
@@ -282,10 +284,10 @@ public class BeanFF {
 	public void setNu_anticipo(String nu_anticipo) {
 		this.nu_anticipo = nu_anticipo;
 	}
-	public String getFecha_anticipo() {
+	public Date getFecha_anticipo() {
 		return fecha_anticipo;
 	}
-	public void setFecha_anticipo(String fecha_anticipo) {
+	public void setFecha_anticipo(Date fecha_anticipo) {
 		this.fecha_anticipo = fecha_anticipo;
 	}
 	public String getViaP() {

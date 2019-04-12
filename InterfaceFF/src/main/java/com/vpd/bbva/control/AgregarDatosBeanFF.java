@@ -1,14 +1,17 @@
 package main.java.com.vpd.bbva.control;
 
 import java.math.BigDecimal;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
 
 public class AgregarDatosBeanFF {
 
-	public ArrayList<BeanFF> setCadenas(List<String> cadenas) {
+	public ArrayList<BeanFF> setCadenas(List<String> cadenas) throws ParseException {
 
 		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
 		
@@ -71,12 +74,13 @@ public class AgregarDatosBeanFF {
 			registroBeanFF.setUsuarioCreador(cadena.substring(192, 202).trim());
 			registroBeanFF.setCentroCostos(cadena.substring(202, 206).trim());
 			registroBeanFF.setDescripServicio(cadena.substring(206, 306).trim());
-			registroBeanFF.setFechaInicio(cadena.substring(306, 316).trim());
-			registroBeanFF.setFechaFin(cadena.substring(316, 326).trim());
+				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+			registroBeanFF.setFechaInicio(formato.parse(cadena.substring(306, 316).trim()));
+			registroBeanFF.setFechaFin(formato.parse(cadena.substring(316, 326).trim()));
 			registroBeanFF.setEstado(Integer.parseInt(cadena.substring(326, 328).trim()));
 			registroBeanFF.setImporteUn(new BigDecimal(cadena.substring(328, 340).trim()));
 			registroBeanFF.setNu_unidades(new BigDecimal(cadena.substring(340, 353).trim()));
-			registroBeanFF.setIva(cadena.substring(353, 365).trim());
+			registroBeanFF.setIva(new Integer(cadena.substring(353, 365).trim()));
 
 			if (!(cadena.substring(365, 377).trim().equals(""))) {
 				registroBeanFF.setIsrRetenido(new BigDecimal(cadena.substring(365, 377).trim()));
@@ -107,7 +111,8 @@ public class AgregarDatosBeanFF {
 			}
 
 			if (!(cadena.substring(457, 467).trim().equals(""))) {
-				registroBeanFF.setFecha_anticipo(cadena.substring(457, 467).trim());
+				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+				registroBeanFF.setFecha_anticipo(formatter.parse(cadena.substring(457, 467).trim()));
 			}
 
 			registroBeanFF.setViaP(cadena.substring(467, 468).trim());

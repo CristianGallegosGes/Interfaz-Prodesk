@@ -37,7 +37,7 @@ public class ValidacionDatos {
 	}
 
 	public void procesarDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
-			throws FileNotFoundException, IOException {
+			throws FileNotFoundException, IOException, ParseException {
 
 		log.info("Leer archivo");
 		FileInputStream file = new FileInputStream(archivo);

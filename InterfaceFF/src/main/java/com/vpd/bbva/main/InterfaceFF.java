@@ -1,5 +1,7 @@
 package main.java.com.vpd.bbva.main;
 
+import java.text.ParseException;
+
 import main.java.com.vpd.bbva.control.ControlFlujo;
 
 /**
@@ -9,7 +11,7 @@ import main.java.com.vpd.bbva.control.ControlFlujo;
  *
  */
 public class InterfaceFF {
-	public static void main(String[] args) {
+	public static void main(String[] args) throws ParseException {
 		ControlFlujo controlF = new ControlFlujo();
 		controlF.Control();
 	}

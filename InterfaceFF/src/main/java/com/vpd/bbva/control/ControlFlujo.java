@@ -1,6 +1,7 @@
 package main.java.com.vpd.bbva.control;
 
 import java.io.IOException;
+import java.text.ParseException;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -23,7 +24,7 @@ public class ControlFlujo {
 		// TODO Auto-generated constructor stub
 	}
 
-	public void Control() {
+	public void Control() throws ParseException {
 
 		log.info("Inicia Proceso de Control");
 		ValidarArchivo procesarA = new ValidarArchivo();
