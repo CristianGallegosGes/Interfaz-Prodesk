@@ -35,7 +35,7 @@ public class ValidacionDatosCtrol {
 	}
 
 	public void procesarDatos(String archivo, String rutaArchivoSBKP, String rutaDirBkpE, String rutaDirS)
-			throws FileNotFoundException, IOException, ParseException {
+			throws FileNotFoundException, IOException {
 
 		log.info("Leer archivo");
 		FileInputStream file = new FileInputStream(archivo);
@@ -130,14 +130,9 @@ public class ValidacionDatosCtrol {
 									// Validar Tipo de Dato
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
-<<<<<<< HEAD:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatos.java
-										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-										AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
-=======
 										// Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar
 										// el memtodo de BD
-										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
->>>>>>> 4db6aad3173be09adfa40fd30df55dabbbfd41d0:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatosCtrol.java
+										AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 										// Validar datos de carta de este bloque, que sean iguales
 										ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
@@ -329,27 +324,6 @@ public class ValidacionDatosCtrol {
 									// Validar Tipo de Dato
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
-<<<<<<< HEAD:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatos.java
-										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-										AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
-										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-										//Validar datos de carta de este bloque, que sean iguales
-										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-										HashMap<Integer, String> validacionDatosCart = null;
-										String errorDatosCart = "";
-										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-										if(validacionDatosCart.size() == 0) {
-											// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-											// Se recibe respuesta del metodo invocado
-											// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-											// Factura
-
-											boolean banderaInvocacion = true;
-											if (banderaInvocacion) {
-												// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-												// lineas enviadas
-												for (String cadenaP : cadenasProcesar) {
-=======
 										// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 										// archivo anterior
 										consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
@@ -357,7 +331,7 @@ public class ValidacionDatosCtrol {
 										if (consecutivoMayor.size() == 0) {
 											// Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar
 											// el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 											// Validar datos de carta de este bloque, que sean iguales
 											ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
@@ -372,7 +346,6 @@ public class ValidacionDatosCtrol {
 												// Se valida si el registro fue correcto, con la bandera de No. Carta y
 												// No.
 												// Factura
->>>>>>> 4db6aad3173be09adfa40fd30df55dabbbfd41d0:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatosCtrol.java
 
 												boolean banderaInvocacion = true;
 												if (banderaInvocacion) {
@@ -565,30 +538,6 @@ public class ValidacionDatosCtrol {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-<<<<<<< HEAD:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatos.java
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
-
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
-
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
-=======
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
 											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
@@ -596,7 +545,7 @@ public class ValidacionDatosCtrol {
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
 												// inovcar el memtodo de BD
-												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
@@ -640,7 +589,6 @@ public class ValidacionDatosCtrol {
 														}
 														
 														
->>>>>>> 4db6aad3173be09adfa40fd30df55dabbbfd41d0:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatosCtrol.java
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -760,30 +708,6 @@ public class ValidacionDatosCtrol {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-<<<<<<< HEAD:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatos.java
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
-
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
-
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
-=======
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
 											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
@@ -791,7 +715,7 @@ public class ValidacionDatosCtrol {
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
 												// inovcar el memtodo de BD
-												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
@@ -832,7 +756,6 @@ public class ValidacionDatosCtrol {
 																	"Error recibido en la respuesta del metodo invocado");
 															totalRegistroError++;
 														}
->>>>>>> 4db6aad3173be09adfa40fd30df55dabbbfd41d0:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatosCtrol.java
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -947,30 +870,6 @@ public class ValidacionDatosCtrol {
 										// Validar Tipo de Dato
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
-<<<<<<< HEAD:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatos.java
-											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
-											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
-											//Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
-											HashMap<Integer, String> validacionDatosCart = null;
-											String errorDatosCart = "";
-											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF, cadenaLinea);
-											if(validacionDatosCart.size() == 0) {
-												// Invocar el metodo de BD enviando la lista "listaBeanFF" como parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y No.
-												// Factura
-
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
-
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
-=======
 											// Validar que el valor de consecutivo de archivo sea mayor al consecutvo de
 											// archivo anterior
 											consecutivoMayor = validaConsecutivoMayor(cadena, consecutivoArchivo,
@@ -978,7 +877,7 @@ public class ValidacionDatosCtrol {
 											if (consecutivoMayor.size() == 0) {
 												// Agregar a Objeto BeanFF las lineas que se enviaran al momento de
 												// inovcar el memtodo de BD
-												AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+												AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
@@ -1019,7 +918,6 @@ public class ValidacionDatosCtrol {
 																	"Error recibido en la respuesta del metodo invocado");
 															totalRegistroError++;
 														}
->>>>>>> 4db6aad3173be09adfa40fd30df55dabbbfd41d0:InterfaceFF/src/main/java/com/vpd/bbva/control/ValidacionDatosCtrol.java
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {

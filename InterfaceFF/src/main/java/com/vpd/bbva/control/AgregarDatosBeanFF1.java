@@ -11,7 +11,7 @@ import main.java.com.vpd.bbva.bean.BeanFF;
 
 public class AgregarDatosBeanFF1 {
 
-	public ArrayList<BeanFF> setCadenas(List<String> cadenas) throws ParseException {
+	public ArrayList<BeanFF> setCadenas(List<String> cadenas){
 
 		ArrayList<BeanFF> beanFFDatosCorrectos = new ArrayList<BeanFF>();
 		
@@ -75,8 +75,18 @@ public class AgregarDatosBeanFF1 {
 			registroBeanFF.setCentroCostos(cadena.substring(202, 206).trim());
 			registroBeanFF.setDescripServicio(cadena.substring(206, 306).trim());
 				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-			registroBeanFF.setFechaInicio(formato.parse(cadena.substring(306, 316).trim()));
-			registroBeanFF.setFechaFin(formato.parse(cadena.substring(316, 326).trim()));
+			try {
+				registroBeanFF.setFechaInicio(formato.parse(cadena.substring(306, 316).trim()));
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			try {
+				registroBeanFF.setFechaFin(formato.parse(cadena.substring(316, 326).trim()));
+			} catch (ParseException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			registroBeanFF.setEstado(Integer.parseInt(cadena.substring(326, 328).trim()));
 			registroBeanFF.setImporteUn(new BigDecimal(cadena.substring(328, 340).trim()));
 			registroBeanFF.setNu_unidades(new BigDecimal(cadena.substring(340, 353).trim()));
@@ -112,7 +122,12 @@ public class AgregarDatosBeanFF1 {
 
 			if (!(cadena.substring(457, 467).trim().equals(""))) {
 				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
-				registroBeanFF.setFecha_anticipo(formatter.parse(cadena.substring(457, 467).trim()));
+				try {
+					registroBeanFF.setFecha_anticipo(formatter.parse(cadena.substring(457, 467).trim()));
+				} catch (ParseException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 			}
 
 			registroBeanFF.setViaP(cadena.substring(467, 468).trim());
