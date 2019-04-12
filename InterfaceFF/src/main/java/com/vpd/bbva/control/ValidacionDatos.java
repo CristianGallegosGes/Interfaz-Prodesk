@@ -128,7 +128,7 @@ public class ValidacionDatos {
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
 										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+										AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 										//Validar datos de carta de este bloque, que sean iguales
 										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
@@ -266,7 +266,7 @@ public class ValidacionDatos {
 									validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 									if (validarTipoDato.size() == 0) {
 										//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+										AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 										//Validar datos de carta de este bloque, que sean iguales
 										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
@@ -412,7 +412,7 @@ public class ValidacionDatos {
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
 											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 											//Validar datos de carta de este bloque, que sean iguales
 											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
@@ -550,7 +550,7 @@ public class ValidacionDatos {
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
 											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 											//Validar datos de carta de este bloque, que sean iguales
 											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
@@ -684,7 +684,7 @@ public class ValidacionDatos {
 										validarTipoDato = validarTiposDato(validacionCadenas, cadenaLinea);
 										if (validarTipoDato.size() == 0) {
 											//Agregar a Objeto BeanFF las lineas que se enviaran al momento de inovcar el memtodo de BD
-											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
+											AgregarDatosBeanFF1 agregarBeanFF = new AgregarDatosBeanFF1();
 											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 											//Validar datos de carta de este bloque, que sean iguales
 											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();

@@ -9,7 +9,7 @@ import java.util.List;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
 
-public class AgregarDatosBeanFF {
+public class AgregarDatosBeanFF1 {
 
 	public ArrayList<BeanFF> setCadenas(List<String> cadenas) throws ParseException {
 
