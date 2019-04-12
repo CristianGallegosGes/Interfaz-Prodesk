@@ -7,16 +7,16 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
-import main.java.com.vpd.bbva.bean.BeanRespuesta;
+import main.java.com.vpd.bbva.bean.BeanRespuesta1;
 import main.java.com.vpd.bbva.modelo.ValidaDatosCarta;
 import main.java.com.vpd.bbva.modelo.ValidaGeneralDatosDB;
 
 public class ValidaArregloBO {
 	public static final Logger LOG = Logger.getLogger(ValidaArregloBO.class);
 	
-public BeanRespuesta ValidaCarta (List<BeanFF> arregloArchivo) throws Exception{
+public BeanRespuesta1 ValidaCarta (List<BeanFF> arregloArchivo) throws Exception{
 	BeanFF DatosCarta = new BeanFF();
-	BeanRespuesta respReturn = new BeanRespuesta();
+	BeanRespuesta1 respReturn = new BeanRespuesta1();
 	ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
 	ValidaDatosCarta vdatosc = new ValidaDatosCarta();
 		
@@ -47,9 +47,9 @@ try {
 	
 	
 	
-	public BeanRespuesta ValidaFactura(List<BeanFF> factura) throws SQLException{
+	public BeanRespuesta1 ValidaFactura(List<BeanFF> factura) throws SQLException{
 		ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
-		BeanRespuesta BeanRes = new BeanRespuesta();
+		BeanRespuesta1 BeanRes = new BeanRespuesta1();
 		BeanFF bean = new BeanFF();
 		
 		for(BeanFF leeF : factura) {

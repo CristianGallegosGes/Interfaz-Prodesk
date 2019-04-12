@@ -4,22 +4,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
-import main.java.com.vpd.bbva.bean.BeanRespuesta;
+import main.java.com.vpd.bbva.bean.BeanRespuesta1;
 import main.java.com.vpd.bbva.constantes.Constantes;
 
 public class ValidaDatosCarta {
 	
 	Constantes cons = new Constantes();
 	
-	public BeanRespuesta ComparaArrevsDBFactura(){
-		BeanRespuesta bean = new BeanRespuesta();
+	public BeanRespuesta1 ComparaArrevsDBFactura(){
+		BeanRespuesta1 bean = new BeanRespuesta1();
 		
 		return bean;
 		
 	}
 	
-	public BeanRespuesta ComparaArrevsDBCarta(List<BeanFF>arregloArchivo, BeanFF listaDB){
-		BeanRespuesta resp = new BeanRespuesta();
+	public BeanRespuesta1 ComparaArrevsDBCarta(List<BeanFF>arregloArchivo, BeanFF listaDB){
+		BeanRespuesta1 resp = new BeanRespuesta1();
 		
 		for (BeanFF ListArc: arregloArchivo) {
 			

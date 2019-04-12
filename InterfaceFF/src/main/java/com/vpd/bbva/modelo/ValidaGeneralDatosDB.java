@@ -10,7 +10,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
-import main.java.com.vpd.bbva.bean.BeanRespuesta;
+import main.java.com.vpd.bbva.bean.BeanRespuesta1;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
 import oracle.jdbc.internal.OracleTypes;
@@ -63,12 +63,12 @@ public class ValidaGeneralDatosDB {
 		
 	}
 	
-	public BeanRespuesta DatosNvaFactura(List<BeanFF> facturaB) throws SQLException{
+	public BeanRespuesta1 DatosNvaFactura(List<BeanFF> facturaB) throws SQLException{
 		con = obConexion.AbreConexion();
 		Integer nuerror = null;
 		ResultSet result = null;
 		
-		BeanRespuesta listaRet = new BeanRespuesta();
+		BeanRespuesta1 listaRet = new BeanRespuesta1();
 		
 		try {
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_VALIDA_FACTURA);
@@ -107,11 +107,11 @@ public class ValidaGeneralDatosDB {
 		
 	}
 	
-	public BeanRespuesta DatosNvaCarta (List<BeanFF> dtArregloC) throws SQLException{
+	public BeanRespuesta1 DatosNvaCarta (List<BeanFF> dtArregloC) throws SQLException{
 		con = obConexion.AbreConexion();
 		Integer nuerror = null;
 		ResultSet result = null;
-		BeanRespuesta resp = new BeanRespuesta();
+		BeanRespuesta1 resp = new BeanRespuesta1();
 		try {
 			call = con.prepareCall(DBConstantes.SICOFE_SPC_S_VALIDA_CARTA);
 			call.registerOutParameter(1, OracleTypes.NUMBER);
