@@ -13,23 +13,31 @@ public class ControlBloqueaDB {
 	
 	
 	public List<BeanRespuesta> BloqueaDB(List<BeanFF> listaBloque, boolean cartaValidada) throws Exception{
-		List<BeanRespuesta> ListAControlF = new ArrayList<BeanRespuesta>();
+		List<BeanRespuesta> ListAControlF = new ArrayList();
 		ValidaArregloBO validaBO = new ValidaArregloBO();
-		BeanRespuesta lstatusC  = new BeanRespuesta();
+		BeanRespuesta beanfacConp  = new BeanRespuesta();
 		InsertaDao insert = new InsertaDao();
+		CreaFacturaConcepto creaFac = new CreaFacturaConcepto();
 		
 		if(cartaValidada == false) {
-			lstatusC = validaBO.ValidaCarta(listaBloque); /** Metodo para validar carta*/
+			BeanRespuesta lstatusC = validaBO.ValidaCarta(listaBloque); /** Metodo para validar carta*/
 			if(lstatusC.GetBandera() == true) {
 				//Metodo para validar concepto
 				BeanRespuesta statusF	= validaBO.ValidaFactura(listaBloque);
-			if(statusF.GetBandera() == true) {
-				BeanRespuesta statusC = insert.CreaCarta(listaBloque);
-				//BeanRespuesta statusF = 
-				/** Metodo para insertar Factura */
 				
+				if(statusF.GetBandera() == true) {
+					
+					BeanRespuesta creaCt = insert.CreaCarta(listaBloque);	/* CREA CARTA */
+					ListAControlF.add(creaCt);
+					if(creaCt.GetBandera() == true) {
+						
+					int carta = Integer.parseInt(creaCt.getCampo());
+					 
+					beanfacConp = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
+					
+					}
 				}
-				}
+			}
 		}else {
 			BeanRespuesta statusF	= validaBO.ValidaFactura(listaBloque);
 			if(statusF.GetBandera() == true) {
@@ -42,5 +50,6 @@ public class ControlBloqueaDB {
 		
 		return ListAControlF;
 	}
+	
 
 }

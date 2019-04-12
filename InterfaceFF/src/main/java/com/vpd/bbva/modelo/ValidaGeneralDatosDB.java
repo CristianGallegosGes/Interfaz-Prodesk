@@ -80,7 +80,7 @@ public class ValidaGeneralDatosDB {
 			call.setInt(5, factura.getNu_factura());
 			call.setInt(6, factura.getNu_carta());
 			call.setInt(7, factura.getEstado());
-			call.setString(8, factura.getIva());
+			call.setInt(8, factura.getIva());
 			call.setInt(9, (factura.getIsrRetenido().intValueExact()));
 			call.setInt(10, factura.getIvaRetenido().intValueExact());
 			call.setInt(11, factura.getImpuestoCedular().intValueExact());
@@ -90,7 +90,7 @@ public class ValidaGeneralDatosDB {
 			call.setString(15, factura.getEstatusF());
 			//break;
 			}
-			nuerror = new Integer((Integer) call.getObject(1));
+			nuerror = new Integer(call.getObject(1).toString());
 			if(nuerror == 0) {
 				listaRet.setBandera(true);
 			}else {
