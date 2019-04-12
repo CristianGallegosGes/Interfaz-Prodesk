@@ -13,7 +13,7 @@ import org.apache.log4j.Logger;
 import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFactura;
-import main.java.com.vpd.bbva.bean.BeanRespuesta1;
+import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
 import oracle.jdbc.internal.OracleTypes;
@@ -26,8 +26,8 @@ public class InsertaDao {
 	Connection con;
 	CallableStatement call;
 	
-	public BeanRespuesta1 CreaCarta(List<BeanFF> datosCarta) throws Exception{
-		BeanRespuesta1 respuesta = new BeanRespuesta1();
+	public BeanRespuesta CreaCarta(List<BeanFF> datosCarta) throws Exception{
+		BeanRespuesta respuesta = new BeanRespuesta();
 		con = obj.AbreConexion();
 		Integer cerror;	
 		try {

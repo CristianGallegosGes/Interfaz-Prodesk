@@ -1,6 +1,6 @@
 package main.java.com.vpd.bbva.bean;
 
-public class BeanRespuesta1 {
+public class BeanRespuesta {
 	private String mensaje;
 	private int numeroFila;
 	private boolean bandera;   /*Si es false termina*/
