@@ -34,7 +34,7 @@ public class ControlFlujo {
 			log.info("Comienza Procesamiento de Archivos");
 			for (String archivo : validacionArchivo) {
 				log.info("Archivo a procesar: \n" + archivo);
-				ValidacionDatos validaD = new ValidacionDatos();
+				ValidacionDatosCtrol validaD = new ValidacionDatosCtrol();
 				PropertiesFile properties = new PropertiesFile();
 				try {
 					String rutaDirSBKP = properties.getPropertiesFile("archivos_salidabkp");

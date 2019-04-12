@@ -7,7 +7,7 @@ import java.util.Properties;
 public class PropertiesFile {
 	private static PropertiesFile INSTANCE = null;
 	private Properties props = null;
-	private static String archivoP = "interfaz.properties";
+	private static String archivoP = "interfaz.properties";//Acordar en que ruta y archivo tomariamos las propiedades  
 	private FileInputStream input = null;
 	private static String paths[] = { "C:\\" + getArchivoP() }; // Local
 	// private static String paths[]={"/rhsicofi/SICOFE/prop_jars/" + getFileP()}; // Desarrollo y Produccion
