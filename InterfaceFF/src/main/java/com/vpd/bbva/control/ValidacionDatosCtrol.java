@@ -25,12 +25,12 @@ import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
 
-public class ValidacionDatos {
+public class ValidacionDatosCtrol {
 
-	private static final Logger log = Logger.getLogger(ValidacionDatos.class);
+	private static final Logger log = Logger.getLogger(ValidacionDatosCtrol.class);
 	public static final String UTF8_BOM = "\uFEFF";
 
-	public ValidacionDatos() {
+	public ValidacionDatosCtrol() {
 		// TODO Auto-generated constructor stub
 	}
 
@@ -44,6 +44,7 @@ public class ValidacionDatos {
 		BufferedReader brTotalLineasS = new BufferedReader(fr);
 
 		String cadena = null;
+		boolean cartaGenerada = false;
 		boolean firstLine = true;
 		int linea = 0;
 		int totalRegistroCorrectos = 0;
@@ -134,7 +135,7 @@ public class ValidacionDatos {
 										AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
 										ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 										// Validar datos de carta de este bloque, que sean iguales
-										ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+										ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
 										HashMap<Integer, String> validacionDatosCart = null;
 										String errorDatosCart = "";
 										validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF,
@@ -142,42 +143,49 @@ public class ValidacionDatos {
 										if (validacionDatosCart.size() == 0) {
 											// Invocar el metodo de BD enviando la lista "listaBeanFF" como
 											// parametro
-											// Se recibe respuesta del metodo invocado
-											// Se valida si el registro fue correcto, con la bandera de No. Carta y
-											// No.
-											// Factura
+											ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
+											try {
+												controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada);
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera de No. Carta y
+												// No.
+												// Factura
 
-											boolean banderaInvocacion = true;
-											if (banderaInvocacion) {
-												// Si son true las banderas se pinta el No. Carta y No. Factura a
-												// todas las
-												// lineas enviadas
-												for (String cadenaP : cadenasProcesar) {
+												boolean banderaInvocacion = true;
+												if (banderaInvocacion) {
+													// Si son true las banderas se pinta el No. Carta y No. Factura a
+													// todas las
+													// lineas enviadas
+													for (String cadenaP : cadenasProcesar) {
 
-													escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															1111111, 2222222);
-													totalRegistroCorrectos++;
+														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																1111111, 2222222);
+														totalRegistroCorrectos++;
+													}
+													
+												} else {
+													// En caso de que una de sas banderas venga en false se da por hecho
+													// que no
+													// se proeco correctamente los registros y se debe de imprimir el
+													// error a
+													// todas las lineas enviadas.
+													for (String cadenaP : cadenasProcesar) {
+														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																"Error recibido en la respuesta del metodo invocado");
+														totalRegistroError++;
+													}
 												}
-												
-											} else {
-												// En caso de que una de sas banderas venga en false se da por hecho
-												// que no
-												// se proeco correctamente los registros y se debe de imprimir el
-												// error a
-												// todas las lineas enviadas.
-												for (String cadenaP : cadenasProcesar) {
-													escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-															"Error recibido en la respuesta del metodo invocado");
-													totalRegistroError++;
-												}
-											}
 
-											if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
-													: cadena.substring(0, 10).trim()) > Integer.parseInt(
-															validacionCadenas.get(0).substring(0, 10).trim())) {
-												// Agregar numero de archivo consecutivo
-												consecutivoArchivo = Integer
-														.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+												if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+														: cadena.substring(0, 10).trim()) > Integer.parseInt(
+																validacionCadenas.get(0).substring(0, 10).trim())) {
+													// Agregar numero de archivo consecutivo
+													consecutivoArchivo = Integer
+															.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+												}
+											} catch (Exception e) {
+												e.printStackTrace();
+												log.error(e.getMessage());
 											}
 										} else {
 											for (Integer j : validacionDatosCart.keySet()) {
@@ -326,7 +334,7 @@ public class ValidacionDatos {
 											AgregarDatosBeanFF agregarBeanFF = new AgregarDatosBeanFF();
 											ArrayList<BeanFF> listaBeanFF = agregarBeanFF.setCadenas(cadenasProcesar);
 											// Validar datos de carta de este bloque, que sean iguales
-											ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+											ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
 											HashMap<Integer, String> validacionDatosCart = null;
 											String errorDatosCart = "";
 											validacionDatosCart = validaDatosC.validaDatosCartaConsecutiva(listaBeanFF,
@@ -541,7 +549,7 @@ public class ValidacionDatos {
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
-												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
 												HashMap<Integer, String> validacionDatosCart = null;
 												String errorDatosCart = "";
 												validacionDatosCart = validaDatosC
@@ -711,7 +719,7 @@ public class ValidacionDatos {
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
-												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
 												HashMap<Integer, String> validacionDatosCart = null;
 												String errorDatosCart = "";
 												validacionDatosCart = validaDatosC
@@ -873,7 +881,7 @@ public class ValidacionDatos {
 												ArrayList<BeanFF> listaBeanFF = agregarBeanFF
 														.setCadenas(cadenasProcesar);
 												// Validar datos de carta de este bloque, que sean iguales
-												ValidaDatosCarta validaDatosC = new ValidaDatosCarta();
+												ValidaDatosCartaCtrol validaDatosC = new ValidaDatosCartaCtrol();
 												HashMap<Integer, String> validacionDatosCart = null;
 												String errorDatosCart = "";
 												validacionDatosCart = validaDatosC

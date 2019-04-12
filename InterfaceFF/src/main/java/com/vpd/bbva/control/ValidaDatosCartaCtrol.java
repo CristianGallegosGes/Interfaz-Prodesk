@@ -6,9 +6,9 @@ import java.util.List;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
 
-public class ValidaDatosCarta {
+public class ValidaDatosCartaCtrol {
 
-	public ValidaDatosCarta() {
+	public ValidaDatosCartaCtrol() {
 		// TODO Auto-generated constructor stub
 	}
 
