@@ -8,6 +8,7 @@ import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFactura;
 import main.java.com.vpd.bbva.bean.BeanNota;
+import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.modelo.InsertaDao;
 
@@ -21,8 +22,8 @@ public class CreaFacturaConcepto {
 		String descOpera = null;
 		
 		/** Insertar posicion fin */
-		
-		HashMap<String, Object> inserPos = dao.insertaPosicionFinanciera(llenaObj.llenaPosicionF(BloqueFac, carta));
+		BeanPosicionFin posicFin = llenaObj.llenaPosicionF(BloqueFac, carta);
+		HashMap<String, Object> inserPos = dao.insertaPosicionFinanciera(posicFin);
 			exito = Integer.parseInt(inserPos.get("exito").toString());
 			int nuPosFin = Integer.parseInt(inserPos.get("nuPosFin").toString());
 				if(exito == 0) {
