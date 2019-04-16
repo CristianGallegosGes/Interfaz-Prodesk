@@ -120,6 +120,7 @@ public class ValidaGeneralDatosDB {
 			call.setInt(4, 2);  /* Accion en SP*/
 			call.setInt(5, 0);
 			for(BeanFF bean : dtArregloC) {
+				while(bean.getTp_registro().equals("NF")) {
 				call.setString(6, bean.getTp_carta());
 				call.setInt(7, bean.getTp_pago());/*Revisar si cambia a int*/
 				call.setInt(8, bean.getNu_proveedor());
@@ -132,6 +133,8 @@ public class ValidaGeneralDatosDB {
 				call.setString(15, bean.getUsuarioCreador());
 				call.execute();
 				break;
+
+				}
 			}
 			nuerror = new Integer(call.getObject(1).toString());
 			if(nuerror == 0) {

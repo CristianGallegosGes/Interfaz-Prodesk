@@ -18,6 +18,12 @@ public final class DBConstantes {
 	public static final String SICOFE_NOM_SP_INSERT_POSICION_FINANCIERA = DBPACKAGE + ".SP_INSERT_POSICION_FINANCIERA";
 	public static final String SICOFE_CALL_SP_INSERT_POSICION_FINANCIERA= "{ call " + SICOFE_NOM_SP_INSERT_POSICION_FINANCIERA + "(?,?,?,?,?,?,?,?,?,?,?)}";
 	
-
+	public static final String SICOFE_NOM_SP_INSERT_NOTA				= DBPACKAGE +".SP_INSERT_NOTA";
+	public static final String SICOFE_CALL_SP_INSERT_NOTA				= "{ call " +SICOFE_NOM_SP_INSERT_NOTA + "(?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 	
+	public static final String SICOFE_NOM_SP_INSERT_CONCEPTO_FINANCIERA = DBPACKAGE + ".SP_INSERT_CONCEPTO_FINANCIERA";
+	public static final String SICOFE_CALL_SP_INSERT_CONCEPTO_FINANCIERA= "{ call" + SICOFE_NOM_SP_INSERT_CONCEPTO_FINANCIERA + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+	
+	public static final String SICOFE_NOM_SP_INSERTA_VPAGO				= DBPACKAGE + ".SP_INSERTA_VPAGO";
+	public static final String SICOFE_CALL_SP_INSERTA_VPAGO				= "{ call" + SICOFE_NOM_SP_INSERTA_VPAGO + "(?,?,?,?)}";
 }

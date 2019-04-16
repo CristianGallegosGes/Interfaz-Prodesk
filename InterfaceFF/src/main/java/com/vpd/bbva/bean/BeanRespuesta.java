@@ -4,17 +4,26 @@ public class BeanRespuesta {
 	private String mensaje;
 	private int numeroFila;
 	private boolean bandera;   /*Si es false termina*/
-	private String campo;
+	private int factura;
+	private int carta;
 	
 	
 	
 	
-	public String getCampo() {
-		return campo;
+	
+	public int getFactua() {
+		return factura;
 	}
-	public void setCampo(String campo) {
-		this.campo = campo;
+	public void setFactua(int factura) {
+		this.factura = factura;
 	}
+	public int getCarta() {
+		return carta;
+	}
+	public void setCarta(int carta) {
+		this.carta = carta;
+	}
+
 	public String getMensaje() {
 		return mensaje;
 	}

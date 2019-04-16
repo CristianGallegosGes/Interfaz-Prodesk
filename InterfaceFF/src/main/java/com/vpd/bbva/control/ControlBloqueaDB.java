@@ -15,7 +15,7 @@ public class ControlBloqueaDB {
 	public List<BeanRespuesta> BloqueaDB(List<BeanFF> listaBloque, boolean cartaValidada) throws Exception{
 		List<BeanRespuesta> ListAControlF = new ArrayList();
 		ValidaArregloBO validaBO = new ValidaArregloBO();
-		BeanRespuesta beanfacConp  = new BeanRespuesta();
+		BeanRespuesta statusF = new BeanRespuesta();
 		InsertaDao insert = new InsertaDao();
 		CreaFacturaConcepto creaFac = new CreaFacturaConcepto();
 		
@@ -23,23 +23,22 @@ public class ControlBloqueaDB {
 			BeanRespuesta lstatusC = validaBO.ValidaCarta(listaBloque); /** Metodo para validar carta*/
 			if(lstatusC.GetBandera() == true) {
 				//Metodo para validar concepto
-				BeanRespuesta statusF	= validaBO.ValidaFactura(listaBloque);
+				statusF	= validaBO.ValidaFactura(listaBloque);
 				
 				if(statusF.GetBandera() == true) {
-					
 					BeanRespuesta creaCt = insert.CreaCarta(listaBloque);	/* CREA CARTA */
 					ListAControlF.add(creaCt);
 					if(creaCt.GetBandera() == true) {
 						
-					int carta = Integer.parseInt(creaCt.getCampo());
+					int carta = creaCt.getCarta();
 					 
-					beanfacConp = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
+					BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
 					
 					}
 				}
 			}
 		}else {
-			BeanRespuesta statusF	= validaBO.ValidaFactura(listaBloque);
+			statusF	= validaBO.ValidaFactura(listaBloque);
 			if(statusF.GetBandera() == true) {
 				/** Metodo para insertar Factura */
 				

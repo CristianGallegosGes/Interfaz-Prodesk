@@ -11,8 +11,10 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanPosicionFin;
+import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFactura;
+import main.java.com.vpd.bbva.bean.BeanNota;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
@@ -63,7 +65,7 @@ public class InsertaDao {
 			if(cerror == 0) {
 				respuesta.setBandera(true);
 				respuesta.setMensaje(call.getObject(23).toString());
-				respuesta.setCampo(call.getObject(20).toString()); /*numero de carta devuelto*/
+				respuesta.setCarta(Integer.parseInt(call.getObject(20).toString())); /*numero de carta devuelto*/
 			}else {
 				respuesta.setBandera(false);
 				respuesta.setMensaje("No se creo la carta");
@@ -167,7 +169,7 @@ public class InsertaDao {
 	}
 	
 	
-	public HashMap<String, Object> inserFactura(BeanFactura beanFac){
+	public HashMap<String, Object> inserFactura(BeanFactura beanFac) throws SQLException{
 		HashMap<String, Object> factura = new HashMap<String, Object>();
 		int exito = 0;
 		try {
@@ -208,21 +210,101 @@ public class InsertaDao {
 			call.registerOutParameter(33, OracleTypes.VARCHAR);
 			call.execute();
 			
-			exito = Integer.parseInt(call.getObject(32).toString());
-			if(exito == 0) {
 				factura.put("factura", call.getObject(31).toString());
-				factura.put("exito", exito);
-			}else {
-				factura.put("exito", exito);
-				factura.put("error", call.getObject(31).toString());
-			}
-			
-			
+				factura.put("exito", Integer.parseInt(call.getObject(32).toString()));
+				factura.put("error", call.getObject(33).toString());
+				
 		}catch (Exception e) {
+			LOG.warn("Error: " + e);
+			LOG.warn(call.getObject(33).toString().toString());
+		}
+		return factura;
+	}
+	
+	public Integer InsertNota (BeanNota nota) throws SQLException{
+		Integer exito = 0;
+		
+		try {
+			con = obj.AbreConexion();
+			call= con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA);
+			call.setInt(1, nota.getNu_factura());
+			call.setInt(2, nota.getNu_nota());
+			call.setString(3, nota.getTp_nota());
+			call.setString(5, nota.getSt_nota());
+			call.setString(6, nota.getCd_folio_sat());
+			call.setString(7, nota.getNb_servicio());
+			call.setDate(8, (Date) nota.getFh_ini_servicio());
+			call.setDate(10, (Date)nota.getFh_ini_servicio());
+			call.setInt(11, nota.getCd_entidad());
+			call.setInt(12, nota.getCd_iva());
+			call.setBigDecimal(13, nota.getNu_unidad());
+			call.setBigDecimal(14, nota.getIm_sin_iva());
+			call.setBigDecimal(15, nota.getIm_subtotal());
+			call.setString(16, nota.getNb_motivo());
+			call.setString(17, nota.getCd_usr_modifica());
+			call.setString(18, nota.getNb_nombre_xml());
+			call.setString(19, nota.getNb_nombre_pdf());
+			call.setString(20, nota.getTp_carga());
+			call.setString(21, nota.getCd_uso_gral_not2());
+			call.registerOutParameter(22, OracleTypes.NUMBER);
+			call.registerOutParameter(23, OracleTypes.VARCHAR);
+			call.execute();
 			
+			exito = Integer.parseInt(call.getObject(22).toString());
+			
+		} catch (Exception e) {
+			LOG.warn("Error: " +e );
+			LOG.warn( call.getObject(22).toString());
 		}
 		
-		return factura;
+		return exito;
+	}
+	
+	public Integer insertConceptoFinan(BeanConceptoFin conceptoF) throws SQLException{
+		Integer exito = 0;
+		try {
+		con = obj.AbreConexion();
+		call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_CONCEPTO_FINANCIERA);
+		call.setInt(1, conceptoF.getNu_factura());
+		call.setString(2, conceptoF.getSt_concepto());
+		call.setInt(3, conceptoF.getNu_carta());
+		call.setInt(4, conceptoF.getNu_posicion_fin());
+		call.setString(5, conceptoF.getCd_usr_modifica());
+		call.setString(6, conceptoF.getCd_usr_gral_con1());
+		call.setString(7, conceptoF.getCd_usr_gral_con2());
+		call.setInt(8, conceptoF.getNu_nota());
+		call.registerOutParameter(9, OracleTypes.NUMBER);
+		call.registerOutParameter(10, OracleTypes.VARCHAR);
+		
+		exito = Integer.parseInt(call.getObject(9).toString());
+				
+		}catch (Exception e) {
+			LOG.warn("Error:" + e);
+			LOG.warn(call.getObject(10).toString());
+		}
+		return exito;
+	}
+	
+	public Integer insertViaP (int nuFactura, String moneda, String sociedad, int nu_proveedor) throws SQLException {
+		Integer exito = 0;
+		try {
+			con = obj.AbreConexion();
+			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERTA_VPAGO);
+			call.setInt(1, nuFactura);
+			call.setString(2, moneda);
+			call.setString(3, sociedad);
+			call.setInt(4, nu_proveedor);
+			call.registerOutParameter(5, OracleTypes.NUMBER);
+			call.registerOutParameter(6, OracleTypes.VARCHAR);
+			call.execute();
+			exito = Integer.parseInt(call.getObject(5).toString());
+			
+		}catch (Exception e) {
+			LOG.warn("Error: " + e);
+			LOG.warn("Error: " + call.getObject(6).toString());
+		}
+		
+		return exito;
 	}
 }
 

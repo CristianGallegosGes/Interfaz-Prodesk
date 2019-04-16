@@ -22,7 +22,7 @@ public BeanRespuesta ValidaCarta (List<BeanFF> arregloArchivo) throws Exception{
 try {
 
 	for (BeanFF beanFF : arregloArchivo) {
-				
+			while(beanFF.getTp_registro().equals("")) {	
 			if(beanFF.getNu_carta() > 0) {				//Carta informada
 				DatosCarta = validaDB.ValidaCarta(new Integer(beanFF.getNu_carta())); //VALIDACION DE CARTA
 						if(DatosCarta.getContinua()==true) {										/*bandera de que existe la carta*/
@@ -33,6 +33,7 @@ try {
 				respReturn =validaDB.DatosNvaCarta(arregloArchivo);  //Carta no informada, validar para crear una nueva
 			}
 			break;  /*se termina de leer el for porque solo es una carta por bloque, si vuelve a leer, leeria la misma carta*/
+			}
 	}
 	
 }catch (Exception e) {
