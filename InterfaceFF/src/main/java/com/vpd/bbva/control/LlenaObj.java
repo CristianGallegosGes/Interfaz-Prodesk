@@ -2,6 +2,8 @@ package main.java.com.vpd.bbva.control;
 
 import java.math.BigDecimal;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import main.java.com.vpd.bbva.bean.BeanConceptoFin;
@@ -13,12 +15,13 @@ import main.java.com.vpd.bbva.modelo.InsertaDao;
 
 public class LlenaObj {
 	
-	public BeanPosicionFin llenaPosicionF (List<BeanFF> listaBloque, int carta) throws SQLException {
-		BeanPosicionFin concep = new BeanPosicionFin();
+	public ArrayList<HashMap<String, Object>> llenaPosicionF (List<BeanFF> listaBloque, int carta) throws SQLException {
+		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		
 		for (BeanFF beanFF : listaBloque) {
 			
 			if (beanFF.getTp_registro().equals("NF")) { /***********	REVISAR		***********/
+				BeanPosicionFin concep = new BeanPosicionFin();
 				InsertaDao dao = new InsertaDao();
 					String status = dao.statusPosicionFF(beanFF.getEstatusF());
 					BigDecimal im_ivaDB = new BigDecimal( (dao.cdIva(beanFF.getIva()) / 100 ));
@@ -37,10 +40,17 @@ public class LlenaObj {
 				concep.setIm_subtotal(beanFF.getImporteUn().multiply(beanFF.getNu_unidades())); /* Numereo de unidades (*) Importe unitario*/
 				concep.setCd_uso_gral_pos1("");
 				concep.setCd_uso_gral_pos2("");
-				concep.setCd_cr(beanFF.getCentroCostos());				
+				concep.setCd_cr(beanFF.getCentroCostos());
+				HashMap<String, Object>inserPos = dao.insertaPosicionFinanciera(concep);
+				list.add(inserPos);
+			}
+			
+			for (HashMap<String, Object> hashMap : list) {  /** PRUEBA */
+				hashMap.get("exito");
+				hashMap.get("nu_posicion_F");
 			}
 		}
-		return concep;
+		return list;
 		}
 	
 	

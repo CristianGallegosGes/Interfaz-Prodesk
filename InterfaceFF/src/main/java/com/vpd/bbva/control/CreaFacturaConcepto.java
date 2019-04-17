@@ -1,6 +1,7 @@
 package main.java.com.vpd.bbva.control;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -8,24 +9,23 @@ import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFactura;
 import main.java.com.vpd.bbva.bean.BeanNota;
-import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.modelo.InsertaDao;
 
 public class CreaFacturaConcepto {
 	
 	public BeanRespuesta creaFactura(List<BeanFF> BloqueFac, int carta) throws SQLException {
+		List<BeanRespuesta> listaBeanRes = new ArrayList<BeanRespuesta>();
 		BeanRespuesta respEjec = new BeanRespuesta();
 		InsertaDao dao = new InsertaDao();
 		LlenaObj llenaObj = new LlenaObj();
 		int exito = 0;
 		String descOpera = null;
+		int nuPosFin ;
 		
 		/** Insertar posicion fin */
-		BeanPosicionFin posicFin = llenaObj.llenaPosicionF(BloqueFac, carta);
-		HashMap<String, Object> inserPos = dao.insertaPosicionFinanciera(posicFin);
-			exito = Integer.parseInt(inserPos.get("exito").toString());
-			int nuPosFin = Integer.parseInt(inserPos.get("nuPosFin").toString());
+		ArrayList<HashMap<String, Object>> posicFin = llenaObj.llenaPosicionF(BloqueFac, carta);
+			
 				if(exito == 0) {
 					
 					/** Inserta factura */
@@ -42,9 +42,26 @@ public class CreaFacturaConcepto {
 							int nu_nota = beaNota.getNu_nota();
 							if (inserNotaF == 0) {
 								
-								/** Inserta Concepto */
-								BeanConceptoFin beanConF = llenaObj.llenaConceptoF(BloqueFac, nuFactura, carta, nuPosFin, nu_nota);
-								Integer inserConcFin = dao.insertConceptoFinan(beanConF);
+								for(HashMap<String, Object> listPosF: posicFin) {
+									int conArchivo = 0;
+									exito = Integer.parseInt(listPosF.get("exito").toString());
+									if(exito == 0) {
+									nuPosFin = Integer.parseInt(listPosF.get("nu_posicion_F").toString());
+									    
+									/** Inserta Concepto */
+										BeanConceptoFin beanConF = llenaObj.llenaConceptoF(BloqueFac, nuFactura, carta, nuPosFin, nu_nota);
+										Integer inserConcFin = dao.insertConceptoFinan(beanConF);
+									}else {
+										System.out.println("Error al insertar concepto en la factura");// para prueba
+										respEjec.setBandera(false);
+										respEjec.setMensaje("Error al insertar concepto en la factura" ); 
+										respEjec.setFactura(nuFactura);
+										respEjec.setConsecutivoA(conArchivo);
+										listaBeanRes.add(respEjec);
+										
+									}
+								}
+								
 								
 								String moneda = null;
 								String sociedad = null;
@@ -62,11 +79,11 @@ public class CreaFacturaConcepto {
 								if(viaP == 0) {
 									/**      OK    */
 									respEjec.setBandera(true);
-									respEjec.setFactua(nuFactura);
+									respEjec.setFactura(nuFactura);
 								}else {
 									respEjec.setBandera(false);
 									respEjec.setMensaje("No se pudo insertar la via de pago" ); // para prueba
-									respEjec.setFactua(nuFactura);
+									respEjec.setFactura(nuFactura);
 								}
 							}
 							
@@ -76,8 +93,7 @@ public class CreaFacturaConcepto {
 						}
 				}else {
 					respEjec.setBandera(false);
-					nuPosFin = Integer.parseInt(inserPos.get("nuPosFin").toString()); /* tipo de error*/
-					respEjec.setMensaje("Error al insertar la factura" + nuPosFin); // para prueba
+					respEjec.setMensaje("Error al insertar la factura" + exito); // para prueba
 				}
 		return respEjec;
 	}

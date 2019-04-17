@@ -82,7 +82,7 @@ public class InsertaDao {
 	
 	public HashMap<String, Object> insertaPosicionFinanciera(BeanPosicionFin posFac) throws SQLException {
 		con = obj.AbreConexion();
-		Integer cerror = null;
+		Integer exito = null;
 		String nuPosFin = null;
 		HashMap<String, Object> resp = new HashMap();
 		try {
@@ -106,13 +106,13 @@ public class InsertaDao {
 				call.registerOutParameter(17, OracleTypes.VARCHAR);
 				call.execute();
 				
-				cerror = new Integer(call.getObject(16).toString());
+				exito = new Integer(call.getObject(16).toString());
 				nuPosFin = call.getObject(17).toString();
-				resp.put("exito", cerror);
+				resp.put("exito", exito);
 				resp.put("nu_posicion_F", nuPosFin);				
 			
 		}catch (Exception e) {
-			resp.put("exito", cerror);
+			resp.put("exito", exito);
 			LOG.warn("nuPosFin: "+nuPosFin);
 		}
 		
