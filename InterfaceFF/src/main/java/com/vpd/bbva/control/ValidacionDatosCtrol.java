@@ -24,6 +24,7 @@ import java.util.regex.Pattern;
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
+import main.java.com.vpd.bbva.bean.BeanRespuesta;
 
 public class ValidacionDatosCtrol {
 
@@ -46,11 +47,13 @@ public class ValidacionDatosCtrol {
 		String cadena = null;
 		boolean cartaGenerada = false;
 		boolean firstLine = true;
+		int noCartaGenerada = 0;
+		int noFacturaGenerada = 0;
 		int linea = 0;
 		int totalRegistroCorrectos = 0;
 		int totalRegistroError = 0;
 		long lineasTotal = obtenerTotalLineas(fr, brTotalLineasS);
-		
+
 		int consecutivoArchivo = 0;
 
 		List<String> cadenaControl = new ArrayList<String>();
@@ -145,33 +148,51 @@ public class ValidacionDatosCtrol {
 											// parametro
 											ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
 											try {
-												controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada);
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y
-												// No.
-												// Factura
 
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a
-													// todas las
-													// lineas enviadas
+												// Validar el valor de la variable cartaGenerada que sea distinto a 0,
+												// ya que eso determina si ya se genero una carta con el mismo
+												// consecutivo
+												if (noCartaGenerada > 0) {
+													cartaGenerada = true;
+												}
+
+												List<BeanRespuesta> ctrolBD = controlProcesoBD.BloqueaDB(listaBeanFF,
+														cartaGenerada);
+												boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+												// Se recibe respuesta del metodo invocado
+												// Se valida si el registro fue correcto, con la bandera GetBandera
+
+												if (banderaCtrolBD) {
+													if(noCartaGenerada == 0) { 
+													 		noCartaGenerada = ctrolBD.get(0).getCarta();
+													}
+													noFacturaGenerada = ctrolBD.get(0).getFactura();
+													//Agregar el valor de ctrolBD.get(0).getNoCarta() a la variable
+													// cartaGenerada, para que cuando se envie otra cara con el mismo
+													// consecutivo en la linea siguiente se envie ese dato como
+													// parametro en el metodo de invocaciond de
+													// controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada); y
+
 													for (String cadenaP : cadenasProcesar) {
 
 														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																1111111, 2222222);
+																noCartaGenerada, noFacturaGenerada);
 														totalRegistroCorrectos++;
 													}
-													
+
 												} else {
-													// En caso de que una de sas banderas venga en false se da por hecho
-													// que no
-													// se proeco correctamente los registros y se debe de imprimir el
-													// error a
-													// todas las lineas enviadas.
+													
+													// En caso de que la bandera sea false se da por hecho // que no
+													// se proceso correctamente los registros de la lista enviada y se
+													// debe de imprimir el
+													// error a todas las lineas enviadas.
+													String mensajeError = ctrolBD.get(0).getMensaje();
+													int lineaError = ctrolBD.get(0).getConsecutivoA();
 													for (String cadenaP : cadenasProcesar) {
+
 														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																"Error recibido en la respuesta del metodo invocado");
+																"ERROR EN LA LINEA" + cadenaLinea.get(lineaError) + " CONSECUTIVO " + cadenasProcesar.get(lineaError).substring(0, 10).trim() + 
+																 cadenasProcesar.get(lineaError).substring(30, 34).trim() + "\"" + mensajeError + "\"");
 														totalRegistroError++;
 													}
 												}
@@ -312,6 +333,8 @@ public class ValidacionDatosCtrol {
 							validacionCadenas.add(cadenaP);
 						}
 
+						// INICIALIZAR LA VARIABLE noCartaGenerada A 0 , YA QUE CAMBIO EL CONSECUTIVO DE CARTA
+						noCartaGenerada = 0;
 						// Validar Longuitud de Cadena
 						validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
 						if (validarLongitudLineas.size() == 0) {
@@ -342,41 +365,61 @@ public class ValidacionDatosCtrol {
 											if (validacionDatosCart.size() == 0) {
 												// Invocar el metodo de BD enviando la lista "listaBeanFF" como
 												// parametro
-												// Se recibe respuesta del metodo invocado
-												// Se valida si el registro fue correcto, con la bandera de No. Carta y
-												// No.
-												// Factura
-
-												boolean banderaInvocacion = true;
-												if (banderaInvocacion) {
-													// Si son true las banderas se pinta el No. Carta y No. Factura a
-													// todas las
-													// lineas enviadas
-													for (String cadenaP : cadenasProcesar) {
-
-														escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
-																cadenaP, 1111111, 2222222);
-														totalRegistroCorrectos++;
-													}
-												} else {
-													// En caso de que una de sas banderas venga en false se da por hecho
-													// que no
-													// se proeco correctamente los registros y se debe de imprimir el
-													// error a
-													// todas las lineas enviadas.
-													for (String cadenaP : cadenasProcesar) {
-														escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																"Error recibido en la respuesta del metodo invocado");
-													}
+												ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
+												try {
+													List<BeanRespuesta> ctrolBD = controlProcesoBD.BloqueaDB(listaBeanFF,
+															cartaGenerada);
+													boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 													
-													totalRegistroError++;
-												}
+													if (banderaCtrolBD) {
+														noCartaGenerada = ctrolBD.get(0).getCarta();
+														noFacturaGenerada = ctrolBD.get(0).getFactura();
+														// Agregar el valor de ctrolBD.get(0).getNoCarta() a la variable
+														// cartaGenerada, para que cuando se envie otra cara con el mismo
+														// consecutivo en la linea siguiente se envie ese dato como
+														// parametro en el metodo de invocaciond de
+														// controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada); y
+														// Si son true las banderas se pinta el No. Carta y No. Factura a
+														// todas las
+														// lineas enviadas
+														for (String cadenaP : cadenasProcesar) {
 
-												if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
-														: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
-													// Agregar numero de archivo consecutivo
-													consecutivoArchivo = Integer
-															.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
+															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																	noCartaGenerada, noFacturaGenerada);
+															totalRegistroCorrectos++;
+														}
+														
+														noCartaGenerada = 0;
+
+													} else {
+														
+														// En caso de que la bandera sea false se da por hecho // que no
+														// se proeco correctamente los registros de la lista enviada y se
+														// debe de imprimir el
+														// error a todas las lineas enviadas.
+														String mensajeError = ctrolBD.get(0).getMensaje();
+														int lineaError = ctrolBD.get(0).getConsecutivoA();
+														for (String cadenaP : cadenasProcesar) {
+
+															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																	"ERROR EN LA LINEA" + cadenaLinea.get(lineaError) + " CONSECUTIVO " + cadenasProcesar.get(lineaError).substring(0, 10).trim() + 
+																	 cadenasProcesar.get(lineaError).substring(30, 34).trim() + "\"" + mensajeError + "\"");
+															totalRegistroError++;
+														}
+														
+														noCartaGenerada = 0;
+													}
+
+													if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
+															? "0"
+															: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+														// Agregar numero de archivo consecutivo
+														consecutivoArchivo = Integer.parseInt(
+																validacionCadenas.get(0).substring(0, 10).trim());
+													}
+												} catch (Exception e) {
+													e.printStackTrace();
+													log.error(e.getMessage());
 												}
 											} else {
 												for (Integer j : validacionDatosCart.keySet()) {
@@ -557,38 +600,62 @@ public class ValidacionDatosCtrol {
 												if (validacionDatosCart.size() == 0) {
 													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
 													// parametro
-													// Se recibe respuesta del metodo invocado
-													// Se valida si el registro fue correcto, con la bandera de No.
-													// Carta y No.
-													// Factura
+													ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
+													try {
 
-													boolean banderaInvocacion = true;
-													if (banderaInvocacion) {
-														// Si son true las banderas se pinta el No. Carta y No. Factura
-														// a todas las
-														// lineas enviadas
-														for (String cadenaP : cadenasProcesar) {
+														// Validar el valor de la variable cartaGenerada que sea distinto a 0,
+														// ya que eso determina si ya se genero una carta con el mismo
+														// consecutivo
+														if (noCartaGenerada > 0) {
+															cartaGenerada = true;
+														}
 
-															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP, 1111111, 2222222);
-															totalRegistroCorrectos++;
+														List<BeanRespuesta> ctrolBD = controlProcesoBD.BloqueaDB(listaBeanFF,
+																cartaGenerada);
+														boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+														if (banderaCtrolBD) {
+															if(noCartaGenerada == 0) {
+															 		noCartaGenerada = ctrolBD.get(0).getCarta();
+															}
+															noFacturaGenerada = ctrolBD.get(0).getFactura();
+															// Agregar el valor de ctrolBD.get(0).getNoCarta() a la variable
+															// cartaGenerada, para que cuando se envie otra cara con el mismo
+															// consecutivo en la linea siguiente se envie ese dato como
+															// parametro en el metodo de invocaciond de
+															// controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada); y
+															// Si son true las banderas se pinta el No. Carta y No. Factura a
+															// todas las
+															// lineas enviadas
+															for (String cadenaP : cadenasProcesar) {
+
+																escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		noCartaGenerada, noFacturaGenerada);
+																totalRegistroCorrectos++;
+															}
+															
+															noCartaGenerada = 0;
+
+														} else {
+															
+															// En caso de que la bandera sea false se da por hecho // que no
+															// se proeco correctamente los registros de la lista enviada y se
+															// debe de imprimir el
+															// error a todas las lineas enviadas.
+															String mensajeError = ctrolBD.get(0).getMensaje();
+															int lineaError = ctrolBD.get(0).getConsecutivoA();
+															for (String cadenaP : cadenasProcesar) {
+
+																escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		"ERROR EN LA LINEA" + cadenaLinea.get(lineaError) + " CONSECUTIVO " + cadenasProcesar.get(lineaError).substring(0, 10).trim() + 
+																		 cadenasProcesar.get(lineaError).substring(30, 34).trim() + "\"" + mensajeError + "\"");
+																totalRegistroError++;
+															}
+															
+															noCartaGenerada = 0;
 														}
-														
-														
-													} else {
-														// En caso de que una de sas banderas venga en false se da por
-														// hecho que no
-														// se proeco correctamente los registros y se debe de imprimir
-														// el error a
-														// todas las lineas enviadas.
-														for (String cadenaP : cadenasProcesar) {
-															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP,
-																	"Error recibido en la respuesta del metodo invocado");
-															totalRegistroError++;
-														}
-														
-														
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.error(e.getMessage());
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -727,35 +794,65 @@ public class ValidacionDatosCtrol {
 												if (validacionDatosCart.size() == 0) {
 													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
 													// parametro
-													// Se recibe respuesta del metodo invocado
-													// Se valida si el registro fue correcto, con la bandera de No.
-													// Carta y No.
-													// Factura
+													ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
+													try {
 
-													boolean banderaInvocacion = true;
-													if (banderaInvocacion) {
-														// Si son true las banderas se pinta el No. Carta y No. Factura
-														// a todas las
-														// lineas enviadas
-														for (String cadenaP : cadenasProcesar) {
-
-															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP, 1111111, 2222222);
-															totalRegistroCorrectos++;
+														// Validar el valor de la variable cartaGenerada que sea distinto a 0,
+														// ya que eso determina si ya se genero una carta con el mismo
+														// consecutivo
+														if (noCartaGenerada > 0) {
+															cartaGenerada = true;
 														}
 
-													} else {
-														// En caso de que una de sas banderas venga en false se da por
-														// hecho que no
-														// se proeco correctamente los registros y se debe de imprimir
-														// el error a
-														// todas las lineas enviadas.
-														for (String cadenaP : cadenasProcesar) {
-															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP,
-																	"Error recibido en la respuesta del metodo invocado");
-															totalRegistroError++;
+														List<BeanRespuesta> ctrolBD = controlProcesoBD.BloqueaDB(listaBeanFF,
+																cartaGenerada);
+														boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+														// Se recibe respuesta del metodo invocado
+														// Se valida si el registro fue correcto, con la bandera GetBandera
+
+														if (banderaCtrolBD) {
+															if(noCartaGenerada == 0) { 
+														 		noCartaGenerada = ctrolBD.get(0).getCarta();
+															}
+															noFacturaGenerada = ctrolBD.get(0).getFactura();
+															// Agregar el valor de ctrolBD.get(0).getNoCarta() a la variable
+															// cartaGenerada, para que cuando se envie otra cara con el mismo
+															// consecutivo en la linea siguiente se envie ese dato como
+															// parametro en el metodo de invocaciond de
+															// controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada); y
+															// Si son true las banderas se pinta el No. Carta y No. Factura a
+															// todas las
+															// lineas enviadas
+															for (String cadenaP : cadenasProcesar) {
+
+																escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		noCartaGenerada, noFacturaGenerada);
+																totalRegistroCorrectos++;
+															}
+															
+															noCartaGenerada = 0;
+
+														} else {
+															
+															// En caso de que la bandera sea false se da por hecho // que no
+															// se proeco correctamente los registros de la lista enviada y se
+															// debe de imprimir el
+															// error a todas las lineas enviadas.
+															String mensajeError = ctrolBD.get(0).getMensaje();
+															int lineaError = ctrolBD.get(0).getConsecutivoA();
+															for (String cadenaP : cadenasProcesar) {
+
+																escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		"ERROR EN LA LINEA" + cadenaLinea.get(lineaError) + " CONSECUTIVO " + cadenasProcesar.get(lineaError).substring(0, 10).trim() + 
+																		 cadenasProcesar.get(lineaError).substring(30, 34).trim() + "\"" + mensajeError + "\"");
+																totalRegistroError++;
+															}
+															
+															noCartaGenerada = 0;
 														}
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.error(e.getMessage());
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -857,6 +954,9 @@ public class ValidacionDatosCtrol {
 							for (String cadenaP : cadenasProcesar) {
 								validacionCadenas.add(cadenaP);
 							}
+							
+							// INICIALIZAR LA VARIABLE noCartaGenerada A 0 , YA QUE CAMBIO EL CONSECUTIVO DE CARTA
+							noCartaGenerada = 0;
 
 							// Validar Longuitud de Cadena
 							validarLongitudLineas = validarLongitudLinea(validacionCadenas, cadenaLinea);
@@ -889,35 +989,56 @@ public class ValidacionDatosCtrol {
 												if (validacionDatosCart.size() == 0) {
 													// Invocar el metodo de BD enviando la lista "listaBeanFF" como
 													// parametro
-													// Se recibe respuesta del metodo invocado
-													// Se valida si el registro fue correcto, con la bandera de No.
-													// Carta y No.
-													// Factura
+													ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
+													try {
 
-													boolean banderaInvocacion = true;
-													if (banderaInvocacion) {
-														// Si son true las banderas se pinta el No. Carta y No. Factura
-														// a todas las
-														// lineas enviadas
-														for (String cadenaP : cadenasProcesar) {
+														List<BeanRespuesta> ctrolBD = controlProcesoBD.BloqueaDB(listaBeanFF,
+																cartaGenerada);
+														boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+														// Se recibe respuesta del metodo invocado
+														// Se valida si el registro fue correcto, con la bandera GetBandera
+														
+														if (banderaCtrolBD) {
+															noCartaGenerada = ctrolBD.get(0).getCarta();
+															noFacturaGenerada = ctrolBD.get(0).getFactura();
+															// Agregar el valor de ctrolBD.get(0).getNoCarta() a la variable
+															// cartaGenerada, para que cuando se envie otra cara con el mismo
+															// consecutivo en la linea siguiente se envie ese dato como
+															// parametro en el metodo de invocaciond de
+															// controlProcesoBD.BloqueaDB(listaBeanFF, cartaGenerada); y
+															// Si son true las banderas se pinta el No. Carta y No. Factura a
+															// todas las
+															// lineas enviadas
+															for (String cadenaP : cadenasProcesar) {
 
-															escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP, 1111111, 2222222);
-															totalRegistroCorrectos++;
+																escribirArchivoCorrecto(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		noCartaGenerada, noFacturaGenerada);
+																totalRegistroCorrectos++;
+															}
+															
+															noCartaGenerada = 0;
+
+														} else {
+															
+															// En caso de que la bandera sea false se da por hecho // que no
+															// se proeco correctamente los registros de la lista enviada y se
+															// debe de imprimir el
+															// error a todas las lineas enviadas.
+															String mensajeError = ctrolBD.get(0).getMensaje();
+															int lineaError = ctrolBD.get(0).getConsecutivoA();
+															for (String cadenaP : cadenasProcesar) {
+
+																escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																		"ERROR EN LA LINEA" + cadenaLinea.get(lineaError) + " CONSECUTIVO " + cadenasProcesar.get(lineaError).substring(0, 10).trim() + 
+																		 cadenasProcesar.get(lineaError).substring(30, 34).trim() + "\"" + mensajeError + "\"");
+																totalRegistroError++;
+															}
+															
+															noCartaGenerada = 0;
 														}
-
-													} else {
-														// En caso de que una de sas banderas venga en false se da por
-														// hecho que no
-														// se proeco correctamente los registros y se debe de imprimir
-														// el error a
-														// todas las lineas enviadas.
-														for (String cadenaP : cadenasProcesar) {
-															escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
-																	cadenaP,
-																	"Error recibido en la respuesta del metodo invocado");
-															totalRegistroError++;
-														}
+													} catch (Exception e) {
+														e.printStackTrace();
+														log.error(e.getMessage());
 													}
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
@@ -1033,15 +1154,15 @@ public class ValidacionDatosCtrol {
 		long lineasTotal = 0;
 		String sCadena;
 		try {
-			while((sCadena = brTotalLineasS.readLine()) != null) {
+			while ((sCadena = brTotalLineasS.readLine()) != null) {
 				lineasTotal++;
 			}
 			brTotalLineasS.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}		
-		
+		}
+
 		return lineasTotal;
 	}
 
@@ -1592,25 +1713,26 @@ public class ValidacionDatosCtrol {
 		}
 	}
 
-public void moverArchivo(String rutaDirSBKP, String rutaDirS) {
-		
+	public void moverArchivo(String rutaDirSBKP, String rutaDirS) {
+
 		File from = new File(rutaDirSBKP);
 		File to = new File(rutaDirS);
 
-		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
+		// CopyOption[] options = new CopyOption[] {
+		// StandardCopyOption.REPLACE_EXISTING};
 		try {
 			InputStream in = new FileInputStream(from);
 			OutputStream out = new FileOutputStream(to);
-			
+
 			byte[] buf = new byte[1024];
 			int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-			//Files.copy(FROM, TO, options);
-            from.delete();
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
+			// Files.copy(FROM, TO, options);
+			from.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1623,14 +1745,14 @@ public void moverArchivo(String rutaDirSBKP, String rutaDirS) {
 		try {
 			InputStream in = new FileInputStream(from);
 			OutputStream out = new FileOutputStream(to);
-			
+
 			byte[] buf = new byte[1024];
 			int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -1638,8 +1760,8 @@ public void moverArchivo(String rutaDirSBKP, String rutaDirS) {
 
 	public void eliminarArchivo(String archivoEntrada) {
 		File from = new File(archivoEntrada);
-		if(from.exists()) {
-			if(from.delete()) {
+		if (from.exists()) {
+			if (from.delete()) {
 				System.out.println("Se elimino el achivo: " + archivoEntrada);
 			} else {
 				System.out.println("No se elimino el achivo: " + archivoEntrada);
