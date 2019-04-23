@@ -1406,16 +1406,16 @@ public class ValidacionDatosCtrol {
 			if (validaCamposDepen.size() == 0) {
 				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 				if (validarNuPep) {
-					validaCamposDepen.put(2, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
-							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+					validaCamposDepen.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO \"NUMERO DE PEP\" ES INCORRECTO, YA QUE NO CUMPLE CON EL FORMATO \"00000000-000\"");
 					return validaCamposDepen;
 				}
 
 				if ((!cadena.substring(174, 182).trim().equals(""))
-						&& cadena.substring(174, 182).trim() == cadena.substring(38, 48).trim()) {
-					validaCamposDepen.put(3, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
-							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+						&& cadena.substring(174, 182).trim().equals(cadena.substring(38, 48).trim())) {
+					validaCamposDepen.put(2, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO \"RECEPTOR ALTERNATIVO\" DEBE DE SER DIFERENTE AL VALOR DE \"NUMERO DE PROVEEDOR\"");
 					return validaCamposDepen;
 				}
@@ -1423,16 +1423,16 @@ public class ValidacionDatosCtrol {
 				boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(),
 						cadena.substring(316, 326).trim());
 				if (validarFechaFin) {
-					validaCamposDepen.put(4, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
-							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
+					validaCamposDepen.put(3, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO \"FECHA FIN SERVICIO\" DEBE DE SER MAYOR AL CAMPO DE \"FECHA INICIO SERVICIO\"");
 					return validaCamposDepen;
 				}
 
 				if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
-					validaCamposDepen.put(5, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
-							+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
-							+ "EL VALOR: \"SI\", DEL CAMPO CAMPO \"COMPROBACION\" SOLO APLICA PARA \"TIPO REGISTRO\": \"NF\"");
+					validaCamposDepen.put(4, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
+							+ " EL VALOR: \"SI\", DEL CAMPO CAMPO \"COMPROBACION\" SOLO APLICA PARA \"TIPO REGISTRO\": \"NF\"");
 					return validaCamposDepen;
 				}
 				cont++;
