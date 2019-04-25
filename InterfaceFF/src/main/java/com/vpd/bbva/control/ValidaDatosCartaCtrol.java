@@ -18,7 +18,7 @@ public class ValidaDatosCartaCtrol {
 		int contLinea = 0;
 		for (int i = 1; i <= listaCadenas.size(); i++) {
 			if (listaCadenas.size() == 1) {
-				if (!listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(i).getTp_carta())) {
+				if (!listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(contLinea).getTp_carta())) {
 					validaCartaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
 							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONSECUTIVO CARTA\"");
@@ -26,7 +26,7 @@ public class ValidaDatosCartaCtrol {
 				}
 				
 				if(listaCadenas.get(contLinea).getNu_carta() > 0) {
-					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(i).getNu_carta()) {
+					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(contLinea).getNu_carta()) {
 						validaCartaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
 								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE CARTA\"");
@@ -34,8 +34,8 @@ public class ValidaDatosCartaCtrol {
 					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(i).getTp_carta()))) {
-					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(i).getNu_carta()) {
+				if(!(listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(contLinea).getTp_carta()))) {
+					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(contLinea).getNu_carta()) {
 						validaCartaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
 								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO CARTA\"");
@@ -43,7 +43,7 @@ public class ValidaDatosCartaCtrol {
 					}
 				}
 				
-				if (!(listaCadenas.get(contLinea).getTp_pago() == (listaCadenas.get(i).getTp_pago()))) {
+				if (!(listaCadenas.get(contLinea).getTp_pago() == (listaCadenas.get(contLinea).getTp_pago()))) {
 					validaCartaConse.put(4,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -51,7 +51,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (listaCadenas.get(contLinea).getNu_proveedor() != listaCadenas.get(i).getNu_proveedor()) {
+				if (listaCadenas.get(contLinea).getNu_proveedor() != listaCadenas.get(contLinea).getNu_proveedor()) {
 					validaCartaConse.put(5,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -59,7 +59,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getSociedadRec().equals(listaCadenas.get(i).getSociedadRec())) {
+				if (!listaCadenas.get(contLinea).getSociedadRec().equals(listaCadenas.get(contLinea).getSociedadRec())) {
 					validaCartaConse.put(6,
 							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -67,7 +67,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getGlg().equals(listaCadenas.get(i).getGlg())) {
+				if (!listaCadenas.get(contLinea).getGlg().equals(listaCadenas.get(contLinea).getGlg())) {
 					validaCartaConse.put(7,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -75,14 +75,14 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getEmpGasBursa().equals(listaCadenas.get(i).getEmpGasBursa())) {
+				if (!listaCadenas.get(contLinea).getEmpGasBursa().equals(listaCadenas.get(contLinea).getEmpGasBursa())) {
 					validaCartaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
 							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"EMPRESA GASTOS BURSA\"");
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getFideicomiso().equals(listaCadenas.get(i).getFideicomiso())) {
+				if (!listaCadenas.get(contLinea).getFideicomiso().equals(listaCadenas.get(contLinea).getFideicomiso())) {
 					validaCartaConse.put(9,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -90,14 +90,14 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getNu_acreditado().equals(listaCadenas.get(i).getNu_acreditado())) {
+				if (!listaCadenas.get(contLinea).getNu_acreditado().equals(listaCadenas.get(contLinea).getNu_acreditado())) {
 					validaCartaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
 							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACREDITADO\"");
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getNu_pep().equals(listaCadenas.get(i).getNu_pep())) {
+				if (!listaCadenas.get(contLinea).getNu_pep().equals(listaCadenas.get(contLinea).getNu_pep())) {
 					validaCartaConse.put(11,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -105,7 +105,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getMondena().equals(listaCadenas.get(i).getMondena())) {
+				if (!listaCadenas.get(contLinea).getMondena().equals(listaCadenas.get(contLinea).getMondena())) {
 					validaCartaConse.put(12,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -114,7 +114,7 @@ public class ValidaDatosCartaCtrol {
 				}
 
 				if (!listaCadenas.get(contLinea).getPeriodificacion()
-						.equals(listaCadenas.get(i).getPeriodificacion())) {
+						.equals(listaCadenas.get(contLinea).getPeriodificacion())) {
 					validaCartaConse.put(13,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -123,7 +123,7 @@ public class ValidaDatosCartaCtrol {
 				}
 
 				if (!listaCadenas.get(contLinea).getProviEjerAnterior()
-						.equals(listaCadenas.get(i).getProviEjerAnterior())) {
+						.equals(listaCadenas.get(contLinea).getProviEjerAnterior())) {
 					validaCartaConse.put(14,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -132,7 +132,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (listaCadenas.get(contLinea).getContrato() != listaCadenas.get(i).getContrato()) {
+				if (listaCadenas.get(contLinea).getContrato() != listaCadenas.get(contLinea).getContrato()) {
 					validaCartaConse.put(15,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -140,7 +140,7 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 				
-				if (listaCadenas.get(contLinea).getCuentaGps() != listaCadenas.get(i).getCuentaGps()) {
+				if (listaCadenas.get(contLinea).getCuentaGps() != listaCadenas.get(contLinea).getCuentaGps()) {
 					validaCartaConse.put(16,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -149,14 +149,14 @@ public class ValidaDatosCartaCtrol {
 					return validaCartaConse;
 				}
 
-				if (!listaCadenas.get(contLinea).getUsuarioCreador().equals(listaCadenas.get(i).getUsuarioCreador())) {
+				if (!listaCadenas.get(contLinea).getUsuarioCreador().equals(listaCadenas.get(contLinea).getUsuarioCreador())) {
 					validaCartaConse.put(17, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
 							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"USUARIO CREADOR DE CARTA\"");
 					return validaCartaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getNu_activo() != listaCadenas.get(i).getNu_activo()) {
+				if(listaCadenas.get(contLinea).getNu_activo() != listaCadenas.get(contLinea).getNu_activo()) {
 					validaCartaConse.put(18, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
 							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACTIVO\"");

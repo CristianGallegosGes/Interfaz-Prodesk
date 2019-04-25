@@ -31,7 +31,7 @@ public class ValidacionesArchivo implements FilenameFilter {
 	private static final Logger log = Logger.getLogger(ValidacionesArchivo.class);
 	private FileWriter fw = null;
 	static Connection con;
-	
+
 	@Override
 	public boolean accept(File archivo, String extension) {
 		log.info("Valida Extension de archivo: " + archivo);
@@ -44,23 +44,23 @@ public class ValidacionesArchivo implements FilenameFilter {
 		boolean validacionN = false;
 		String fecha = obtenerFecha();
 
-		String[] parts = fecha.split("-");
-		String anio = parts[0];
-		String mes = parts[1];
-		String dia = parts[2];
-		String hora = parts[3];
-
-		String proyecto = nombreA.substring(0, 3);
-		String proceso = nombreA.substring(3, 6);
-		String anioA = nombreA.substring(6, 10);
-		String mesA = nombreA.substring(10, 12);
-		String diaA = nombreA.substring(12, 14);
-		String horaA = nombreA.substring(14, 16);
-		String numeroA = nombreA.substring(16, 18);
-		
-		boolean proyectoConsulta = validaBDAplicativo(proceso);
-
 		if (nombreA.length() == 18) {
+			String[] parts = fecha.split("-");
+			String anio = parts[0];
+			String mes = parts[1];
+			String dia = parts[2];
+			String hora = parts[3];
+
+			String proyecto = nombreA.substring(0, 3);
+			String proceso = nombreA.substring(3, 6);
+			String anioA = nombreA.substring(6, 10);
+			String mesA = nombreA.substring(10, 12);
+			String diaA = nombreA.substring(12, 14);
+			String horaA = nombreA.substring(14, 16);
+			String numeroA = nombreA.substring(16, 18);
+
+			boolean proyectoConsulta = validaBDAplicativo(proceso);
+
 			if (proyecto.equals("VPD")) {
 				if (proyectoConsulta) {
 					if (anioA.equals(anio)) {
@@ -80,25 +80,26 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 		return validacionN;
 	}
-	
+
 	public boolean validaBDAplicativo(String aplicativo) {
 		boolean resultado = false;
 		try {
 			Conexion objs = new Conexion();
 			con = objs.AbreConexion();
 			Statement s = con.createStatement();
-			ResultSet rs = s.executeQuery("SELECT * FROM GORAPR.TXWV180_TP_CARGA_FF WHERE TP_PARAM = 1 AND CD_PARAM = '" + aplicativo + "'");
-			while(rs.next()) {
+			ResultSet rs = s.executeQuery(
+					"SELECT * FROM GORAPR.TXWV180_TP_CARGA_FF WHERE TP_PARAM = 1 AND CD_PARAM = '" + aplicativo + "'");
+			while (rs.next()) {
 				log.info("Existe registro de Aplicativo: " + aplicativo);
 				resultado = true;
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
+
 		return resultado;
 	}
-	
+
 	public boolean validaCodificacion(String rutaDir, String archivo, String rutaDirS, String rutaDirBkpE) {
 
 		log.info("Valida codificacion de archivo: " + archivo);
@@ -106,12 +107,13 @@ public class ValidacionesArchivo implements FilenameFilter {
 		String encoding;
 
 		try {
-			
+
 			final FileInputStream fis = new FileInputStream(rutaDir + archivo);
 			final UniversalDetector detector = new UniversalDetector(null);
 			handleData(fis, detector);
 			encoding = getEncoding(detector);
-			if (!(encoding.equals("UTF-8") || encoding.equals("UTF-16BE") || encoding.equals("UTF-32BE") || encoding.equals("UTF-32LE") || encoding.equals("UTF-16LE"))) {
+			if (!(encoding.equals("UTF-8") || encoding.equals("UTF-16BE") || encoding.equals("UTF-32BE")
+					|| encoding.equals("UTF-32LE") || encoding.equals("UTF-16LE"))) {
 				codif = true;
 				log.info("El archivo \"" + archivo + "\" tiene codificación: UTF-8 sin BOM");
 				detector.reset();
@@ -120,8 +122,9 @@ public class ValidacionesArchivo implements FilenameFilter {
 				detector.reset();
 				fis.close();
 				log.error("El archivo \"" + archivo + "\" tiene codificacion: " + encoding);
-				//Mover archivo en caso de que sea codificacion diferente a UTF-8
-				if(encoding.equals("UTF-16BE") || encoding.equals("UTF-32BE") || encoding.equals("UTF-32LE") || encoding.equals("UTF-16LE")) {
+				// Mover archivo en caso de que sea codificacion diferente a UTF-8
+				if (encoding.equals("UTF-16BE") || encoding.equals("UTF-32BE") || encoding.equals("UTF-32LE")
+						|| encoding.equals("UTF-16LE")) {
 					// Renombrar el archivo para la salida
 					File archivoF = new File(rutaDir + archivo);
 					String nuevoNombreArc = "LOG" + archivo;
@@ -129,7 +132,7 @@ public class ValidacionesArchivo implements FilenameFilter {
 					moverArchivo(rutaDir + nuevoNombreArc, rutaDirS + nuevoNombreArc);
 				}
 			}
-			
+
 		} catch (IOException e) {
 			e.printStackTrace();
 			return codif;
@@ -141,10 +144,10 @@ public class ValidacionesArchivo implements FilenameFilter {
 	public void EscribeError(String rutaDir, String nombre, String rutaDirS, String rutaDirBkpE, String tipo) {
 		File archivoF = new File(rutaDir + nombre);
 		BufferedWriter bw = null;
-		
+
 		try {
 			if (archivoF.exists()) {
-				
+
 				copiarArchivo(rutaDir + nombre, rutaDirBkpE + nombre);
 
 				fw = new FileWriter(archivoF.getAbsoluteFile(), true);
@@ -167,7 +170,7 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 				moverArchivo(rutaDir + nuevoNombreArc, rutaDirS + nuevoNombreArc);
 			} else {
-				//archivoF.createNewFile();
+				// archivoF.createNewFile();
 				log.info("No existe el archivo " + rutaDir + nombre + ".");
 			}
 		} catch (IOException e) {
@@ -211,24 +214,25 @@ public class ValidacionesArchivo implements FilenameFilter {
 	}
 
 	public void moverArchivo(String rutaDir, String rutaDirS) {
-		
+
 		File from = new File(rutaDir);
 		File to = new File(rutaDirS);
 
-		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
+		// CopyOption[] options = new CopyOption[] {
+		// StandardCopyOption.REPLACE_EXISTING};
 		try {
 			InputStream in = new FileInputStream(from);
 			OutputStream out = new FileOutputStream(to);
-			
+
 			byte[] buf = new byte[1024];
 			int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-			//Files.copy(FROM, TO, options);
-            from.delete();
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
+			// Files.copy(FROM, TO, options);
+			from.delete();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -238,19 +242,20 @@ public class ValidacionesArchivo implements FilenameFilter {
 		File from = new File(rutaDir);
 		File to = new File(rutaDirS);
 
-		//CopyOption[] options = new CopyOption[] { StandardCopyOption.REPLACE_EXISTING};
+		// CopyOption[] options = new CopyOption[] {
+		// StandardCopyOption.REPLACE_EXISTING};
 		try {
 			InputStream in = new FileInputStream(from);
 			OutputStream out = new FileOutputStream(to);
-			
+
 			byte[] buf = new byte[1024];
 			int len;
-            while ((len = in.read(buf)) > 0) {
-                out.write(buf, 0, len);
-            }
-            in.close();
-            out.close();
-			//Files.copy(FROM, TO, options);
+			while ((len = in.read(buf)) > 0) {
+				out.write(buf, 0, len);
+			}
+			in.close();
+			out.close();
+			// Files.copy(FROM, TO, options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
