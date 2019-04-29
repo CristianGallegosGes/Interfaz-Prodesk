@@ -21,6 +21,32 @@ public class BeanPosicionFin {
 	private String 	cd_cr;
 	
 	
+	
+	private int nu_nota;   				/* variables para nota de credito*/
+	private String tp_nota;
+	private String cd_usr_modifica;
+	
+	
+	
+	
+	public String getCd_usr_modifica() {
+		return cd_usr_modifica;
+	}
+	public void setCd_usr_modifica(String cd_usr_modifica) {
+		this.cd_usr_modifica = cd_usr_modifica;
+	}
+	public String getTp_nota() {
+		return tp_nota;
+	}
+	public void setTp_nota(String tp_nota) {
+		this.tp_nota = tp_nota;
+	}
+	public int getNu_nota() {
+		return nu_nota;
+	}
+	public void setNu_nota(int nu_nota) {
+		this.nu_nota = nu_nota;
+	}
 	public int getNu_carta() {
 		return nu_carta;
 	}

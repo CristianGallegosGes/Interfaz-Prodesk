@@ -21,26 +21,52 @@ public class ControlBloqueaDB {
 		
 		if(cartaValidada == false) {
 			BeanRespuesta lstatusC = validaBO.ValidaCarta(listaBloque); /** Metodo para validar carta*/
-			if(lstatusC.GetBandera() == true) {
-				//Metodo para validar concepto
-				statusF	= validaBO.ValidaFactura(listaBloque);
+			if(lstatusC.GetBandera() == true) {   /** Validacion de Carta correcta*/
 				
-				if(statusF.GetBandera() == true) {
-					BeanRespuesta creaCt = insert.CreaCarta(listaBloque);	/* CREA CARTA */
-					ListAControlF.add(creaCt);
-					if(creaCt.GetBandera() == true) {
+				statusF	= validaBO.ValidaFactura(listaBloque);
+				int existeFac = statusF.getFactura();
+				
+				if(statusF.GetBandera() == true) {  /** Validacion de Factura correcta*/
+					if(existeFac == 0) {				/** Si la factura no existe, crear carta, factura, concepto, nota de credito */
 						
-					int carta = creaCt.getCarta();
-					 
-					BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
-					
+						BeanRespuesta creaCt = insert.CreaCarta(listaBloque);	/* CREA CARTA */
+						ListAControlF.add(creaCt);
+							if(creaCt.GetBandera() == true) {	
+								int carta = creaCt.getCarta();
+								BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
+								ListAControlF.add(beanfacConp);
+								
+								
+								/* CREAR NOTAS DE CREDITO */
+								int factura = beanfacConp.getFactura();
+								ValidaArregloBO valida = new ValidaArregloBO();
+								List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, carta,factura );
+								
+								for(BeanRespuesta informeNC : notaCredito) {
+									ListAControlF.add(informeNC);
+								}
+								
+							}
+					}else {							/** Si la factura existe, solo crear notas de credito*/
+						/* CREAR NOTA DE CREDITO */
+						
+						
 					}
+				}else {
+					ListAControlF.add(statusF);
 				}
+				
+				
+			}else {
+				ListAControlF.add(lstatusC);
 			}
 		}else {
 			statusF	= validaBO.ValidaFactura(listaBloque);
-			if(statusF.GetBandera() == true) {
-				/** Metodo para insertar Factura */
+			if(statusF.GetBandera() == true) { 
+				int carta = statusF.getCarta();
+				BeanRespuesta beanfac = creaFac.creaFactura(listaBloque, carta);	/*	CREA FACTURA */
+				/* CREAR NOTAS DE CREDITO */
+				int factura = beanfac.getFactura();
 				
 				}
 		}

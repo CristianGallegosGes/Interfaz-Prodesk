@@ -3,23 +3,21 @@ package main.java.com.vpd.bbva.modelo;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
-import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFactura;
 import main.java.com.vpd.bbva.bean.BeanNota;
+import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
 import oracle.jdbc.internal.OracleTypes;
-import oracle.net.aso.b;
 
 public class InsertaDao {
 	static Logger LOG = Logger.getLogger(InsertaDao.class);
@@ -31,10 +29,15 @@ public class InsertaDao {
 	public BeanRespuesta CreaCarta(List<BeanFF> datosCarta) throws Exception{
 		BeanRespuesta respuesta = new BeanRespuesta();
 		con = obj.AbreConexion();
+		
 		Integer cerror;	
 		try {
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_CARTA);
 			for(BeanFF factura : datosCarta) {
+				ValidaGeneralDatosDB validaDatos = new ValidaGeneralDatosDB();
+				String nf = validaDatos.parametro(8, factura.getTp_registro());
+				while(factura.getTp_registro().equals(nf)) {
+			
 				call.setString(1, factura.getTp_carta());
 				call.setString(2, factura.getUsuarioCreador());
 				call.setString(3, factura.getSociedadRec());
@@ -60,6 +63,8 @@ public class InsertaDao {
 				call.registerOutParameter(23, OracleTypes.VARCHAR);	
 				call.execute();
 				LOG.info("Fin de llamada al SP: "+ DBConstantes.SICOFE_CALL_SP_INSERT_CARTA);
+				break;
+				}
 			}
 			cerror = new Integer(call.getObject(22).toString());
 			if(cerror == 0) {
@@ -120,53 +125,6 @@ public class InsertaDao {
 		return resp;
 	}
 	
-	public String statusPosicionFF (String estatus) {
-		String status = null;
-		ResultSet resultSet;
-		try {
-			con = obj.AbreConexion();
-			call = con.prepareCall("SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = 5 AND CD_PARAM = " + estatus);
-			resultSet = call.executeQuery();
-			while(resultSet.next()) {
-				status = resultSet.getString("CD_PARAM");
-			}
-		}catch (Exception e) {
-			LOG.warn("Error en al consultar el estatus " + e);
-		}
-		
-		return status;		
-	}
-	
-	public int cdIva(int cd_iva) {
-		int iva = 0;
-		ResultSet resultSet;
-		try {
-			con = obj.AbreConexion();
-			call = con.prepareCall("SELECT CD_VALOR_IVA FROM TXWV123_IVA WHERE NB_IVA = " + cd_iva);
-			resultSet = call.executeQuery();
-				iva = Integer.parseInt(resultSet.getString("CD_VALOR_IVA"));
-			
-		}catch (Exception e) {
-			LOG.warn("Error en al consultar cd_iva " + e);
-		}
-		
-		return iva;
-	}
-	
-	public String parametro(int tp_param, String estatus) {
-		String parametro = null;
-		ResultSet resultSet;
-		try {
-			con = obj.AbreConexion();
-			call = con.prepareCall("SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = " + tp_param +"AND CD_PARAM = " + estatus);
-			resultSet = call.executeQuery();
-			parametro = resultSet.getString("CD_PARAM");
-			
-		}catch (Exception e) {
-			// TODO: handle exception
-		}
-		return parametro;
-	}
 	
 	
 	public HashMap<String, Object> inserFactura(BeanFactura beanFac) throws SQLException{
@@ -306,20 +264,44 @@ public class InsertaDao {
 		
 		return exito;
 	}
+	
+	
+	public boolean insertaConceptoNCFin(BeanPosicionFin pNotaCredito, int factura ) throws Exception {
+		 Integer cveError 		= null;
+		 boolean exito			= false;
+		 try {
+			 con = obj.AbreConexion();
+			 call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA_FIN);
+			 call.setInt(1, pNotaCredito.getNu_carta());
+			 call.setInt(2, factura);
+			 call.setInt(3, pNotaCredito.getNu_nota());
+			 call.setString(4, pNotaCredito.getTp_nota());
+			 call.setString(5, pNotaCredito.getStConcep());
+			 call.setInt(6, pNotaCredito.getCuenta());
+			 call.setString(7, pNotaCredito.getNb_servicio());
+			 call.setDate(8, (Date)pNotaCredito.getFh_Inicio());
+			 call.setDate(9, (Date)pNotaCredito.getFh_Fin());
+			 call.setInt(10, pNotaCredito.getEntidad());
+			 call.setInt(11, pNotaCredito.getCd_iva());
+			 call.setBigDecimal(12, pNotaCredito.getIm_iva());
+			 call.setBigDecimal(13, pNotaCredito.getNu_unidad());
+			 call.setBigDecimal(14, pNotaCredito.getIm_sin_iva());
+			 call.setBigDecimal(15, pNotaCredito.getIm_subtotal());
+			 call.setString(16, pNotaCredito.getCd_cr());
+			 call.setString(17, pNotaCredito.getCd_usr_modifica());
+			 call.registerOutParameter(18, OracleTypes.NUMBER);
+			 call.registerOutParameter(19, OracleTypes.VARCHAR);
+			 call.execute();
+			 cveError = new Integer(call.getObject(18).toString());
+			 if(cveError == 0) {
+				 exito = true;
+			 }			 
+		 }catch(Exception e){
+			 LOG.warn("Error: "+e);
+			 LOG.warn("Error: "+call.getObject(19).toString());
+		 }
+		 
+		 return exito;
+	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 

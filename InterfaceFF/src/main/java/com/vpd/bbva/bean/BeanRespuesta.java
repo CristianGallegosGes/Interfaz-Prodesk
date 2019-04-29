@@ -4,13 +4,20 @@ public class BeanRespuesta {
 	private String mensaje;
 	private int consecutivoA;
 	private boolean bandera;   /*Si es false termina*/
-	private int factura;
+	private int factura = 0;
 	private int carta;
+	private String tp_registro;
 	
 	
 	
 	
 	
+	public String getTp_registro() {
+		return tp_registro;
+	}
+	public void setTp_registro(String tp_registro) {
+		this.tp_registro = tp_registro;
+	}
 	public int getConsecutivoA() {
 		return consecutivoA;
 	}

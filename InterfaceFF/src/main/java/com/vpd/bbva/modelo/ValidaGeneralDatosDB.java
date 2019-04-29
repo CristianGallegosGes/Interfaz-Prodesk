@@ -1,5 +1,6 @@
 package main.java.com.vpd.bbva.modelo;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -10,6 +11,7 @@ import java.util.List;
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
+import main.java.com.vpd.bbva.bean.BeanFacturaNVA;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
@@ -23,8 +25,8 @@ public class ValidaGeneralDatosDB {
 	private static final Logger LOG = Logger.getLogger(ValidaGeneralDatosDB.class);
 	
 	
-	public BeanFF DatosFactura(int facturaI, int cartaI ) throws SQLException{
-		BeanFF beanResp = new BeanFF();
+	public BeanFacturaNVA DatosFactura(int facturaI, int cartaI,int proveedor,String sociedad, String viaP ) throws SQLException{
+		BeanFacturaNVA beanFacN = new BeanFacturaNVA();
 		con = obConexion.AbreConexion();
 		Integer nuerror = null;
 		ResultSet result = null;
@@ -33,7 +35,7 @@ public class ValidaGeneralDatosDB {
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
-			call.registerOutParameter(4, 1);  						/** Accion en SP = 1 (Valida si exite la factura)*/
+			call.registerOutParameter(4, 1);  		/** Accion en SP = 1 (Valida si exite la factura)*/
 			call.setInt(5, facturaI);				/** Obligatiorio*/ 
 			call.setInt(6, cartaI);					/** Obligatiorio*/	
 			call.setInt(7, 0);
@@ -41,29 +43,39 @@ public class ValidaGeneralDatosDB {
 			call.setInt(9, 0);
 			call.setInt(10, 0);
 			call.setInt(11, 0);
-			call.setString(12, "");
+			call.setString(12, viaP);
 			call.setInt(13, 0);
 			call.setString(14, "");
 			call.setString(15, "");
-			
+			call.setInt(16, proveedor);
+			call.setString(17, sociedad);
+			call.execute();
 			result = (ResultSet) call.getObject(3);
-			while(result.next()) {
-				int i = 0;
-				beanResp.setEstado(result.getInt(++i));
-				
+			nuerror = Integer.parseInt(call.getObject(1).toString());
+			if(nuerror == 0) {
+				beanFacN.setExito(nuerror);
+				while(result.next()) {
+					int i = 0;
+					beanFacN.setEstatusF(result.getString(++i));
+					beanFacN.setViaP(result.getString(++i));
+					beanFacN.setCuentaBanc(result.getInt(++i));
+					beanFacN.setTpBanco(result.getString(++i));
+				}
+			}else {
+				beanFacN.setExito(nuerror);
+				beanFacN.setMensaje(call.getObject(2).toString());
 			}
-			
 			
 		} catch (Exception e) {
 			LOG.warn("Error: "+e);
 		}
 		
 		
-		return beanResp;
+		return beanFacN;
 		
 	}
 	
-	public BeanRespuesta DatosNvaFactura(List<BeanFF> facturaB) throws SQLException{
+	public BeanRespuesta DatosNvaFactura(BeanFacturaNVA factura) throws SQLException{
 		con = obConexion.AbreConexion();
 		Integer nuerror = null;
 		ResultSet result = null;
@@ -75,21 +87,20 @@ public class ValidaGeneralDatosDB {
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
-			call.registerOutParameter(4, 2);
-			for(BeanFF factura : facturaB) {
+			call.registerOutParameter(4, 2);		
 			call.setInt(5, factura.getNu_factura());
 			call.setInt(6, factura.getNu_carta());
 			call.setInt(7, factura.getEstado());
 			call.setInt(8, factura.getIva());
-			call.setInt(9, (factura.getIsrRetenido().intValueExact()));
-			call.setInt(10, factura.getIvaRetenido().intValueExact());
-			call.setInt(11, factura.getImpuestoCedular().intValueExact());
+			call.setBigDecimal(9, (factura.getIsrRetenido()));
+			call.setBigDecimal(10, factura.getIvaRetenido());
+			call.setBigDecimal(11, factura.getImpuestoCedular());
 			call.setString(12, factura.getViaP());
 			call.setInt(13, factura.getCuentaBanc());
 			call.setString(14, factura.getTpBanco());
 			call.setString(15, factura.getEstatusF());
-			//break;
-			}
+			call.execute();
+	
 			nuerror = new Integer(call.getObject(1).toString());
 			if(nuerror == 0) {
 				listaRet.setBandera(true);
@@ -104,10 +115,52 @@ public class ValidaGeneralDatosDB {
 		}
 		
 		return listaRet;
-		
 	}
 	
-	public BeanRespuesta DatosNvaCarta (List<BeanFF> dtArregloC) throws SQLException{
+	
+	
+	public BeanRespuesta ValidaDatosConcep (int estado, int iva ) throws SQLException {
+		BeanRespuesta respCon = new BeanRespuesta();
+		con = obConexion.AbreConexion();
+		Integer nuerror = null;
+		ResultSet result = null;
+		try {
+			call = con.prepareCall(DBConstantes.SICOFE_CALL_VALIDA_FACTURA);
+			call.registerOutParameter(1, OracleTypes.NUMBER);
+			call.registerOutParameter(2, OracleTypes.VARCHAR);
+			call.registerOutParameter(3, OracleTypes.CURSOR);
+			call.registerOutParameter(4, 3);	//P_ACCION	
+			call.setInt(5, 0);
+			call.setInt(6, 0);
+			call.setInt(7, estado);
+			call.setInt(8, iva);
+			call.setBigDecimal(9, new BigDecimal("0.0"));
+			call.setBigDecimal(10, new BigDecimal("0.0"));
+			call.setBigDecimal(11, new BigDecimal("0.0"));
+			call.setString(12, "");
+			call.setInt(13, 0);
+			call.setString(14, "");
+			call.setString(15, "");
+			call.execute();
+	
+			nuerror = new Integer(call.getObject(1).toString());
+			if(nuerror == 0) {
+				respCon.setBandera(true);
+			}else {
+				respCon.setBandera(false);
+			}
+			respCon.setMensaje(call.getObject(2).toString());
+			
+			
+		}catch(Exception e){
+			LOG.warn("Error: "+e);
+		}
+		
+		return respCon;
+	}
+	
+	
+	public BeanRespuesta DatosNvaCarta (List<BeanFF> dtArregloC, String tpRegistroNF) throws SQLException{
 		con = obConexion.AbreConexion();
 		Integer nuerror = null;
 		ResultSet result = null;
@@ -120,7 +173,7 @@ public class ValidaGeneralDatosDB {
 			call.setInt(4, 2);  /* Accion en SP*/
 			call.setInt(5, 0);
 			for(BeanFF bean : dtArregloC) {
-				while(bean.getTp_registro().equals("NF")) {
+				while(bean.getTp_registro().equals(tpRegistroNF)) { /**NF*/
 				call.setString(6, bean.getTp_carta());
 				call.setInt(7, bean.getTp_pago());/*Revisar si cambia a int*/
 				call.setInt(8, bean.getNu_proveedor());
@@ -177,6 +230,7 @@ public class ValidaGeneralDatosDB {
 			call.setInt(13, 0);
 			call.setInt(14, 0);
 			call.setString(15, "P_USUARIO_C");
+			call.execute();
 			
 			LOG.info("Se llama al SP ");
 			call.execute();
@@ -218,7 +272,72 @@ public class ValidaGeneralDatosDB {
 			
 		}
 		return beanCarta;
-		
 	}
-
+	public int nuNota(int factura) throws SQLException {
+		con = obConexion.AbreConexion();
+		ResultSet rs ;
+		int numN = 0;
+		try {
+			call = con.prepareCall("SELECT COUNT(*) FROM TXWV106_NOTA WHERE NU_FACTURA = " + factura);
+			rs = call.executeQuery();
+				int conta = 0;
+			while(rs.next()) {
+				numN = Integer.parseInt(rs.getString(++conta));
+			}
+		}catch (Exception e) {
+			
+		}
+		
+		return numN;
+	}
+	
+	
+	
+	public int cdIva(int cd_iva) {
+		int iva = 0;
+		ResultSet resultSet;
+		try {
+			con = obConexion.AbreConexion();
+			call = con.prepareCall("SELECT CD_VALOR_IVA FROM TXWV123_IVA WHERE NB_IVA = " + cd_iva);
+			resultSet = call.executeQuery();
+				iva = Integer.parseInt(resultSet.getString("CD_VALOR_IVA"));
+			
+		}catch (Exception e) {
+			LOG.warn("Error en al consultar cd_iva " + e);
+		}
+		
+		return iva;
+	}
+	
+	public String parametro(int tp_param, String estatus) {
+		String parametro = null;
+		ResultSet resultSet;
+		try {
+			con = obConexion.AbreConexion();
+			call = con.prepareCall("SELECT NB_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = " + tp_param +"AND CD_PARAM = " + estatus);
+			resultSet = call.executeQuery();
+			parametro = resultSet.getString("NB_PARAM");
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return parametro;
+	}
+	
+	
+	public String existe(String tp_param) {
+		String parametro = null;
+		ResultSet resultSet;
+		try {
+			con = obConexion.AbreConexion();
+			call = con.prepareCall("SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE CD_PARAM = " + tp_param );
+			resultSet = call.executeQuery();
+			parametro = resultSet.getString("CD_PARAM");
+			
+		}catch (Exception e) {
+			// TODO: handle exception
+		}
+		return parametro;
+	}
+	
 }
