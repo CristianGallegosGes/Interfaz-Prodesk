@@ -44,31 +44,34 @@ public class ValidacionesArchivo implements FilenameFilter {
 		boolean validacionN = false;
 		String fecha = obtenerFecha();
 
-		if (nombreA.length() == 18) {
+		if (nombreA.length() == 20) {
 			String[] parts = fecha.split("-");
 			String anio = parts[0];
 			String mes = parts[1];
 			String dia = parts[2];
 			String hora = parts[3];
 
-			String proyecto = nombreA.substring(0, 3);
-			String proceso = nombreA.substring(3, 6);
-			String anioA = nombreA.substring(6, 10);
-			String mesA = nombreA.substring(10, 12);
-			String diaA = nombreA.substring(12, 14);
-			String horaA = nombreA.substring(14, 16);
-			String numeroA = nombreA.substring(16, 18);
+			String aplicativo = nombreA.substring(0, 3);
+			String interfaz = nombreA.substring(3, 5);
+			String aplicativoOrigen = nombreA.substring(5, 8);
+			String anioA = nombreA.substring(8, 12);
+			String mesA = nombreA.substring(12, 14);
+			String diaA = nombreA.substring(14, 16);
+			String horaA = nombreA.substring(16, 18);
+			String numeroA = nombreA.substring(18, 20);
 
-			boolean proyectoConsulta = validaBDAplicativo(proceso);
+			boolean proyectoConsulta = validaBDAplicativo(aplicativoOrigen);
 
-			if (proyecto.equals("VPD")) {
-				if (proyectoConsulta) {
-					if (anioA.equals(anio)) {
-						if (mesA.equals(mes)) {
-							if (diaA.equals(dia)) {
-								if (horaA.equals(hora)) {
-									if (Integer.parseInt(numeroA) >= 0 || Integer.parseInt(numeroA) <= 99) {
-										validacionN = true;
+			if (aplicativo.equals("VPD")) {
+				if (interfaz.equals("FF")) {
+					if (proyectoConsulta) {
+						if (anioA.equals(anio)) {
+							if (mesA.equals(mes)) {
+								if (diaA.equals(dia)) {
+									if (horaA.equals(hora)) {
+										if (Integer.parseInt(numeroA) >= 0 || Integer.parseInt(numeroA) <= 99) {
+											validacionN = true;
+										}
 									}
 								}
 							}

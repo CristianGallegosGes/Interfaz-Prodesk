@@ -19,204 +19,219 @@ public class ValidaDatosFacturaCtrol {
 		int contLinea = 0;
 		for (int i = 1; i <= listaCadenas.size(); i++) {
 			if (listaCadenas.size() == 1) {
-				if(listaCadenas.get(contLinea).getConsecNota() != listaCadenas.get(contLinea).getConsecNota()) {
-					validaFacturaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONSECUTIVO NOTA/CONCEPTO\"");
-					return validaFacturaConse;
-				}
-				
-				if(listaCadenas.get(contLinea).getRecAlternativo() != listaCadenas.get(contLinea).getRecAlternativo()) {
-					validaFacturaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"RECEPTOR ALTERNATIVO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(listaCadenas.get(contLinea).getConsecNota() != listaCadenas.get(contLinea).getConsecNota()) {
+						validaFacturaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"CONSECUTIVO FACTURA\"");
+						return validaFacturaConse;
+					}
 				}
 				
 				if(listaCadenas.get(contLinea).getIsrRetenido() != listaCadenas.get(contLinea).getIsrRetenido()) {
-					validaFacturaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaFacturaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"ISR RETENIDO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"ISR RETENIDO\"");
 					return validaFacturaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getIvaRetenido() != listaCadenas.get(contLinea).getIvaRetenido()) {
-					validaFacturaConse.put(4, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaFacturaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"IVA RETENIDO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"IVA RETENIDO\"");
 					return validaFacturaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getImpuestoCedular() != listaCadenas.get(contLinea).getImpuestoCedular()) {
-					validaFacturaConse.put(5, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaFacturaConse.put(4, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"IMPUESTO CEDULAR\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"IMPUESTO CEDULAR\"");
 					return validaFacturaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getOtrosImpuestos() != listaCadenas.get(contLinea).getOtrosImpuestos()) {
-					validaFacturaConse.put(6, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaFacturaConse.put(5, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"OTROS IMPUESTOS\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"OTROS IMPUESTOS\"");
 					return validaFacturaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getDescuento() != listaCadenas.get(contLinea).getDescuento()) {
-					validaFacturaConse.put(7, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaFacturaConse.put(6, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"DESCUENTO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"DESCUENTO\"");
 					return validaFacturaConse;
 				}
 				
-				if(!(listaCadenas.get(contLinea).getComprobacion().equals(listaCadenas.get(contLinea).getComprobacion()))) {
-					validaFacturaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"COMPROBACIÓN\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getComprobacion().equals(listaCadenas.get(contLinea).getComprobacion()))) {
+						validaFacturaConse.put(7, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"COMPROBACIÓN\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getNu_anticipo().equals(listaCadenas.get(contLinea).getNu_anticipo()))) {
-					validaFacturaConse.put(9, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ANTICIPO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getNu_anticipo().equals(listaCadenas.get(contLinea).getNu_anticipo()))) {
+						validaFacturaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"NUMERO DE ANTICIPO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(listaCadenas.get(contLinea).getFecha_anticipo() != listaCadenas.get(contLinea).getFecha_anticipo()) {
-					validaFacturaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"FECHA DE ANTICIPO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(listaCadenas.get(contLinea).getFecha_anticipo() != listaCadenas.get(contLinea).getFecha_anticipo()) {
+						validaFacturaConse.put(9, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"FECHA DE ANTICIPO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getViaP().equals(listaCadenas.get(contLinea).getViaP()))) {
-					validaFacturaConse.put(11, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"VIA DE PAGO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getViaP().equals(listaCadenas.get(contLinea).getViaP()))) {
+						validaFacturaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"VIA DE PAGO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(listaCadenas.get(contLinea).getCuentaBanc() != listaCadenas.get(contLinea).getCuentaBanc()) {
-					validaFacturaConse.put(12, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CUENTA BANCARIA\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(listaCadenas.get(contLinea).getCuentaBanc() != listaCadenas.get(contLinea).getCuentaBanc()) {
+						validaFacturaConse.put(11, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"CUENTA BANCARIA\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getTpBanco().equals(listaCadenas.get(contLinea).getTpBanco()))) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getTpBanco().equals(listaCadenas.get(contLinea).getTpBanco()))) {
+						validaFacturaConse.put(12, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"TIPO BANCO\"");
+						return validaFacturaConse;
+					}
+				}
+				
+				if(!(listaCadenas.get(contLinea).getEstatusF().equals(listaCadenas.get(contLinea).getEstatusF()))) {
 					validaFacturaConse.put(13, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO BANCO\"");
-					return validaFacturaConse;
-				}
-				
-				if(listaCadenas.get(contLinea).getEstatusF().equals(listaCadenas.get(contLinea).getEstatusF())) {
-					validaFacturaConse.put(14, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"ESTATUS FACTURA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"ESTATUS FACTURA\"");
 					return validaFacturaConse;
 				}
 			}
 			
 			if(!(i == listaCadenas.size())){
-				if(listaCadenas.get(contLinea).getConsecNota() != listaCadenas.get(i).getConsecNota()) {
-					validaFacturaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(listaCadenas.get(contLinea).getConsecNota() != listaCadenas.get(i).getConsecNota()) {
+						validaFacturaConse.put(1, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"CONSECUTIVO FACTURA\"");
+						return validaFacturaConse;
+					}
+				}
+				
+				if(!(listaCadenas.get(contLinea).getIsrRetenido().compareTo(listaCadenas.get(i).getIsrRetenido()) == 0)) {
+					validaFacturaConse.put(2, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONSECUTIVO NOTA/CONCEPTO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"ISR RETENIDO\"");
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getRecAlternativo() != listaCadenas.get(i).getRecAlternativo()) {
-					validaFacturaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(!(listaCadenas.get(contLinea).getIvaRetenido().compareTo(listaCadenas.get(i).getIvaRetenido()) == 0)) {
+					validaFacturaConse.put(3, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"RECEPTOR ALTERNATIVO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"IVA RETENIDO\"");
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getIsrRetenido() != listaCadenas.get(i).getIsrRetenido()) {
-					validaFacturaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(!(listaCadenas.get(contLinea).getImpuestoCedular().compareTo(listaCadenas.get(i).getImpuestoCedular()) == 0)) {
+					validaFacturaConse.put(4, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"ISR RETENIDO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"IMPUESTO CEDULAR\"");
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getIvaRetenido() != listaCadenas.get(i).getIvaRetenido()) {
-					validaFacturaConse.put(4, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(!(listaCadenas.get(contLinea).getOtrosImpuestos().compareTo(listaCadenas.get(i).getOtrosImpuestos()) == 0)) {
+					validaFacturaConse.put(5, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"IVA RETENIDO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"OTROS IMPUESTOS\"");
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getImpuestoCedular() != listaCadenas.get(i).getImpuestoCedular()) {
-					validaFacturaConse.put(5, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(!(listaCadenas.get(contLinea).getDescuento().compareTo(listaCadenas.get(i).getDescuento()) == 0)) {
+					validaFacturaConse.put(6, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"IMPUESTO CEDULAR\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"DESCUENTO\"");
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getOtrosImpuestos() != listaCadenas.get(i).getOtrosImpuestos()) {
-					validaFacturaConse.put(6, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"OTROS IMPUESTOS\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getComprobacion().equals(listaCadenas.get(i).getComprobacion()))) {
+						validaFacturaConse.put(7, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"COMPROBACIÓN\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(listaCadenas.get(contLinea).getDescuento() != listaCadenas.get(i).getDescuento()) {
-					validaFacturaConse.put(7, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"DESCUENTO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getNu_anticipo().equals(listaCadenas.get(i).getNu_anticipo()))) {
+						validaFacturaConse.put(8, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"NUMERO DE ANTICIPO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getComprobacion().equals(listaCadenas.get(i).getComprobacion()))) {
-					validaFacturaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"COMPROBACIÓN\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getFecha_anticipo().equals(listaCadenas.get(i).getFecha_anticipo()))) {
+						validaFacturaConse.put(9, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"FECHA DE ANTICIPO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getNu_anticipo().equals(listaCadenas.get(i).getNu_anticipo()))) {
-					validaFacturaConse.put(9, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ANTICIPO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getViaP().equals(listaCadenas.get(i).getViaP()))) {
+						validaFacturaConse.put(10, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"VIA DE PAGO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(listaCadenas.get(contLinea).getFecha_anticipo() != listaCadenas.get(i).getFecha_anticipo()) {
-					validaFacturaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"FECHA DE ANTICIPO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(listaCadenas.get(contLinea).getCuentaBanc() != listaCadenas.get(i).getCuentaBanc()) {
+						validaFacturaConse.put(11, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"CUENTA BANCARIA\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(!(listaCadenas.get(contLinea).getViaP().equals(listaCadenas.get(i).getViaP()))) {
-					validaFacturaConse.put(11, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"VIA DE PAGO\"");
-					return validaFacturaConse;
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+					if(!(listaCadenas.get(contLinea).getTpBanco().equals(listaCadenas.get(i).getTpBanco()))) {
+						validaFacturaConse.put(12, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+								+ listaCadenas.get(contLinea).getConsecArch() + "/"
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"TIPO BANCO\"");
+						return validaFacturaConse;
+					}
 				}
 				
-				if(listaCadenas.get(contLinea).getCuentaBanc() != listaCadenas.get(i).getCuentaBanc()) {
-					validaFacturaConse.put(12, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+				if(!(listaCadenas.get(contLinea).getEstatusF().equals(listaCadenas.get(i).getEstatusF()))) {
+					validaFacturaConse.put(13, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CUENTA BANCARIA\"");
-					return validaFacturaConse;
-				}
-				
-				if(!(listaCadenas.get(contLinea).getTpBanco().equals(listaCadenas.get(i).getTpBanco()))) {
-					validaFacturaConse.put(13, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO BANCO\"");
-					return validaFacturaConse;
-				}
-				
-				if(listaCadenas.get(contLinea).getEstatusF().equals(listaCadenas.get(i).getEstatusF())) {
-					validaFacturaConse.put(14, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
-							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"ESTATUS FACTURA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS EN EL CAMPO -> \"ESTATUS FACTURA\"");
 					return validaFacturaConse;
 				}
 			}
+			contLinea++;
 		}
 		return validaFacturaConse;
 	}

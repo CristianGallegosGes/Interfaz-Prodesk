@@ -21,7 +21,7 @@ public class ValidaDatosCartaCtrol {
 				if (!listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(contLinea).getTp_carta())) {
 					validaCartaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONSECUTIVO CARTA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CONSECUTIVO CARTA\"");
 					return validaCartaConse;
 				}
 				
@@ -29,7 +29,7 @@ public class ValidaDatosCartaCtrol {
 					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(contLinea).getNu_carta()) {
 						validaCartaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
-								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE CARTA\"");
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE CARTA\"");
 						return validaCartaConse;
 					}
 				}
@@ -38,7 +38,7 @@ public class ValidaDatosCartaCtrol {
 					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(contLinea).getNu_carta()) {
 						validaCartaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
-								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO CARTA\"");
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"TIPO CARTA\"");
 						return validaCartaConse;
 					}
 				}
@@ -47,7 +47,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(4,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO PAGO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"TIPO PAGO\"");
 					return validaCartaConse;
 				}
 
@@ -55,7 +55,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(5,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO PROVEEDOR\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO PROVEEDOR\"");
 					return validaCartaConse;
 				}
 
@@ -63,7 +63,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(6,
 							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"SOCIEDAD RECEPTORA\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"SOCIEDAD RECEPTORA\"");
 					return validaCartaConse;
 				}
 
@@ -71,14 +71,14 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(7,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"GLG\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"GLG\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getEmpGasBursa().equals(listaCadenas.get(contLinea).getEmpGasBursa())) {
 					validaCartaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"EMPRESA GASTOS BURSA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"EMPRESA GASTOS BURSA\"");
 					return validaCartaConse;
 				}
 
@@ -86,14 +86,14 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(9,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"FIDEICOMISO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"FIDEICOMISO\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getNu_acreditado().equals(listaCadenas.get(contLinea).getNu_acreditado())) {
 					validaCartaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACREDITADO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE ACREDITADO\"");
 					return validaCartaConse;
 				}
 
@@ -101,7 +101,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(11,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE PEP\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE PEP\"");
 					return validaCartaConse;
 				}
 
@@ -109,7 +109,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(12,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"MONEDA\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"MONEDA\"");
 					return validaCartaConse;
 				}
 
@@ -118,7 +118,7 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(13,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"PERIODIFICACIÓN\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"PERIODIFICACIÓN\"");
 					return validaCartaConse;
 				}
 
@@ -128,7 +128,7 @@ public class ValidaDatosCartaCtrol {
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota()
-									+ " CAMPO -> \"PROVISIÓN EJERCICIO ANTERIOR\"");
+									+ " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"PROVISIÓN EJERCICIO ANTERIOR\"");
 					return validaCartaConse;
 				}
 
@@ -136,37 +136,44 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(15,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONTRATO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CONTRATO\"");
+					return validaCartaConse;
+				}
+				
+				if(listaCadenas.get(contLinea).getRecAlternativo() != listaCadenas.get(contLinea).getRecAlternativo()) {
+					validaCartaConse.put(16, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							+ listaCadenas.get(contLinea).getConsecArch() + "/"
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"RECEPTOR ALTERNATIVO\"");
 					return validaCartaConse;
 				}
 				
 				if (listaCadenas.get(contLinea).getCuentaGps() != listaCadenas.get(contLinea).getCuentaGps()) {
-					validaCartaConse.put(16,
+					validaCartaConse.put(17,
 							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota()
-									+ " CAMPO -> \"CUENTA GPS(CUENTA DE GASTO)\"");
+									+ " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CUENTA GPS(CUENTA DE GASTO)\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getUsuarioCreador().equals(listaCadenas.get(contLinea).getUsuarioCreador())) {
-					validaCartaConse.put(17, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(18, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"USUARIO CREADOR DE CARTA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"USUARIO CREADOR DE CARTA\"");
 					return validaCartaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getNu_activo() != listaCadenas.get(contLinea).getNu_activo()) {
-					validaCartaConse.put(18, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(19, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACTIVO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE ACTIVO\"");
 					return validaCartaConse;
 				}
 				
 				if (!listaCadenas.get(contLinea).getAplicativoOrg().equals(aplicativoOrigen)) {
-					validaCartaConse.put(19, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(20, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"APLICATIVO ORIGEN\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"APLICATIVO ORIGEN\"");
 					return validaCartaConse;
 				}
 
@@ -174,43 +181,44 @@ public class ValidaDatosCartaCtrol {
 			
 			if(!(i == listaCadenas.size())){
 				if (!listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(i).getTp_carta())) {
-					validaCartaConse.put(1, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+						validaCartaConse.put(1, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONSECUTIVO CARTA\"");
-					return validaCartaConse;
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CONSECUTIVO CARTA\"");
+						return validaCartaConse;
+					
 				}
 				
 				if(listaCadenas.get(contLinea).getNu_carta() > 0) {
 					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(i).getNu_carta()) {
-						validaCartaConse.put(2, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+						validaCartaConse.put(2, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
-								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE CARTA\"");
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE CARTA\"");
 						return validaCartaConse;
 					}
 				}
 				
 				if(!(listaCadenas.get(contLinea).getTp_carta().equals(listaCadenas.get(i).getTp_carta()))) {
 					if(listaCadenas.get(contLinea).getNu_carta() != listaCadenas.get(i).getNu_carta()) {
-						validaCartaConse.put(3, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+						validaCartaConse.put(3, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
-								+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO CARTA\"");
+								+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"TIPO CARTA\"");
 						return validaCartaConse;
 					}
 				}
 				
 				if (!(listaCadenas.get(contLinea).getTp_pago() == (listaCadenas.get(i).getTp_pago()))) {
 					validaCartaConse.put(4,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"TIPO PAGO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"TIPO PAGO\"");
 					return validaCartaConse;
 				}
 
 				if (listaCadenas.get(contLinea).getNu_proveedor() != listaCadenas.get(i).getNu_proveedor()) {
 					validaCartaConse.put(5,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO PROVEEDOR\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO PROVEEDOR\"");
 					return validaCartaConse;
 				}
 
@@ -218,113 +226,127 @@ public class ValidaDatosCartaCtrol {
 					validaCartaConse.put(6,
 							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"SOCIEDAD RECEPTORA\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS EN EL SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"SOCIEDAD RECEPTORA\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getGlg().equals(listaCadenas.get(i).getGlg())) {
 					validaCartaConse.put(7,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"GLG\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"GLG\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getEmpGasBursa().equals(listaCadenas.get(i).getEmpGasBursa())) {
-					validaCartaConse.put(8, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(8, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"EMPRESA GASTOS BURSA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"EMPRESA GASTOS BURSA\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getFideicomiso().equals(listaCadenas.get(i).getFideicomiso())) {
 					validaCartaConse.put(9,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"FIDEICOMISO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"FIDEICOMISO\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getNu_acreditado().equals(listaCadenas.get(i).getNu_acreditado())) {
-					validaCartaConse.put(10, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(10, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACREDITADO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE ACREDITADO\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getNu_pep().equals(listaCadenas.get(i).getNu_pep())) {
 					validaCartaConse.put(11,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE PEP\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE PEP\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getMondena().equals(listaCadenas.get(i).getMondena())) {
 					validaCartaConse.put(12,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"MONEDA\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"MONEDA\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getPeriodificacion()
 						.equals(listaCadenas.get(i).getPeriodificacion())) {
 					validaCartaConse.put(13,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"PERIODIFICACIÓN\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"PERIODIFICACIÓN\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getProviEjerAnterior()
 						.equals(listaCadenas.get(i).getProviEjerAnterior())) {
 					validaCartaConse.put(14,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota()
-									+ " CAMPO -> \"PROVISIÓN EJERCICIO ANTERIOR\"");
+									+ " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"PROVISIÓN EJERCICIO ANTERIOR\"");
 					return validaCartaConse;
 				}
 
 				if (listaCadenas.get(contLinea).getContrato() != listaCadenas.get(i).getContrato()) {
 					validaCartaConse.put(15,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
-									+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"CONTRATO\"");
+									+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CONTRATO\"");
+					return validaCartaConse;
+				}
+				
+				if(listaCadenas.get(contLinea).getRecAlternativo() != listaCadenas.get(i).getRecAlternativo()) {
+					validaCartaConse.put(16, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+							+ listaCadenas.get(contLinea).getConsecArch() + "/"
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"RECEPTOR ALTERNATIVO\"");
 					return validaCartaConse;
 				}
 				
 				if (listaCadenas.get(contLinea).getCuentaGps() != listaCadenas.get(i).getCuentaGps()) {
-					validaCartaConse.put(16,
-							"ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(17,
+							"ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 									+ listaCadenas.get(contLinea).getConsecArch() + "/"
 									+ listaCadenas.get(contLinea).getConsecNota()
-									+ " CAMPO -> \"CUENTA GPS(CUENTA DE GASTO)\"");
+									+ " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"CUENTA GPS(CUENTA DE GASTO)\"");
 					return validaCartaConse;
 				}
 
 				if (!listaCadenas.get(contLinea).getUsuarioCreador().equals(listaCadenas.get(i).getUsuarioCreador())) {
-					validaCartaConse.put(17, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(18, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"USUARIO CREADOR DE CARTA\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"USUARIO CREADOR DE CARTA\"");
 					return validaCartaConse;
 				}
 				
 				if(listaCadenas.get(contLinea).getNu_activo() != listaCadenas.get(i).getNu_activo()) {
-					validaCartaConse.put(18, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(19, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"NUMERO DE ACTIVO\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"NUMERO DE ACTIVO\"");
 					return validaCartaConse;
 				}
 				
 				if (!listaCadenas.get(contLinea).getAplicativoOrg().equals(aplicativoOrigen)) {
-					validaCartaConse.put(19, "ERROR EN LINEA" + linea.get(contLinea) + " CONSECUTIVO  "
+					validaCartaConse.put(20, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 							+ listaCadenas.get(contLinea).getConsecArch() + "/"
-							+ listaCadenas.get(contLinea).getConsecNota() + " CAMPO -> \"APLICATIVO ORIGEN\"");
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"APLICATIVO ORIGEN\"");
 					return validaCartaConse;
 				}
 
+			} else {
+				if (!listaCadenas.get(contLinea).getAplicativoOrg().equals(aplicativoOrigen)) {
+					validaCartaConse.put(20, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
+							+ listaCadenas.get(contLinea).getConsecArch() + "/"
+							+ listaCadenas.get(contLinea).getConsecNota() + " SE ENCONTRARON DIFERENCIAS DE DATOS  EN EL CAMPO -> \"APLICATIVO ORIGEN\"");
+					return validaCartaConse;
+				}
 			}
 			contLinea++;
 		}

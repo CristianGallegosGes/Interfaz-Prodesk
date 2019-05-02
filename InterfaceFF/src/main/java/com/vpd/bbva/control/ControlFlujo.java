@@ -29,8 +29,8 @@ public class ControlFlujo {
 		log.info("Inicia Proceso de Control");
 		ValidarArchivo procesarA = new ValidarArchivo();
 		List<String> validacionArchivo = procesarA.ValidaArchivo();
-		
-		if(validacionArchivo != null && validacionArchivo.size() > 0) {
+
+		if (validacionArchivo != null && validacionArchivo.size() > 0) {
 			log.info("Comienza Procesamiento de Archivos");
 			for (String archivo : validacionArchivo) {
 				log.info("Archivo a procesar: \n" + archivo);
@@ -48,19 +48,5 @@ public class ControlFlujo {
 		} else {
 			log.error("No hay archivos por procesar");
 		}
-		
 	}
-
-	// Mandar arreglo con el mismo tipo de consecutivo de archivo
-
-	// Metodo para insertar una carta
-
-	// Metodo para insertar una factura
-
-	// Metodo para insertar un concepto
-
-	// Metodo para insertar una nota de credito
-
-	//
-
 }
