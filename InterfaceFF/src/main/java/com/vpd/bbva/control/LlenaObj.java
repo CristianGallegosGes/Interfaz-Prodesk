@@ -236,7 +236,7 @@ public class LlenaObj {
 			return facNva;
 	}
 	
-	public BeanNotaCreFin llenaNotaCredito (List<BeanFF> nota, String nc, int numFila, int carta, int factura) throws SQLException {
+	public BeanNotaCreFin llenaNotaCredito (List<BeanFF> nota, String nc, int numFila, int carta, int factura) throws Exception {
 		BeanNotaCreFin notaCre = new BeanNotaCreFin();
 		ValidaGeneralDatosDB datosdb = new ValidaGeneralDatosDB();
 		int fila = 0;
