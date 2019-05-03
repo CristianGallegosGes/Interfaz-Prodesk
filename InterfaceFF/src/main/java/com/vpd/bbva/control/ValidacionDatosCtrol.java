@@ -166,7 +166,7 @@ public class ValidacionDatosCtrol {
 												ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
 												try {
 
-													if (Integer.parseInt(lineasArchivo.get(lineasArchivo.size() - 1)
+													if (Integer.parseInt(lineasArchivo.get(lineasArchivo.size() - 2)
 															.substring(0, 10).trim()) == listaBeanFF.get(0)
 																	.getConsecArch()) {
 
@@ -217,14 +217,14 @@ public class ValidacionDatosCtrol {
 
 																			List<BeanRespuesta> ctrolBD = controlProcesoBD
 																					.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																			boolean banderaCtrolBD = true; // ctrolBD.get(0).GetBandera();
+																			boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																			if (banderaCtrolBD) {
 
 																				if (noCartaGenerada == 0) {
-																					noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																					noCartaGenerada = ctrolBD.get(0).getCarta();
 																				}
-																				noFacturaGenerada = 22222222; // ctrolBD.get(0).getFactura();
+																				noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																				for (String cadenaP : cadenasProcesarBean) {
 																					escribirArchivoCorrecto(
@@ -257,8 +257,8 @@ public class ValidacionDatosCtrol {
 																							rutaArchivoSBKP
 																									+ nuevoNombreArc,
 																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
+																							"[ERROR EN LA LINEA"
+																									+ lineasProcesar.get(
 																											lineaError)
 																									+ " CONSECUTIVO "
 																									+ cadenasProcesarBean
@@ -267,15 +267,15 @@ public class ValidacionDatosCtrol {
 																													0,
 																													10)
 																											.trim()
-																									+ cadenasProcesarBean
+																									+ "/" +cadenasProcesarBean
 																											.get(lineaError)
 																											.substring(
 																													30,
 																													34)
 																											.trim()
-																									+ "\""
+																									+ " \""
 																									+ mensajeError
-																									+ "\"");
+																									+ "\"]");
 																					totalRegistroError++;
 																				}
 																				noCartaGenerada = 0;
@@ -348,15 +348,14 @@ public class ValidacionDatosCtrol {
 
 																			List<BeanRespuesta> ctrolBD = controlProcesoBD
 																					.BloqueaDB(listaBeanFFIAN, cartaGenerada);
-																			boolean banderaCtrolBD = true;// ctrolBD.get(0)
-																			// .GetBandera();
+																			boolean banderaCtrolBD =  ctrolBD.get(0).GetBandera();
 
 																			if (banderaCtrolBD) {
 
 																				if (noCartaGenerada == 0) {
-																					noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																					noCartaGenerada = ctrolBD.get(0).getCarta();
 																				}
-																				noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
+																				noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																				for (String cadenaP : cadenasProcesarBean) {
 
@@ -390,8 +389,8 @@ public class ValidacionDatosCtrol {
 																							rutaArchivoSBKP
 																									+ nuevoNombreArc,
 																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
+																							"[ERROR EN LA LINEA"
+																									+ lineasProcesar.get(
 																											lineaError)
 																									+ " CONSECUTIVO "
 																									+ cadenasProcesarBean
@@ -406,9 +405,9 @@ public class ValidacionDatosCtrol {
 																													30,
 																													34)
 																											.trim()
-																									+ "\""
+																									+ " \""
 																									+ mensajeError
-																									+ "\"");
+																									+ "\"]");
 																					totalRegistroError++;
 																				}
 
@@ -478,15 +477,14 @@ public class ValidacionDatosCtrol {
 
 																			List<BeanRespuesta> ctrolBD = controlProcesoBD
 																					.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																			boolean banderaCtrolBD = true;// ctrolBD.get(0)
-																			// .GetBandera();
+																			boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																			if (banderaCtrolBD) {
 
 																				if (noCartaGenerada == 0) {
-																					noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																					noCartaGenerada = ctrolBD.get(0).getCarta();
 																				}
-																				noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
+																				noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																				for (String cadenaP : cadenasProcesarBean) {
 
@@ -520,8 +518,8 @@ public class ValidacionDatosCtrol {
 																							rutaArchivoSBKP
 																									+ nuevoNombreArc,
 																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
+																							"[ERROR EN LA LINEA"
+																									+ lineasProcesar.get(
 																											lineaError)
 																									+ " CONSECUTIVO "
 																									+ cadenasProcesarBean
@@ -530,15 +528,15 @@ public class ValidacionDatosCtrol {
 																													0,
 																													10)
 																											.trim()
-																									+ cadenasProcesarBean
+																									+ "/" +cadenasProcesarBean
 																											.get(lineaError)
 																											.substring(
 																													30,
 																													34)
 																											.trim()
-																									+ "\""
+																									+ " \""
 																									+ mensajeError
-																									+ "\"");
+																									+ "\"]");
 																					totalRegistroError++;
 																				}
 
@@ -620,13 +618,13 @@ public class ValidacionDatosCtrol {
 
 																		List<BeanRespuesta> ctrolBD = controlProcesoBD
 																				.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																		boolean banderaCtrolBD = true; // ctrolBD.get(0).GetBandera();
+																		boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																		if (banderaCtrolBD) {
 																			if (noCartaGenerada == 0) {
-																				noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																				noCartaGenerada = ctrolBD.get(0).getCarta();
 																			}
-																			noFacturaGenerada = 22222222; // ctrolBD.get(0).getFactura();
+																			noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																			for (String cadenaP : cadenasProcesarBean) {
 
@@ -658,8 +656,8 @@ public class ValidacionDatosCtrol {
 																						rutaArchivoSBKP
 																								+ nuevoNombreArc,
 																						cadenaP,
-																						"ERROR EN LA LINEA"
-																								+ cadenaLinea
+																						"[ERROR EN LA LINEA"
+																								+ lineasProcesar
 																										.get(lineaError)
 																								+ " CONSECUTIVO "
 																								+ cadenasProcesarBean
@@ -667,13 +665,13 @@ public class ValidacionDatosCtrol {
 																										.substring(0,
 																												10)
 																										.trim()
-																								+ cadenasProcesarBean
+																								+ "/" +cadenasProcesarBean
 																										.get(lineaError)
 																										.substring(30,
 																												34)
 																										.trim()
-																								+ "\"" + mensajeError
-																								+ "\"");
+																								+ " \"" + mensajeError
+																								+ "\"]");
 																				totalRegistroError++;
 																			}
 																			noCartaGenerada = 0;
@@ -740,15 +738,14 @@ public class ValidacionDatosCtrol {
 
 																		List<BeanRespuesta> ctrolBD = controlProcesoBD
 																				.BloqueaDB(listaBeanFFIAN, cartaGenerada);
-																		boolean banderaCtrolBD = true; // ctrolBD.get(0)
-																		// .GetBandera();
+																		boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																		if (banderaCtrolBD) {
 
 																			if (noCartaGenerada == 0) {
-																				noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																				noCartaGenerada = ctrolBD.get(0).getCarta();
 																			}
-																			noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
+																			noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																			for (String cadenaP : cadenasProcesarBean) {
 
@@ -779,8 +776,8 @@ public class ValidacionDatosCtrol {
 																						rutaArchivoSBKP
 																								+ nuevoNombreArc,
 																						cadenaP,
-																						"ERROR EN LA LINEA"
-																								+ cadenaLinea
+																						"[ERROR EN LA LINEA"
+																								+ lineasProcesar
 																										.get(lineaError)
 																								+ " CONSECUTIVO "
 																								+ cadenasProcesarBean
@@ -788,13 +785,13 @@ public class ValidacionDatosCtrol {
 																										.substring(0,
 																												10)
 																										.trim()
-																								+ cadenasProcesarBean
+																								+ "/" +cadenasProcesarBean
 																										.get(lineaError)
 																										.substring(30,
 																												34)
 																										.trim()
-																								+ "\"" + mensajeError
-																								+ "\"");
+																								+ " \"" + mensajeError
+																								+ "\"]");
 																				totalRegistroError++;
 																			}
 																			noCartaGenerada = 0;
@@ -852,11 +849,11 @@ public class ValidacionDatosCtrol {
 														if (validacionDatosFac.size() == 0) {
 															List<BeanRespuesta> ctrolBD = controlProcesoBD
 																	.BloqueaDB(listaBeanFF, cartaGenerada);
-															boolean banderaCtrolBD = true; // ctrolBD.get(0).GetBandera();
+															boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 															if (banderaCtrolBD) {
-																noCartaGenerada = 1111111;// ctrolBD.get(0).getCarta();
-																noFacturaGenerada = 2222222;// ctrolBD.get(0).getFactura();
+																noCartaGenerada = ctrolBD.get(0).getCarta();
+																noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																for (String cadenaP : cadenasProcesar) {
 
@@ -884,14 +881,14 @@ public class ValidacionDatosCtrol {
 
 																	escribirArchivoError(
 																			rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																			"ERROR EN LA LINEA"
+																			"[ERROR EN LA LINEA"
 																					+ cadenaLinea.get(lineaError)
 																					+ " CONSECUTIVO "
 																					+ cadenasProcesar.get(lineaError)
 																							.substring(0, 10).trim()
-																					+ cadenasProcesar.get(lineaError)
+																					+ "/" +cadenasProcesar.get(lineaError)
 																							.substring(30, 34).trim()
-																					+ "\"" + mensajeError + "\"");
+																					+ " \"" + mensajeError + "\"]");
 																	totalRegistroError++;
 																}
 
@@ -1124,42 +1121,451 @@ public class ValidacionDatosCtrol {
 													ControlBloqueaDB controlProcesoBD = new ControlBloqueaDB();
 													try {
 
-														int conta = 0;
-														int contaa = 0;
-														ArrayList<BeanFF> listaBeanN = new ArrayList<BeanFF>();
-														ArrayList<BeanFF> listaBeanFFIAN = new ArrayList<BeanFF>();
-														ArrayList<BeanFF> listaBeanFFDAN = new ArrayList<BeanFF>();
-														ArrayList<String> cadenasProcesarBean = new ArrayList<String>();
-														int totalListaBeanFF = listaBeanFF.size();
-														for (int i = 1; i <= listaBeanFF.size(); i++) {
-															contaa++;
+														if (Integer.parseInt(lineasArchivo.get(lineasArchivo.size() - 2)
+																.substring(0, 10).trim()) == listaBeanFF.get(0)
+																		.getConsecArch()) {
 
-															if (i == 1) {
-																listaBeanN.add(listaBeanFF.get(conta));
-																cadenasProcesarBean.add(cadenasProcesar.get(conta));
-															} else {
-																if (listaBeanFF.get(conta)
-																		.getConsecNota() == listaBeanFF.get(i - 2)
-																				.getConsecNota()) {
+															int conta = 0;
+															int contaa = 0;
+															ArrayList<BeanFF> listaBeanN = new ArrayList<BeanFF>();
+															ArrayList<BeanFF> listaBeanFFIAN = new ArrayList<BeanFF>();
+															ArrayList<BeanFF> listaBeanFFDAN = new ArrayList<BeanFF>();
+															ArrayList<String> cadenasProcesarBean = new ArrayList<String>();
+															ArrayList<Integer> lineasProcesar = new ArrayList<Integer>();
+															int totalListaBeanFF = listaBeanFF.size();
+															for (int i = 1; i <= listaBeanFF.size(); i++) {
+																contaa++;
+
+																if (i == 1) {
 																	listaBeanN.add(listaBeanFF.get(conta));
-																	listaBeanFFIAN.addAll(listaBeanN);
 																	cadenasProcesarBean.add(cadenasProcesar.get(conta));
-																	if (i == totalListaBeanFF) {
-																		listaBeanFFDAN.clear();
+																	lineasProcesar.add(cadenaLinea.get(conta));
+																} else {
+																	if (listaBeanFF.get(conta)
+																			.getConsecNota() == listaBeanFF.get(i - 2)
+																					.getConsecNota()) {
+																		listaBeanN.add(listaBeanFF.get(conta));
+																		listaBeanFFIAN.addAll(listaBeanN);
+																		cadenasProcesarBean.add(cadenasProcesar.get(conta));
+																		lineasProcesar.add(cadenaLinea.get(conta));
+																		if (i == totalListaBeanFF) {
+																			listaBeanFFDAN.clear();
+																		}
+																		if (listaBeanFFDAN.size() > 0) {
+
+																			ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
+																			HashMap<Integer, String> validacionDatosFac = null;
+																			String errorDatosFac = "";
+																			validacionDatosFac = validaDatosF
+																					.validaDatosFacturaConsecutiva(
+																							listaBeanFFDAN, lineasProcesar);
+																			if (validacionDatosFac.size() == 0) {
+																				// Validar el valor de la variable
+																				// cartaGenerada
+																				// que sea distinto a 0,
+																				// ya que eso determina si ya se genero una
+																				// carta con el mismo
+																				// consecutivo
+																				if (noCartaGenerada > 0) {
+																					cartaGenerada = true;
+																				}
+
+																				List<BeanRespuesta> ctrolBD = controlProcesoBD
+																						.BloqueaDB(listaBeanFFDAN, cartaGenerada);
+																				boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+
+																				if (banderaCtrolBD) {
+
+																					if (noCartaGenerada == 0) {
+																						noCartaGenerada = ctrolBD.get(0).getCarta();
+																					}
+																					noFacturaGenerada = ctrolBD.get(0).getFactura();
+
+																					for (String cadenaP : cadenasProcesarBean) {
+																						escribirArchivoCorrecto(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP, noCartaGenerada,
+																								noFacturaGenerada);
+																						totalRegistroCorrectos++;
+																					}
+
+																				} else {
+
+																					// En caso de que la bandera sea false
+																					// se da
+																					// por
+																					// hecho // que no
+																					// se proeco correctamente los registros
+																					// de
+																					// la
+																					// lista enviada y se
+																					// debe de imprimir el
+																					// error a todas las lineas enviadas.
+																					String mensajeError = ctrolBD.get(0)
+																							.getMensaje();
+																					int lineaError = ctrolBD.get(0)
+																							.getConsecutivoA();
+																					for (String cadenaP : cadenasProcesarBean) {
+
+																						escribirArchivoError(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP,
+																								"[ERROR EN LA LINEA"
+																										+ lineasProcesar.get(
+																												lineaError)
+																										+ " CONSECUTIVO "
+																										+ cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														0,
+																														10)
+																												.trim()
+																										+ "/" +cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														30,
+																														34)
+																												.trim()
+																										+ " \""
+																										+ mensajeError
+																										+ "\"]");
+																						totalRegistroError++;
+																					}
+																					noCartaGenerada = 0;
+																				}
+																			} else {
+
+																				for (Integer j : validacionDatosFac
+																						.keySet()) {
+																					errorDatosFac = validacionDatosFac
+																							.values().toString();
+																					log.error(
+																							"Identificador de error(Datos Factura Consecutivo):"
+																									+ j
+																									+ " Descripcion de error: "
+																									+ validacionDatosFac
+																											.values()
+																									+ " en la linea "
+																									+ errorDatosFac.substring(15, 16));
+																				}
+
+																				for (String cadenaP : cadenasProcesarBean) {
+																					escribirArchivoError(
+																							rutaArchivoSBKP
+																									+ nuevoNombreArc,
+																							cadenaP, errorDatosFac);
+																					totalRegistroError++;
+																				}
+
+																				if (Integer.parseInt((cadena
+																						.substring(0, 10).trim().equals(""))
+																								? "0"
+																								: cadena.substring(0, 10)
+																										.trim()) > consecutivoArchivo) {
+																					// Agregar numero de archivo consecutivo
+																					consecutivoArchivo = Integer
+																							.parseInt(validacionCadenas
+																									.get(0).substring(0, 10)
+																									.trim());
+																				}
+																			}
+
+																			listaBeanFFDAN.clear();
+																			listaBeanN.clear();
+																			cadenasProcesarBean.clear();
+																			lineasProcesar.clear();
+																		}
+																	} else if (listaBeanFF.get(conta)
+																			.getConsecNota() != listaBeanFF.get(i - 2)
+																					.getConsecNota()) {
+
+																		if (listaBeanFFIAN.size() > 0) {
+
+																			ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
+																			HashMap<Integer, String> validacionDatosFac = null;
+																			String errorDatosFac = "";
+																			validacionDatosFac = validaDatosF
+																					.validaDatosFacturaConsecutiva(
+																							listaBeanFFIAN, lineasProcesar);
+																			if (validacionDatosFac.size() == 0) {
+
+																				// Validar el valor de la variable
+																				// cartaGenerada
+																				// que sea distinto a 0,
+																				// ya que eso determina si ya se genero una
+																				// carta con el mismo
+																				// consecutivo
+																				if (noCartaGenerada > 0) {
+																					cartaGenerada = true;
+																				}
+
+																				List<BeanRespuesta> ctrolBD = controlProcesoBD
+																						.BloqueaDB(listaBeanFFIAN, cartaGenerada);
+																				boolean banderaCtrolBD =  ctrolBD.get(0).GetBandera();
+
+																				if (banderaCtrolBD) {
+
+																					if (noCartaGenerada == 0) {
+																						noCartaGenerada = ctrolBD.get(0).getCarta();
+																					}
+																					noFacturaGenerada = ctrolBD.get(0).getFactura();
+
+																					for (String cadenaP : cadenasProcesarBean) {
+
+																						escribirArchivoCorrecto(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP, noCartaGenerada,
+																								noFacturaGenerada);
+																						totalRegistroCorrectos++;
+																					}
+
+																				} else {
+
+																					// En caso de que la bandera sea false
+																					// se da
+																					// por
+																					// hecho // que no
+																					// se proeco correctamente los registros
+																					// de
+																					// la
+																					// lista enviada y se
+																					// debe de imprimir el
+																					// error a todas las lineas enviadas.
+																					String mensajeError = ctrolBD.get(0)
+																							.getMensaje();
+																					int lineaError = ctrolBD.get(0)
+																							.getConsecutivoA();
+																					for (String cadenaP : cadenasProcesarBean) {
+
+																						escribirArchivoError(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP,
+																								"[ERROR EN LA LINEA"
+																										+ lineasProcesar.get(
+																												lineaError)
+																										+ " CONSECUTIVO "
+																										+ cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														0,
+																														10)
+																												.trim()
+																										+ cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														30,
+																														34)
+																												.trim()
+																										+ " \""
+																										+ mensajeError
+																										+ "\"]");
+																						totalRegistroError++;
+																					}
+
+																					noCartaGenerada = 0;
+																				}
+																			} else {
+
+																				for (Integer j : validacionDatosFac
+																						.keySet()) {
+																					errorDatosFac = validacionDatosFac
+																							.values().toString();
+																					log.error(
+																							"Identificador de error(Datos Factura Consecutivo):"
+																									+ j
+																									+ " Descripcion de error: "
+																									+ validacionDatosFac
+																											.values()
+																									+ " en la linea "
+																									+ errorDatosFac.substring(15, 16));
+																				}
+
+																				for (String cadenaP : cadenasProcesarBean) {
+																					escribirArchivoError(
+																							rutaArchivoSBKP
+																									+ nuevoNombreArc,
+																							cadenaP, errorDatosFac);
+																					totalRegistroError++;
+																				}
+
+																				if (Integer.parseInt((cadena
+																						.substring(0, 10).trim().equals(""))
+																								? "0"
+																								: cadena.substring(0, 10)
+																										.trim()) > consecutivoArchivo) {
+																					// Agregar numero de archivo consecutivo
+																					consecutivoArchivo = Integer
+																							.parseInt(validacionCadenas
+																									.get(0).substring(0, 10)
+																									.trim());
+																				}
+
+																			}
+
+																			listaBeanFFIAN.clear();
+																			listaBeanN.clear();
+																			cadenasProcesarBean.clear();
+																			lineasProcesar.clear();
+																		} else if (listaBeanFFDAN.size() > 0) {
+
+																			ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
+																			HashMap<Integer, String> validacionDatosFac = null;
+																			String errorDatosFac = "";
+																			validacionDatosFac = validaDatosF
+																					.validaDatosFacturaConsecutiva(
+																							listaBeanFFDAN, lineasProcesar);
+																			if (validacionDatosFac.size() == 0) {
+
+																				// Validar el valor de la variable
+																				// cartaGenerada
+																				// que sea distinto a 0,
+																				// ya que eso determina si ya se genero una
+																				// carta con el mismo
+																				// consecutivo
+																				if (noCartaGenerada > 0) {
+																					cartaGenerada = true;
+																				}
+
+																				List<BeanRespuesta> ctrolBD = controlProcesoBD
+																						.BloqueaDB(listaBeanFFDAN, cartaGenerada);
+																				boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
+
+																				if (banderaCtrolBD) {
+
+																					if (noCartaGenerada == 0) {
+																						noCartaGenerada = ctrolBD.get(0).getCarta();
+																					}
+																					noFacturaGenerada = ctrolBD.get(0).getFactura();
+
+																					for (String cadenaP : cadenasProcesarBean) {
+
+																						escribirArchivoCorrecto(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP, noCartaGenerada,
+																								noFacturaGenerada);
+																						totalRegistroCorrectos++;
+																					}
+
+																				} else {
+
+																					// En caso de que la bandera sea false
+																					// se da
+																					// por
+																					// hecho // que no
+																					// se proeco correctamente los registros
+																					// de
+																					// la
+																					// lista enviada y se
+																					// debe de imprimir el
+																					// error a todas las lineas enviadas.
+																					String mensajeError = ctrolBD.get(0)
+																							.getMensaje();
+																					int lineaError = ctrolBD.get(0)
+																							.getConsecutivoA();
+																					for (String cadenaP : cadenasProcesarBean) {
+
+																						escribirArchivoError(
+																								rutaArchivoSBKP
+																										+ nuevoNombreArc,
+																								cadenaP,
+																								"[ERROR EN LA LINEA"
+																										+ lineasProcesar.get(
+																												lineaError)
+																										+ " CONSECUTIVO "
+																										+ cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														0,
+																														10)
+																												.trim()
+																										+ "/" +cadenasProcesarBean
+																												.get(lineaError)
+																												.substring(
+																														30,
+																														34)
+																												.trim()
+																										+ " \""
+																										+ mensajeError
+																										+ "\"]");
+																						totalRegistroError++;
+																					}
+
+																					noCartaGenerada = 0;
+																				}
+
+																			} else {
+
+																				for (Integer j : validacionDatosFac
+																						.keySet()) {
+																					errorDatosFac = validacionDatosFac
+																							.values().toString();
+																					log.error(
+																							"Identificador de error(Datos Factura Consecutivo):"
+																									+ j
+																									+ " Descripcion de error: "
+																									+ validacionDatosFac
+																											.values()
+																									+ " en la linea "
+																									+ errorDatosFac.substring(15, 16));
+																				}
+
+																				for (String cadenaP : cadenasProcesarBean) {
+																					escribirArchivoError(
+																							rutaArchivoSBKP
+																									+ nuevoNombreArc,
+																							cadenaP, errorDatosFac);
+																					totalRegistroError++;
+																				}
+
+																				if (Integer.parseInt((cadena
+																						.substring(0, 10).trim().equals(""))
+																								? "0"
+																								: cadena.substring(0, 10)
+																										.trim()) > consecutivoArchivo) {
+																					// Agregar numero de archivo consecutivo
+																					consecutivoArchivo = Integer
+																							.parseInt(validacionCadenas
+																									.get(0).substring(0, 10)
+																									.trim());
+																				}
+
+																			}
+
+																			listaBeanFFDAN.clear();
+																			listaBeanN.clear();
+																			cadenasProcesarBean.clear();
+																			lineasProcesar.clear();
+																		}
+
+																		listaBeanN.add(listaBeanFF.get(conta));
+																		listaBeanFFDAN.addAll(listaBeanN);
+																		cadenasProcesarBean.add(cadenasProcesar.get(conta));
+																		lineasProcesar.add(cadenaLinea.get(conta));
 																	}
+																}
+
+																if (totalListaBeanFF == contaa) {
 																	if (listaBeanFFDAN.size() > 0) {
+
 																		ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
 																		HashMap<Integer, String> validacionDatosFac = null;
 																		String errorDatosFac = "";
 																		validacionDatosFac = validaDatosF
 																				.validaDatosFacturaConsecutiva(
-																						listaBeanFFDAN, cadenaLinea);
+																						listaBeanFFDAN, lineasProcesar);
 																		if (validacionDatosFac.size() == 0) {
-																			// Validar el valor de la variable
-																			// cartaGenerada
-																			// que sea distinto a 0,
+
+																			// Validar el valor de la variable cartaGenerada
+																			// que
+																			// sea distinto a 0,
 																			// ya que eso determina si ya se genero una
-																			// carta con el mismo
+																			// carta
+																			// con el mismo
 																			// consecutivo
 																			if (noCartaGenerada > 0) {
 																				cartaGenerada = true;
@@ -1167,13 +1573,13 @@ public class ValidacionDatosCtrol {
 
 																			List<BeanRespuesta> ctrolBD = controlProcesoBD
 																					.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																			boolean banderaCtrolBD = true; // ctrolBD.get(0).GetBandera();
+																			boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																			if (banderaCtrolBD) {
 																				if (noCartaGenerada == 0) {
-																					noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																					noCartaGenerada = ctrolBD.get(0).getCarta();
 																				}
-																				noFacturaGenerada = 22222222; // ctrolBD.get(0).getFactura();
+																				noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																				for (String cadenaP : cadenasProcesarBean) {
 
@@ -1185,16 +1591,12 @@ public class ValidacionDatosCtrol {
 																					totalRegistroCorrectos++;
 																				}
 
-																				noCartaGenerada = 0;
-
 																			} else {
 
-																				// En caso de que la bandera sea false
-																				// se da
+																				// En caso de que la bandera sea false se da
 																				// por
 																				// hecho // que no
-																				// se proeco correctamente los registros
-																				// de
+																				// se proeco correctamente los registros de
 																				// la
 																				// lista enviada y se
 																				// debe de imprimir el
@@ -1209,63 +1611,56 @@ public class ValidacionDatosCtrol {
 																							rutaArchivoSBKP
 																									+ nuevoNombreArc,
 																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
-																											lineaError)
+																							"[ERROR EN LA LINEA"
+																									+ lineasProcesar
+																											.get(lineaError)
 																									+ " CONSECUTIVO "
 																									+ cadenasProcesarBean
 																											.get(lineaError)
-																											.substring(
-																													0,
+																											.substring(0,
 																													10)
 																											.trim()
-																									+ cadenasProcesarBean
+																									+ "/" +cadenasProcesarBean
 																											.get(lineaError)
-																											.substring(
-																													30,
+																											.substring(30,
 																													34)
 																											.trim()
-																									+ "\""
-																									+ mensajeError
-																									+ "\"");
+																									+ " \"" + mensajeError
+																									+ "\"]");
 																					totalRegistroError++;
 																				}
 																				noCartaGenerada = 0;
 																			}
+
 																		} else {
 
-																			for (Integer j : validacionDatosFac
-																					.keySet()) {
-																				errorDatosFac = validacionDatosFac
-																						.values().toString();
+																			for (Integer j : validacionDatosFac.keySet()) {
+																				errorDatosFac = validacionDatosFac.values()
+																						.toString();
 																				log.error(
 																						"Identificador de error(Datos Factura Consecutivo):"
 																								+ j
 																								+ " Descripcion de error: "
 																								+ validacionDatosFac
 																										.values()
-																								+ " en la linea "
-																								+ errorDatosFac.substring(15, 16));
+																								+ " en la linea " + errorDatosFac.substring(15, 16));
 																			}
 
 																			for (String cadenaP : cadenasProcesarBean) {
 																				escribirArchivoError(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
+																						rutaArchivoSBKP + nuevoNombreArc,
 																						cadenaP, errorDatosFac);
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena
-																					.substring(0, 10).trim().equals(""))
-																							? "0"
+																			if (Integer.parseInt((cadena.substring(0, 10)
+																					.trim().equals("")) ? "0"
 																							: cadena.substring(0, 10)
 																									.trim()) > consecutivoArchivo) {
 																				// Agregar numero de archivo consecutivo
 																				consecutivoArchivo = Integer
-																						.parseInt(validacionCadenas
-																								.get(0).substring(0, 10)
-																								.trim());
+																						.parseInt(validacionCadenas.get(0)
+																								.substring(0, 10).trim());
 																			}
 
 																		}
@@ -1273,24 +1668,24 @@ public class ValidacionDatosCtrol {
 																		listaBeanFFDAN.clear();
 																		listaBeanN.clear();
 																		cadenasProcesarBean.clear();
-																	}
-																} else if (listaBeanFF.get(conta)
-																		.getConsecNota() != listaBeanFF.get(i - 2)
-																				.getConsecNota()) {
+																		lineasProcesar.clear();
 
-																	if (listaBeanFFIAN.size() > 0) {
+																	} else if (listaBeanFFIAN.size() > 0) {
+
 																		ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
 																		HashMap<Integer, String> validacionDatosFac = null;
 																		String errorDatosFac = "";
 																		validacionDatosFac = validaDatosF
 																				.validaDatosFacturaConsecutiva(
-																						listaBeanFFIAN, cadenaLinea);
+																						listaBeanFFIAN, lineasProcesar);
 																		if (validacionDatosFac.size() == 0) {
-																			// Validar el valor de la variable
-																			// cartaGenerada
-																			// que sea distinto a 0,
+
+																			// Validar el valor de la variable cartaGenerada
+																			// que
+																			// sea distinto a 0,
 																			// ya que eso determina si ya se genero una
-																			// carta con el mismo
+																			// carta
+																			// con el mismo
 																			// consecutivo
 																			if (noCartaGenerada > 0) {
 																				cartaGenerada = true;
@@ -1298,141 +1693,14 @@ public class ValidacionDatosCtrol {
 
 																			List<BeanRespuesta> ctrolBD = controlProcesoBD
 																					.BloqueaDB(listaBeanFFIAN, cartaGenerada);
-																			boolean banderaCtrolBD = true;// ctrolBD.get(0)
-																			// .GetBandera();
-
-																			if (banderaCtrolBD) {
-																				noCartaGenerada = 11111111;// ctrolBD.get(0).getCarta();
-																				noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
-
-																				for (String cadenaP : cadenasProcesarBean) {
-
-																					escribirArchivoCorrecto(
-																							rutaArchivoSBKP
-																									+ nuevoNombreArc,
-																							cadenaP, noCartaGenerada,
-																							noFacturaGenerada);
-																					totalRegistroCorrectos++;
-																				}
-
-																				noCartaGenerada = 0;
-
-																			} else {
-
-																				// En caso de que la bandera sea false
-																				// se da
-																				// por
-																				// hecho // que no
-																				// se proeco correctamente los registros
-																				// de
-																				// la
-																				// lista enviada y se
-																				// debe de imprimir el
-																				// error a todas las lineas enviadas.
-																				String mensajeError = ctrolBD.get(0)
-																						.getMensaje();
-																				int lineaError = ctrolBD.get(0)
-																						.getConsecutivoA();
-																				for (String cadenaP : cadenasProcesarBean) {
-
-																					escribirArchivoError(
-																							rutaArchivoSBKP
-																									+ nuevoNombreArc,
-																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
-																											lineaError)
-																									+ " CONSECUTIVO "
-																									+ cadenasProcesarBean
-																											.get(lineaError)
-																											.substring(
-																													0,
-																													10)
-																											.trim()
-																									+ cadenasProcesarBean
-																											.get(lineaError)
-																											.substring(
-																													30,
-																													34)
-																											.trim()
-																									+ "\""
-																									+ mensajeError
-																									+ "\"");
-																					totalRegistroError++;
-																				}
-
-																				noCartaGenerada = 0;
-																			}
-																		} else {
-
-																			for (Integer j : validacionDatosFac
-																					.keySet()) {
-																				errorDatosFac = validacionDatosFac
-																						.values().toString();
-																				log.error(
-																						"Identificador de error(Datos Factura Consecutivo):"
-																								+ j
-																								+ " Descripcion de error: "
-																								+ validacionDatosFac
-																										.values()
-																								+ " en la linea "
-																								+ errorDatosFac.substring(15, 16));
-																			}
-
-																			for (String cadenaP : cadenasProcesarBean) {
-																				escribirArchivoError(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
-																						cadenaP, errorDatosFac);
-																				totalRegistroError++;
-																			}
-
-																			if (Integer.parseInt((cadena
-																					.substring(0, 10).trim().equals(""))
-																							? "0"
-																							: cadena.substring(0, 10)
-																									.trim()) > consecutivoArchivo) {
-																				// Agregar numero de archivo consecutivo
-																				consecutivoArchivo = Integer
-																						.parseInt(validacionCadenas
-																								.get(0).substring(0, 10)
-																								.trim());
-																			}
-																		}
-
-																		listaBeanFFIAN.clear();
-																		listaBeanN.clear();
-																		cadenasProcesarBean.clear();
-																	} else if (listaBeanFFDAN.size() > 0) {
-
-																		ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
-																		HashMap<Integer, String> validacionDatosFac = null;
-																		String errorDatosFac = "";
-																		validacionDatosFac = validaDatosF
-																				.validaDatosFacturaConsecutiva(
-																						listaBeanFFDAN, cadenaLinea);
-																		if (validacionDatosFac.size() == 0) {
-																			// Validar el valor de la variable
-																			// cartaGenerada
-																			// que sea distinto a 0,
-																			// ya que eso determina si ya se genero una
-																			// carta con el mismo
-																			// consecutivo
-																			if (noCartaGenerada > 0) {
-																				cartaGenerada = true;
-																			}
-
-																			List<BeanRespuesta> ctrolBD = controlProcesoBD
-																					.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																			boolean banderaCtrolBD = true;// ctrolBD.get(0)
-																			// .GetBandera();
+																			boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 																			if (banderaCtrolBD) {
 
 																				if (noCartaGenerada == 0) {
-																					noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
+																					noCartaGenerada = ctrolBD.get(0).getCarta();
 																				}
-																				noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
+																				noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																				for (String cadenaP : cadenasProcesarBean) {
 
@@ -1443,15 +1711,12 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
-
 																			} else {
 
-																				// En caso de que la bandera sea false
-																				// se da
+																				// En caso de que la bandera sea false se da
 																				// por
 																				// hecho // que no
-																				// se proeco correctamente los registros
-																				// de
+																				// se proeco correctamente los registros de
 																				// la
 																				// lista enviada y se
 																				// debe de imprimir el
@@ -1466,320 +1731,155 @@ public class ValidacionDatosCtrol {
 																							rutaArchivoSBKP
 																									+ nuevoNombreArc,
 																							cadenaP,
-																							"ERROR EN LA LINEA"
-																									+ cadenaLinea.get(
-																											lineaError)
+																							"[ERROR EN LA LINEA"
+																									+ lineasProcesar
+																											.get(lineaError)
 																									+ " CONSECUTIVO "
 																									+ cadenasProcesarBean
 																											.get(lineaError)
-																											.substring(
-																													0,
+																											.substring(0,
 																													10)
 																											.trim()
-																									+ cadenasProcesarBean
+																									+ "/" +cadenasProcesarBean
 																											.get(lineaError)
-																											.substring(
-																													30,
+																											.substring(30,
 																													34)
 																											.trim()
-																									+ "\""
-																									+ mensajeError
-																									+ "\"");
+																									+ " \"" + mensajeError
+																									+ "\"]");
 																					totalRegistroError++;
 																				}
-
 																				noCartaGenerada = 0;
 																			}
 																		} else {
 
-																			for (Integer j : validacionDatosFac
-																					.keySet()) {
-																				errorDatosFac = validacionDatosFac
-																						.values().toString();
+																			for (Integer j : validacionDatosFac.keySet()) {
+																				errorDatosFac = validacionDatosFac.values()
+																						.toString();
 																				log.error(
 																						"Identificador de error(Datos Factura Consecutivo):"
 																								+ j
 																								+ " Descripcion de error: "
 																								+ validacionDatosFac
 																										.values()
-																								+ " en la linea "
-																								+ errorDatosFac.substring(15, 16));
+																								+ " en la linea " + errorDatosFac.substring(15, 16));
+
 																			}
 
 																			for (String cadenaP : cadenasProcesarBean) {
 																				escribirArchivoError(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
+																						rutaArchivoSBKP + nuevoNombreArc,
 																						cadenaP, errorDatosFac);
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena
-																					.substring(0, 10).trim().equals(""))
-																							? "0"
+																			if (Integer.parseInt((cadena.substring(0, 10)
+																					.trim().equals("")) ? "0"
 																							: cadena.substring(0, 10)
 																									.trim()) > consecutivoArchivo) {
 																				// Agregar numero de archivo consecutivo
 																				consecutivoArchivo = Integer
-																						.parseInt(validacionCadenas
-																								.get(0).substring(0, 10)
-																								.trim());
+																						.parseInt(validacionCadenas.get(0)
+																								.substring(0, 10).trim());
 																			}
-																		}
 
-																		listaBeanFFDAN.clear();
+																		}
+																		listaBeanFFIAN.clear();
 																		listaBeanN.clear();
 																		cadenasProcesarBean.clear();
+																		lineasProcesar.clear();
 																	}
-
-																	listaBeanN.add(listaBeanFF.get(conta));
-																	listaBeanFFDAN.addAll(listaBeanN);
-																	cadenasProcesarBean.add(cadenasProcesar.get(conta));
 																}
+																conta++;
 															}
+														} else {
+															
+															// Inicializar la variable noCartaGenerada a 0 , ya que cambio el consetucivo de la carta
+															noCartaGenerada = 0;
+															ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
+															HashMap<Integer, String> validacionDatosFac = null;
+															String errorDatosFac = "";
+															validacionDatosFac = validaDatosF.validaDatosFacturaConsecutiva(
+																	listaBeanFF, cadenaLinea);
+															if (validacionDatosFac.size() == 0) {
+																List<BeanRespuesta> ctrolBD = controlProcesoBD
+																		.BloqueaDB(listaBeanFF, cartaGenerada);
+																boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
-															if (totalListaBeanFF == contaa) {
-																if (listaBeanFFDAN.size() > 0) {
+																if (banderaCtrolBD) {
+																	noCartaGenerada = ctrolBD.get(0).getCarta();
+																	noFacturaGenerada = ctrolBD.get(0).getFactura();
 
-																	ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
-																	HashMap<Integer, String> validacionDatosFac = null;
-																	String errorDatosFac = "";
-																	validacionDatosFac = validaDatosF
-																			.validaDatosFacturaConsecutiva(
-																					listaBeanFFDAN, cadenaLinea);
-																	if (validacionDatosFac.size() == 0) {
-																		// Validar el valor de la variable cartaGenerada
-																		// que
-																		// sea distinto a 0,
-																		// ya que eso determina si ya se genero una
-																		// carta
-																		// con el mismo
-																		// consecutivo
-																		if (noCartaGenerada > 0) {
-																			cartaGenerada = true;
-																		}
+																	for (String cadenaP : cadenasProcesar) {
 
-																		List<BeanRespuesta> ctrolBD = controlProcesoBD
-																				.BloqueaDB(listaBeanFFDAN, cartaGenerada);
-																		boolean banderaCtrolBD = true; // ctrolBD.get(0).GetBandera();
-
-																		if (banderaCtrolBD) {
-																			if (noCartaGenerada == 0) {
-																				noCartaGenerada = 11111111; // ctrolBD.get(0).getCarta();
-																			}
-																			noFacturaGenerada = 22222222; // ctrolBD.get(0).getFactura();
-
-																			for (String cadenaP : cadenasProcesarBean) {
-
-																				escribirArchivoCorrecto(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
-																						cadenaP, noCartaGenerada,
-																						noFacturaGenerada);
-																				totalRegistroCorrectos++;
-																			}
-																			noCartaGenerada = 0;
-																		} else {
-
-																			// En caso de que la bandera sea false se da
-																			// por
-																			// hecho // que no
-																			// se proeco correctamente los registros de
-																			// la
-																			// lista enviada y se
-																			// debe de imprimir el
-																			// error a todas las lineas enviadas.
-																			String mensajeError = ctrolBD.get(0)
-																					.getMensaje();
-																			int lineaError = ctrolBD.get(0)
-																					.getConsecutivoA();
-																			for (String cadenaP : cadenasProcesarBean) {
-
-																				escribirArchivoError(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
-																						cadenaP,
-																						"ERROR EN LA LINEA"
-																								+ cadenaLinea
-																										.get(lineaError)
-																								+ " CONSECUTIVO "
-																								+ cadenasProcesarBean
-																										.get(lineaError)
-																										.substring(0,
-																												10)
-																										.trim()
-																								+ cadenasProcesarBean
-																										.get(lineaError)
-																										.substring(30,
-																												34)
-																										.trim()
-																								+ "\"" + mensajeError
-																								+ "\"");
-																				totalRegistroError++;
-																			}
-																			noCartaGenerada = 0;
-																		}
-																	} else {
-
-																		for (Integer j : validacionDatosFac.keySet()) {
-																			errorDatosFac = validacionDatosFac.values()
-																					.toString();
-																			log.error(
-																					"Identificador de error(Datos Factura Consecutivo):"
-																							+ j
-																							+ " Descripcion de error: "
-																							+ validacionDatosFac
-																									.values()
-																							+ " en la linea " + errorDatosFac.substring(15, 16));
-																		}
-
-																		for (String cadenaP : cadenasProcesarBean) {
-																			escribirArchivoError(
-																					rutaArchivoSBKP + nuevoNombreArc,
-																					cadenaP, errorDatosFac);
-																			totalRegistroError++;
-																		}
-
-																		if (Integer.parseInt((cadena.substring(0, 10)
-																				.trim().equals("")) ? "0"
-																						: cadena.substring(0, 10)
-																								.trim()) > consecutivoArchivo) {
-																			// Agregar numero de archivo consecutivo
-																			consecutivoArchivo = Integer
-																					.parseInt(validacionCadenas.get(0)
-																							.substring(0, 10).trim());
-																		}
-
+																		escribirArchivoCorrecto(
+																				rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																				noCartaGenerada, noFacturaGenerada);
+																		totalRegistroCorrectos++;
 																	}
 
-																	listaBeanFFDAN.clear();
-																	listaBeanN.clear();
-																	cadenasProcesarBean.clear();
-																} else if (listaBeanFFIAN.size() > 0) {
+																	noCartaGenerada = 0;
 
-																	ValidaDatosFacturaCtrol validaDatosF = new ValidaDatosFacturaCtrol();
-																	HashMap<Integer, String> validacionDatosFac = null;
-																	String errorDatosFac = "";
-																	validacionDatosFac = validaDatosF
-																			.validaDatosFacturaConsecutiva(
-																					listaBeanFFIAN, cadenaLinea);
-																	if (validacionDatosFac.size() == 0) {
-																		// Validar el valor de la variable cartaGenerada
-																		// que
-																		// sea distinto a 0,
-																		// ya que eso determina si ya se genero una
-																		// carta
-																		// con el mismo
-																		// consecutivo
-																		if (noCartaGenerada > 0) {
-																			cartaGenerada = true;
-																		}
+																} else {
 
-																		List<BeanRespuesta> ctrolBD = controlProcesoBD
-																				.BloqueaDB(listaBeanFFIAN, cartaGenerada);
-																		boolean banderaCtrolBD = true; // ctrolBD.get(0)
-																		// .GetBandera();
+																	// En caso de que la bandera sea false se da por hecho
+																	// //
+																	// que no
+																	// se proeco correctamente los registros de la lista
+																	// enviada
+																	// y se
+																	// debe de imprimir el
+																	// error a todas las lineas enviadas.
+																	String mensajeError = ctrolBD.get(0).getMensaje();
+																	int lineaError = ctrolBD.get(0).getConsecutivoA();
+																	for (String cadenaP : cadenasProcesar) {
 
-																		if (banderaCtrolBD) {
-																			noCartaGenerada = 11111111;// ctrolBD.get(0).getCarta();
-																			noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
-
-																			for (String cadenaP : cadenasProcesarBean) {
-
-																				escribirArchivoCorrecto(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
-																						cadenaP, noCartaGenerada,
-																						noFacturaGenerada);
-																				totalRegistroCorrectos++;
-																			}
-
-																			noCartaGenerada = 0;
-
-																		} else {
-
-																			// En caso de que la bandera sea false se da
-																			// por
-																			// hecho // que no
-																			// se proeco correctamente los registros de
-																			// la
-																			// lista enviada y se
-																			// debe de imprimir el
-																			// error a todas las lineas enviadas.
-																			String mensajeError = ctrolBD.get(0)
-																					.getMensaje();
-																			int lineaError = ctrolBD.get(0)
-																					.getConsecutivoA();
-																			for (String cadenaP : cadenasProcesarBean) {
-
-																				escribirArchivoError(
-																						rutaArchivoSBKP
-																								+ nuevoNombreArc,
-																						cadenaP,
-																						"ERROR EN LA LINEA"
-																								+ cadenaLinea
-																										.get(lineaError)
-																								+ " CONSECUTIVO "
-																								+ cadenasProcesarBean
-																										.get(lineaError)
-																										.substring(0,
-																												10)
-																										.trim()
-																								+ cadenasProcesarBean
-																										.get(lineaError)
-																										.substring(30,
-																												34)
-																										.trim()
-																								+ "\"" + mensajeError
-																								+ "\"");
-																				totalRegistroError++;
-																			}
-
-																			noCartaGenerada = 0;
-																		}
-																	} else {
-
-																		for (Integer j : validacionDatosFac.keySet()) {
-																			errorDatosFac = validacionDatosFac.values()
-																					.toString();
-																			log.error(
-																					"Identificador de error(Datos Factura Consecutivo):"
-																							+ j
-																							+ " Descripcion de error: "
-																							+ validacionDatosFac
-																									.values()
-																							+ " en la linea " + errorDatosFac.substring(15, 16));
-																		}
-
-																		for (String cadenaP : cadenasProcesarBean) {
-																			escribirArchivoError(
-																					rutaArchivoSBKP + nuevoNombreArc,
-																					cadenaP, errorDatosFac);
-																			totalRegistroError++;
-																		}
-
-																		if (Integer.parseInt((cadena.substring(0, 10)
-																				.trim().equals("")) ? "0"
-																						: cadena.substring(0, 10)
-																								.trim()) > consecutivoArchivo) {
-																			// Agregar numero de archivo consecutivo
-																			consecutivoArchivo = Integer
-																					.parseInt(validacionCadenas.get(0)
-																							.substring(0, 10).trim());
-																		}
+																		escribirArchivoError(
+																				rutaArchivoSBKP + nuevoNombreArc, cadenaP,
+																				"[ERROR EN LA LINEA"
+																						+ cadenaLinea.get(lineaError)
+																						+ " CONSECUTIVO "
+																						+ cadenasProcesar.get(lineaError)
+																								.substring(0, 10).trim()
+																						+ "/" +cadenasProcesar.get(lineaError)
+																								.substring(30, 34).trim()
+																						+ " \"" + mensajeError + "\"]");
+																		totalRegistroError++;
 																	}
 
-																	listaBeanFFIAN.clear();
-																	listaBeanN.clear();
-																	cadenasProcesarBean.clear();
+																	noCartaGenerada = 0;
+																}
+															} else {
+
+																for (Integer j : validacionDatosFac.keySet()) {
+																	errorDatosFac = validacionDatosFac.values().toString();
+																	log.error(
+																			"Identificador de error(Datos Factura Consecutivo):"
+																					+ j + " Descripcion de error: "
+																					+ validacionDatosFac.values()
+																					+ " en la linea " + linea);
+																}
+
+																for (String cadenaP : cadenasProcesar) {
+																	escribirArchivoError(rutaArchivoSBKP + nuevoNombreArc,
+																			cadenaP, errorDatosFac);
+																	totalRegistroError++;
+																}
+
+																if (Integer.parseInt(
+																		(cadena.substring(0, 10).trim().equals("")) ? "0"
+																				: cadena.substring(0, 10)
+																						.trim()) > consecutivoArchivo) {
+																	// Agregar numero de archivo consecutivo
+																	consecutivoArchivo = Integer.parseInt(validacionCadenas
+																			.get(0).substring(0, 10).trim());
 																}
 															}
 														}
 
-														if (Integer.parseInt(
-																(cadena.substring(0, 10).trim().equals("")) ? "0"
-																		: cadena.substring(0, 10)
-																				.trim()) > consecutivoArchivo) {
+														if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
+																? "0"
+																: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 															// Agregar numero de archivo consecutivo
 															consecutivoArchivo = Integer.parseInt(
 																	validacionCadenas.get(0).substring(0, 10).trim());
@@ -1789,6 +1889,7 @@ public class ValidacionDatosCtrol {
 														e.printStackTrace();
 														log.error(e.getMessage());
 													}
+
 												} else {
 													for (Integer j : validacionDatosCart.keySet()) {
 														errorDatosCart = validacionDatosCart.values().toString();
@@ -1937,11 +2038,11 @@ public class ValidacionDatosCtrol {
 
 															List<BeanRespuesta> ctrolBD = controlProcesoBD
 																	.BloqueaDB(listaBeanFF, cartaGenerada);
-															boolean banderaCtrolBD = true;// ctrolBD.get(0).GetBandera();
+															boolean banderaCtrolBD = ctrolBD.get(0).GetBandera();
 
 															if (banderaCtrolBD) {
-																noCartaGenerada = 11111111;// ctrolBD.get(0).getCarta();
-																noFacturaGenerada = 22222222;// ctrolBD.get(0).getFactura();
+																noCartaGenerada = ctrolBD.get(0).getCarta();
+																noFacturaGenerada = ctrolBD.get(0).getFactura();
 
 																for (String cadenaP : cadenasProcesar) {
 
@@ -1969,14 +2070,14 @@ public class ValidacionDatosCtrol {
 
 																	escribirArchivoError(
 																			rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																			"ERROR EN LA LINEA"
+																			"[ERROR EN LA LINEA"
 																					+ cadenaLinea.get(lineaError)
 																					+ " CONSECUTIVO "
 																					+ cadenasProcesar.get(lineaError)
 																							.substring(0, 10).trim()
-																					+ cadenasProcesar.get(lineaError)
+																					+ "/" +cadenasProcesar.get(lineaError)
 																							.substring(30, 34).trim()
-																					+ "\"" + mensajeError + "\"");
+																					+ " \"" + mensajeError + "\"]");
 																	totalRegistroError++;
 																}
 
