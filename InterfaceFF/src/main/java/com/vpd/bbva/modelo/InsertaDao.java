@@ -47,7 +47,7 @@ public class InsertaDao {
 				call.setInt(7, factura.getTp_pago());
 				call.setString(8, factura.getNu_anticipo());
 				call.setDate(9,   (Date)factura.getFecha_anticipo()); /*	revisar el casteo */  
-				call.setString(10, factura.getCentroCostos()); /*CR*/
+				call.setString(10, null); /*CR*/
 				call.setString(11, factura.getMondena());
 				call.setInt(12, factura.getContrato());
 				call.setString(13, factura.getFideicomiso());

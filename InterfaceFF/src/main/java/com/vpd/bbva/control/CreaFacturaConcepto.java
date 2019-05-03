@@ -66,12 +66,14 @@ public class CreaFacturaConcepto {
 								String moneda = null;
 								String sociedad = null;
 								int nu_proveedor = 0;
+								String tpBanco = null;
 								
 								for(BeanFF bean : BloqueFac) {
 									while(bean.getTp_registro().equals(nf)) {
 									moneda = bean.getMondena();
 									sociedad = bean.getSociedadRec();
 									nu_proveedor = bean.getNu_proveedor();
+									tpBanco = bean.getTpBanco();
 									break;
 									}
 								}
