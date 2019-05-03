@@ -91,7 +91,7 @@ public class ValidacionesArchivo implements FilenameFilter {
 			con = objs.AbreConexion();
 			Statement s = con.createStatement();
 			ResultSet rs = s.executeQuery(
-					"SELECT * FROM GORAPR.TXWV180_TP_CARGA_FF WHERE TP_PARAM = 1 AND CD_PARAM = '" + aplicativo + "'");
+					"SELECT * FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = 1 AND CD_PARAM = '" + aplicativo + "'");
 			while (rs.next()) {
 				log.info("Existe registro de Aplicativo: " + aplicativo);
 				resultado = true;
