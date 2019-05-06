@@ -2743,7 +2743,7 @@ public class ValidacionDatosCtrol {
 						: cadenasProcesar.get(cont).substring(0, 10).trim()) > consecutivoArchivo)) {
 					validaConsecutivoMayor.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadenaProcesar.substring(0, 10).trim() + "/" + cadenaProcesar.substring(30, 34).trim()
-							+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR O IGUAL AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
+							+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
 					return validaConsecutivoMayor;
 				}
 			}
