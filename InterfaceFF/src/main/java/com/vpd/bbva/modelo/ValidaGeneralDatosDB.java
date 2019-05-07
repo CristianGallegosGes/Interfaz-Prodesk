@@ -17,20 +17,20 @@ import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
 import oracle.jdbc.internal.OracleTypes;
 
-public class ValidaGeneralDatosDB {
+public class ValidaGeneralDatosDB extends GeneralDao{
 
 	private static final Logger LOG = Logger.getLogger(ValidaGeneralDatosDB.class);
 	
 	
-	public BeanFacturaNVA DatosFactura(int facturaI, int cartaI,int proveedor,String sociedad, String viaP ) {
+	public BeanFacturaNVA DatosFactura(int facturaI, int cartaI,int proveedor,String sociedad, String viaP ) throws Exception {
 		BeanFacturaNVA beanFacN = new BeanFacturaNVA();
-			
+
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;	
 		Integer nuerror = null;
 		ResultSet result = null;
 		try {
-			Conexion obConexion   = new Conexion();
-			Connection con =  obConexion.AbreConexion();
-			CallableStatement call;
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_VALIDA_FACTURA);
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
@@ -68,6 +68,8 @@ public class ValidaGeneralDatosDB {
 			
 		} catch (Exception e) {
 			LOG.warn("Error: "+e);
+		}finally {
+			closeAll(null, result, null, call, con, obConexion);
 		}
 		
 		
@@ -75,17 +77,17 @@ public class ValidaGeneralDatosDB {
 		
 	}
 	
-	public BeanRespuesta DatosNvaFactura(BeanFacturaNVA factura) {
+	public BeanRespuesta DatosNvaFactura(BeanFacturaNVA factura) throws Exception {
 		
 		Integer nuerror = null;
 		ResultSet result = null;
-		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
 		BeanRespuesta listaRet = new BeanRespuesta();
 		
 		try {
-			Conexion obConexion   = new Conexion();
-			Connection con =  obConexion.AbreConexion();
-			CallableStatement call;
+			
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_VALIDA_FACTURA);
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
@@ -115,6 +117,8 @@ public class ValidaGeneralDatosDB {
 			
 		}catch(Exception e){
 			LOG.warn("Error: "+e);
+		}finally {
+			closeAll(null, result, null, call, con, obConexion);
 		}
 		
 		return listaRet;
@@ -122,14 +126,14 @@ public class ValidaGeneralDatosDB {
 	
 	
 	
-	public BeanRespuesta ValidaDatosConcep (int estado, int iva ) {
+	public BeanRespuesta ValidaDatosConcep (int estado, int iva ) throws Exception {
 		BeanRespuesta respCon = new BeanRespuesta();
 		Integer nuerror = null;
 		ResultSet result = null;
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
 		try {
-			Conexion obConexion   = new Conexion();
-			Connection con =  obConexion.AbreConexion();
-			CallableStatement call;
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_VALIDA_FACTURA);
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
@@ -159,6 +163,8 @@ public class ValidaGeneralDatosDB {
 			
 		}catch(Exception e){
 			LOG.warn("Error: "+e);
+		}finally {
+			closeAll(null, result, null, call, con, obConexion);
 		}
 		
 		return respCon;
@@ -168,10 +174,11 @@ public class ValidaGeneralDatosDB {
 	public BeanRespuesta DatosNvaCarta (List<BeanFF> dtArregloC, String tpRegistroNF) throws Exception{
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
-		CallableStatement call;
+		CallableStatement call = null;
 		boolean ejecucion = false;
 		Integer nuerror = null;
 		ResultSet result = null;
+			
 		BeanRespuesta resp = new BeanRespuesta();
 		try {
 			call = con.prepareCall(DBConstantes.SICOFE_SPC_S_VALIDA_CARTA);
@@ -186,17 +193,17 @@ public class ValidaGeneralDatosDB {
 			for(BeanFF bean : dtArregloC) {
 				if(!ejecucion) {
 					while(bean.getTp_registro().equals(tpRegistroNF)) { /**NF*/
-					call.setString(9, bean.getTp_carta());
-					call.setInt(10, bean.getTp_pago());/*Revisar si cambia a int*/
-					call.setInt(11, bean.getNu_proveedor());
-					call.setString(12, bean.getSociedadRec());
-					call.setString(13, bean.getGlg().replaceAll("\\s", ""));System.out.println(bean.getGlg().replaceAll("\\s", "")+".");
-					call.setString(14, bean.getEmpGasBursa());
-					call.setString(15, bean.getMondena());
-					call.setInt(16, bean.getRecAlternativo());
-					call.setInt(17, bean.getCuentaGps());
-					call.setString(18, bean.getUsuarioCreador());
-					call.setString(19, bean.getPeriodificacion());
+					call.setString(9, bean.getTp_carta());System.out.println(bean.getTp_carta() );
+					call.setInt(10, bean.getTp_pago());System.out.println(bean.getTp_pago() );
+					call.setInt(11, bean.getNu_proveedor());System.out.println(bean.getNu_proveedor() );
+					call.setString(12, bean.getSociedadRec());System.out.println(bean.getSociedadRec() );
+					call.setString(13, bean.getGlg().trim());System.out.println(bean.getGlg() );
+					call.setString(14, bean.getEmpGasBursa());System.out.println(bean.getEmpGasBursa() );
+					call.setString(15, bean.getMondena());System.out.println(bean.getMondena() );
+					call.setInt(16, bean.getRecAlternativo());System.out.println(bean.getRecAlternativo());
+					call.setInt(17, bean.getCuentaGps());System.out.println(bean.getCuentaGps());
+					call.setString(18, bean.getUsuarioCreador());System.out.println(bean.getUsuarioCreador());
+					call.setString(19, bean.getPeriodificacion());System.out.println("OK"+bean.getPeriodificacion());
 					call.setString(20, bean.getProviEjerAnterior());
 					call.execute();
 					ejecucion = true;
@@ -219,6 +226,9 @@ public class ValidaGeneralDatosDB {
 		}catch (Exception e) {
 			LOG.warn("Error " + e);
 		}
+		finally {
+			closeAll(null, result, null, call, con, obConexion);
+		}
 		return resp;
 		
 		
@@ -227,7 +237,7 @@ public class ValidaGeneralDatosDB {
 	public BeanFF  ValidaCarta(int carta) throws Exception {
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
-		CallableStatement call;
+		CallableStatement call = null;
 		Integer cderror 	= null;
 		ResultSet result 	= null;
 		BeanFF beanCarta = new BeanFF();
@@ -292,16 +302,17 @@ public class ValidaGeneralDatosDB {
 			
 		}catch (Exception e) {
 			LOG.warn("Error en SP " +DBConstantes.SICOFE_SPC_S_VALIDA_CARTA );
-			
+		}finally {
+			closeAll(null, result, null, call, con, obConexion);
 		}
 		return beanCarta;
 	}
 	public int nuNota(int factura) throws Exception {
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
-		CallableStatement call;
+		CallableStatement call = null;
 		
-		ResultSet rs ;
+		ResultSet rs = null ;
 		int numN = 0;
 		try {
 			call = con.prepareCall("SELECT COUNT(*) FROM TXWV106_NOTA WHERE NU_FACTURA = " + factura);
@@ -311,7 +322,9 @@ public class ValidaGeneralDatosDB {
 				numN = Integer.parseInt(rs.getString(++conta));
 			}
 		}catch (Exception e) {
-			
+			LOG.warn("Error" + e);
+		}finally {
+			closeAll(null, rs, null, call, con, obConexion);
 		}
 		
 		return numN;
@@ -319,14 +332,13 @@ public class ValidaGeneralDatosDB {
 	
 	
 	
-	public int cdIva(int cd_iva) {
+	public int cdIva(int cd_iva) throws Exception {
 		int iva = 0;
-		ResultSet resultSet;
+		ResultSet resultSet = null;
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
 		try {
-			Conexion obConexion   = new Conexion();
-			Connection con =  obConexion.AbreConexion();
-			CallableStatement call;
-			
 			call = con.prepareCall("SELECT CD_VALOR_IVA FROM TXWV123_IVA WHERE NB_IVA = " + cd_iva);
 			resultSet = call.executeQuery();
 			while(resultSet.next()) {
@@ -334,28 +346,32 @@ public class ValidaGeneralDatosDB {
 			}
 		}catch (Exception e) {
 			LOG.warn("Error en al consultar cd_iva " + e);
+		}finally {
+			closeAll(null, resultSet, null, call, con, obConexion);
 		}
 		
 		return iva;
 	}
 	
-	public String parametro(int tp_param, String estatus) {
+	
+	public String parametro(int tp_param, String estatus) throws Exception {
 		String parametro = null;
-		ResultSet resultSet;
+		ResultSet resultSet = null;
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
 		try {
-			Conexion obConexion   = new Conexion();
-			Connection con =  obConexion.AbreConexion();
-			CallableStatement call;
-			
-			call = con.prepareCall("SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = " + tp_param +"AND CD_PARAM = '" + estatus+"'");
+			call = con.prepareCall("SELECT NB_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = " + tp_param +"AND CD_PARAM = '" + estatus+"'");
 			resultSet = call.executeQuery();
 			while(resultSet.next()) {
-				parametro = resultSet.getString("CD_PARAM");
+				parametro = resultSet.getString("NB_PARAM");
 			}
 			
 			
 		}catch (Exception e) {
 			// TODO: handle exception
+		}finally {
+			closeAll(null, resultSet, null, call, con, obConexion);
 		}
 		return parametro;
 	}
@@ -363,12 +379,12 @@ public class ValidaGeneralDatosDB {
 	
 	public String existe(String tp_param) {
 		String parametro = null;
-		Conexion obConexion ;
-		Connection con;
-		CallableStatement call;
+		Conexion obConexion = null ;
+		Connection con = null;
+		CallableStatement call = null;
+		ResultSet resultSet = null;
 
 		try {
-			ResultSet resultSet;
 			obConexion = new Conexion();
 			con = obConexion.AbreConexion();
 			call = con.prepareCall("SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE CD_PARAM = '" + tp_param+"'" );
@@ -380,30 +396,41 @@ public class ValidaGeneralDatosDB {
 			
 		}catch (Exception e) {
 			LOG.warn("Error: " +e);
+		}finally {
+			closeAll(null, resultSet, null, call, con, obConexion);
 		}
 		return parametro;
 	}
 	
-	public BigDecimal totalNF (int factura) {
-		
-		Conexion obConexion ;
-		Connection con;
-		CallableStatement call;
+	public ArrayList<BigDecimal> totalNF (int factura) {
+		ArrayList<BigDecimal> importesFac = new ArrayList<BigDecimal>();
+		Conexion obConexion = null ;
+		Connection con = null;
+		CallableStatement call = null;
 		
 		BigDecimal total = null;
-		ResultSet rs ;
+		ResultSet rs = null ;
 		try {
 			obConexion = new Conexion();
 			con = obConexion.AbreConexion();
-			call = con.prepareCall(""+factura);
+			String sql = "SELECT IM_TOTAL_NF, IM_ISR_RETENIDO_NF, IM_IVA_RETENIDO_NF, IM_IMPTO_CEDULA_NF, IM_IMPTO_OTROS_NF FROM TXWV103_FACTURA WHERE NU_FACTURA ="+factura;
+			call = con.prepareCall(sql);
 			rs = call.executeQuery();
 			while(rs.next()) {
-			total = new BigDecimal(rs.getString("SELECT IM_TOTAL_NF FROM TXWV103_FACTURA WHERE NU_FACTURA ="+factura));
+				importesFac.add(new BigDecimal(rs.getString("IM_TOTAL_NF")));
+				importesFac.add(new BigDecimal(rs.getString("IM_ISR_RETENIDO_NF")));
+				importesFac.add(new BigDecimal(rs.getString("IM_IVA_RETENIDO_NF")));
+				importesFac.add(new BigDecimal(rs.getString("IM_IMPTO_CEDULA_NF")));
+				importesFac.add(new BigDecimal(rs.getString("IM_IMPTO_OTROS_NF")));
+				
+			
 			}
 		}catch (Exception e) {
 			LOG.warn("Error: " +e);
+		}finally {
+			closeAll(null, rs, null, call, con, obConexion);
 		}
 		
-		return total;
+		return importesFac;
 	}
 }

@@ -19,7 +19,7 @@ import main.java.com.vpd.bbva.modelo.ValidaGeneralDatosDB;
 
 public class LlenaObj {
 	
-	public ArrayList<HashMap<String, Object>> llenaPosicionF (List<BeanFF> listaBloque, int carta) throws SQLException {
+	public ArrayList<HashMap<String, Object>> llenaPosicionF (List<BeanFF> listaBloque, int carta) throws Exception {
 		ArrayList<HashMap<String, Object>> list = new ArrayList<HashMap<String, Object>>();
 		int posicion = 0;
 		
@@ -70,7 +70,7 @@ public class LlenaObj {
 		}
 	
 	
-	public BeanFactura llenaFactura (List<BeanFF> listaBloque, int carta, String nf) {
+	public BeanFactura llenaFactura (List<BeanFF> listaBloque, int carta, String nf) throws Exception {
 		int nu_factura = 0 ;
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
 		BeanFactura factura = new BeanFactura();
@@ -117,7 +117,7 @@ public class LlenaObj {
 		return factura;
 	}
 	
-	public BeanNota llenaNota (List<BeanFF> listaBloque, int factura, String nf) {
+	public BeanNota llenaNota (List<BeanFF> listaBloque, int factura, String nf) throws Exception {
 		BeanNota nota = new BeanNota();
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
 		for (BeanFF beanFF : listaBloque) {
@@ -169,7 +169,7 @@ public class LlenaObj {
 	}	
 	
 	
-	public BeanRespuesta llenaFacConNva(List<BeanFF> factura, String nf) throws SQLException {
+	public BeanRespuesta llenaFacConNva(List<BeanFF> factura, String nf) throws Exception {
 		BeanFacturaNVA facNva = new BeanFacturaNVA();
 			ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
 			int consecutivoA = 0;
@@ -264,20 +264,19 @@ public class LlenaObj {
 	}
 
 
-public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc, int numFila, int carta, int factura) throws Exception {
+public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc, int numFila, int carta, int factura, int param) throws Exception {
 	int posicion = 0;
 	BeanPosicionFin concep = new BeanPosicionFin();
 	for (BeanFF beanFF : listaBloque) {
-		++posicion;
 		while(beanFF.getTp_registro().equals(nc) && posicion == numFila) {
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
-				String status = dao.parametro(6,beanFF.getEstatusF());
+				String status = dao.parametro(param,beanFF.getEstatusF());
 				BigDecimal im_ivaDB = new BigDecimal( (dao.cdIva(beanFF.getIva()) / 100 ));
 				BigDecimal im_iva = (beanFF.getNu_unidades().multiply(beanFF.getImporteUn())).multiply(im_ivaDB);
 			concep.setNu_carta(carta);
 			concep.setStConcep(status);
 				int num_nota = dao.nuNota(factura);
-			concep.setNu_nota(num_nota);
+			concep.setNu_nota(num_nota+1);
 			concep.setTp_nota(nc);
 			concep.setCuenta(beanFF.getCuentaGps());
 			concep.setNb_servicio(beanFF.getDescripServicio());
@@ -294,7 +293,7 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 			concep.setCd_uso_gral_pos1("");
 			concep.setCd_uso_gral_pos2("");
 			concep.setCd_cr(beanFF.getCentroCostos());
-		}
+		}++posicion;
 	}
 	return concep;
 	}

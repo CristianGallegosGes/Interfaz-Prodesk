@@ -12,7 +12,7 @@ public class ValidaDatos {
 	
 	Constantes cons = new Constantes();
 	
-	public BeanRespuesta ComparaArrevsDBFactura(BeanFacturaNVA datosFac, BeanFacturaNVA beanDB){
+	public BeanRespuesta ComparaArrevsDBFactura(BeanFacturaNVA datosFac, BeanFacturaNVA beanDB) throws Exception{
 		BeanRespuesta beanr = new BeanRespuesta();
 			ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
 			int llave = 10;

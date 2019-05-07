@@ -1,5 +1,6 @@
 package main.java.com.vpd.bbva.modelo;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
@@ -19,7 +20,7 @@ import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
 import oracle.jdbc.internal.OracleTypes;
 
-public class InsertaDao {
+public class InsertaDao extends GeneralDao{
 	static Logger LOG = Logger.getLogger(InsertaDao.class);
 	
 	Conexion obj ;
@@ -81,7 +82,9 @@ public class InsertaDao {
 			respuesta.setMensaje("No se creo la carta");
 			LOG.warn(call.getObject(23).toString());
 			LOG.warn("Error: " + e);
-		}		
+		}finally {
+			closeAll(null, null, null, call, con, obj);
+		}
 		return respuesta;
 	}
 	
@@ -91,7 +94,7 @@ public class InsertaDao {
 		String nuPosFin = null;
 		HashMap<String, Object> resp = new HashMap();
 		try {
-			call = con.prepareCall(DBConstantes.SICOFE_NOM_SP_INSERT_POSICION_FINANCIERA);
+			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_POSICION_FINANCIERA);
 				call.setInt(1, posFac.getNu_carta());
 				call.setString(2, posFac.getStConcep());
 				call.setInt(3, posFac.getCuenta());
@@ -119,6 +122,8 @@ public class InsertaDao {
 		}catch (Exception e) {
 			resp.put("exito", exito);
 			LOG.warn("nuPosFin: "+nuPosFin);
+		}finally {
+			closeAll(null, null, null, call, con, obj);
 		}
 		
 		
@@ -175,6 +180,8 @@ public class InsertaDao {
 		}catch (Exception e) {
 			LOG.warn("Error: " + e);
 			LOG.warn(call.getObject(33).toString().toString());
+		}finally {
+			closeAll(null, null, null, call, con, obj);
 		}
 		return factura;
 	}
@@ -213,6 +220,8 @@ public class InsertaDao {
 		} catch (Exception e) {
 			LOG.warn("Error: " +e );
 			LOG.warn( call.getObject(22).toString());
+		}finally {
+			closeAll(null, null, null, call, con, obj);
 		}
 		
 		return exito;
@@ -239,6 +248,8 @@ public class InsertaDao {
 		}catch (Exception e) {
 			LOG.warn("Error:" + e);
 			LOG.warn(call.getObject(10).toString());
+		}finally {
+			closeAll(null, null, null, call, con, obj);
 		}
 		return exito;
 	}
@@ -260,6 +271,8 @@ public class InsertaDao {
 		}catch (Exception e) {
 			LOG.warn("Error: " + e);
 			LOG.warn("Error: " + call.getObject(6).toString());
+		}finally {
+			closeAll(null, null, null, call, con, obj);
 		}
 		
 		return exito;
@@ -299,9 +312,43 @@ public class InsertaDao {
 		 }catch(Exception e){
 			 LOG.warn("Error: "+e);
 			 LOG.warn("Error: "+call.getObject(19).toString());
-		 }
+		 }finally {
+				closeAll(null, null, null, call, con, obj);
+			}
 		 
 		 return exito;
 	}
+	
+	
+	public boolean calculaImportesFac(int nu_factura,  BigDecimal bdIsrRetenidoNF, BigDecimal bdIvaRetenidoNF, BigDecimal bdImpuestoCedularNF, BigDecimal bdOtrosImpuestosNF,
+			  BigDecimal bdIsrRetenidoNC, BigDecimal bdIvaRetenidoNC, BigDecimal bdImpuestoCedularNC, BigDecimal bdOtrosImpuestosNC ) {
+		boolean exito = false;
+		try {
+			con = obj.AbreConexion();
+			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_UPDATE_IMP_FACTURA);
+			call.setInt(1, nu_factura);
+			call.setBigDecimal(2, bdIsrRetenidoNF);
+			call.setBigDecimal(3, bdIvaRetenidoNF);
+			call.setBigDecimal(4, bdImpuestoCedularNF);
+			call.setBigDecimal(5, bdOtrosImpuestosNF);
+			call.setBigDecimal(6, bdIsrRetenidoNC);
+			call.setBigDecimal(7, bdIvaRetenidoNC);
+			call.setBigDecimal(8, bdImpuestoCedularNC);
+			call.setBigDecimal(9, bdOtrosImpuestosNC);
+			call.registerOutParameter(10, OracleTypes.NUMBER);
+			call.registerOutParameter(11, OracleTypes.VARCHAR);
+			call.execute();
+			
+			if(new Integer(call.getObject(10).toString()) == 0) {
+				exito = false;
+			}
+		}catch (Exception e) {
+			// TODO: handle exception
+		}finally {
+				closeAll(null, null, null, call, con, obj);
+		}
+		return exito;
+	}
+	
 }
 

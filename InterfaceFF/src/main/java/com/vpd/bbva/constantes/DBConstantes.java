@@ -29,4 +29,7 @@ public final class DBConstantes {
 	
 	public static final String SICOFE_NOM_SP_INSERT_NOTA_FIN			= DBPACKAGE +".SP_INSERT_NOTA_FIN";
 	public static final String SICOFE_CALL_SP_INSERT_NOTA_FIN			= "{ call" + SICOFE_NOM_SP_INSERT_NOTA_FIN + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";
+	
+	public static final String SICOFE_NOM_SP_UPDATE_IMP_FACTURA			= DBPACKAGE + ".SP_UPDATE_IMP_FACTURA";
+	public static final String SICOFE_CALL_SP_UPDATE_IMP_FACTURA		= "{ call" + SICOFE_NOM_SP_UPDATE_IMP_FACTURA + "(?,?,?,?,?,?,?,?,?,?,?) } ";
 }

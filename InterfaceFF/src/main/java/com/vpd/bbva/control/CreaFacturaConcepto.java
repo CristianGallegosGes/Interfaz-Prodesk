@@ -14,7 +14,7 @@ import main.java.com.vpd.bbva.modelo.InsertaDao;
 
 public class CreaFacturaConcepto {
 	
-	public BeanRespuesta creaFactura(List<BeanFF> BloqueFac, int carta) throws SQLException {
+	public BeanRespuesta creaFactura(List<BeanFF> BloqueFac, int carta) throws Exception {
 		BeanRespuesta respEjec = new BeanRespuesta();
 		InsertaDao dao = new InsertaDao();
 		LlenaObj llenaObj = new LlenaObj();
