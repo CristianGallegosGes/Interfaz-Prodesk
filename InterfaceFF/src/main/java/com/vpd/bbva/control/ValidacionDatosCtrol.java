@@ -2485,7 +2485,7 @@ public class ValidacionDatosCtrol {
 						return validaCamposObli;
 					}
 
-					if (cadena.substring(467, 468).trim().equals("")) {
+					/*if (cadena.substring(467, 468).trim().equals("")) {
 						validaCamposObli.put(22,
 								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"VIA DE PAGO\" ES OBLIGATORIO");
@@ -2497,7 +2497,7 @@ public class ValidacionDatosCtrol {
 								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA BANCARIA\" ES OBLIGATORIO");
 						return validaCamposObli;
-					}
+					}*/
 
 					if (cadena.substring(518, 521).trim().equals("")) {
 						validaCamposObli.put(24,
