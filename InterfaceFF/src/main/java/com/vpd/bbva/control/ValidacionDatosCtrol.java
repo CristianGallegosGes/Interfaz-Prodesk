@@ -99,7 +99,7 @@ public class ValidacionDatosCtrol {
 				// Agregar cadena a lista archivo
 				lineasArchivo.add(cadena);
 			} else {
-
+				try {
 				if (cadena.substring(0, 10).trim().equals(lineasArchivo.get(linea - 2).substring(0, 10).trim())
 						&& cadena.substring(30, 34).trim()
 								.equals(lineasArchivo.get(linea - 2).substring(30, 34).trim())) {
@@ -234,6 +234,10 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
+																				
+																				consecutivoArchivo = Integer
+																						.parseInt(cadenasProcesarBean.get(0)
+																								.substring(0, 10).trim());
 
 																			} else {
 
@@ -304,7 +308,7 @@ public class ValidacionDatosCtrol {
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena
+																			/*if (Integer.parseInt((cadena
 																					.substring(0, 10).trim().equals(""))
 																							? "0"
 																							: cadena.substring(0, 10)
@@ -314,7 +318,7 @@ public class ValidacionDatosCtrol {
 																						.parseInt(validacionCadenas
 																								.get(0).substring(0, 10)
 																								.trim());
-																			}
+																			}*/
 																		}
 
 																		listaBeanFFDAN.clear();
@@ -366,6 +370,10 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
+																				
+																				consecutivoArchivo = Integer
+																						.parseInt(cadenasProcesarBean.get(0)
+																								.substring(0, 10).trim());
 
 																			} else {
 
@@ -437,7 +445,7 @@ public class ValidacionDatosCtrol {
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena
+																			/*if (Integer.parseInt((cadena
 																					.substring(0, 10).trim().equals(""))
 																							? "0"
 																							: cadena.substring(0, 10)
@@ -447,7 +455,7 @@ public class ValidacionDatosCtrol {
 																						.parseInt(validacionCadenas
 																								.get(0).substring(0, 10)
 																								.trim());
-																			}
+																			}*/
 
 																		}
 
@@ -495,6 +503,10 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
+																				
+																				consecutivoArchivo = Integer
+																						.parseInt(cadenasProcesarBean.get(0)
+																								.substring(0, 10).trim());
 
 																			} else {
 
@@ -567,7 +579,7 @@ public class ValidacionDatosCtrol {
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena
+																			/*if (Integer.parseInt((cadena
 																					.substring(0, 10).trim().equals(""))
 																							? "0"
 																							: cadena.substring(0, 10)
@@ -577,7 +589,7 @@ public class ValidacionDatosCtrol {
 																						.parseInt(validacionCadenas
 																								.get(0).substring(0, 10)
 																								.trim());
-																			}
+																			}*/
 
 																		}
 
@@ -635,6 +647,10 @@ public class ValidacionDatosCtrol {
 																						noFacturaGenerada);
 																				totalRegistroCorrectos++;
 																			}
+																			
+																			consecutivoArchivo = Integer
+																					.parseInt(cadenasProcesarBean.get(0)
+																							.substring(0, 10).trim());
 
 																		} else {
 
@@ -698,7 +714,7 @@ public class ValidacionDatosCtrol {
 																			totalRegistroError++;
 																		}
 
-																		if (Integer.parseInt((cadena.substring(0, 10)
+																		/*if (Integer.parseInt((cadena.substring(0, 10)
 																				.trim().equals("")) ? "0"
 																						: cadena.substring(0, 10)
 																								.trim()) > consecutivoArchivo) {
@@ -706,7 +722,7 @@ public class ValidacionDatosCtrol {
 																			consecutivoArchivo = Integer
 																					.parseInt(validacionCadenas.get(0)
 																							.substring(0, 10).trim());
-																		}
+																		}*/
 
 																	}
 
@@ -756,6 +772,10 @@ public class ValidacionDatosCtrol {
 																						noFacturaGenerada);
 																				totalRegistroCorrectos++;
 																			}
+																			
+																			consecutivoArchivo = Integer
+																					.parseInt(cadenasProcesarBean.get(0)
+																							.substring(0, 10).trim());
 																		} else {
 
 																			// En caso de que la bandera sea false se da
@@ -818,7 +838,7 @@ public class ValidacionDatosCtrol {
 																			totalRegistroError++;
 																		}
 
-																		if (Integer.parseInt((cadena.substring(0, 10)
+																		/*if (Integer.parseInt((cadena.substring(0, 10)
 																				.trim().equals("")) ? "0"
 																						: cadena.substring(0, 10)
 																								.trim()) > consecutivoArchivo) {
@@ -826,7 +846,7 @@ public class ValidacionDatosCtrol {
 																			consecutivoArchivo = Integer
 																					.parseInt(validacionCadenas.get(0)
 																							.substring(0, 10).trim());
-																		}
+																		}*/
 
 																	}
 																	listaBeanFFIAN.clear();
@@ -864,6 +884,8 @@ public class ValidacionDatosCtrol {
 																}
 
 																noCartaGenerada = 0;
+																
+																consecutivoArchivo = Integer.parseInt(cadenasProcesar.get(0).substring(0, 10).trim());
 
 															} else {
 
@@ -911,24 +933,24 @@ public class ValidacionDatosCtrol {
 																totalRegistroError++;
 															}
 
-															if (Integer.parseInt(
+															/*if (Integer.parseInt(
 																	(cadena.substring(0, 10).trim().equals("")) ? "0"
 																			: cadena.substring(0, 10)
 																					.trim()) > consecutivoArchivo) {
 																// Agregar numero de archivo consecutivo
 																consecutivoArchivo = Integer.parseInt(validacionCadenas
 																		.get(0).substring(0, 10).trim());
-															}
+															}*/
 														}
 													}
 
-													if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
+													/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
 															? "0"
 															: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 														// Agregar numero de archivo consecutivo
 														consecutivoArchivo = Integer.parseInt(
 																validacionCadenas.get(0).substring(0, 10).trim());
-													}
+													}*/
 
 												} catch (Exception e) {
 													e.printStackTrace();
@@ -948,12 +970,12 @@ public class ValidacionDatosCtrol {
 													}
 												}
 
-												if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+												/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
 														: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 													// Agregar numero de archivo consecutivo
 													consecutivoArchivo = Integer
 															.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
-												}
+												}*/
 											}
 
 											// Eliminar datos de la lista listaBeanFF
@@ -971,12 +993,12 @@ public class ValidacionDatosCtrol {
 												}
 											}
 
-											if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+											/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
 													: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 												// Agregar numero de archivo consecutivo
 												consecutivoArchivo = Integer
 														.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
-											}
+											}*/
 										}
 									} else {
 										for (Integer j : validarTipoDato.keySet()) {
@@ -991,12 +1013,12 @@ public class ValidacionDatosCtrol {
 											}
 										}
 
-										if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+										/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
 												: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 											// Agregar numero de archivo consecutivo
 											consecutivoArchivo = Integer
 													.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
-										}
+										}*/
 									}
 								} else {
 									for (Integer j : validarDatosD.keySet()) {
@@ -1011,12 +1033,12 @@ public class ValidacionDatosCtrol {
 										}
 									}
 
-									if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
+									/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals("")) ? "0"
 											: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 										// Agregar numero de archivo consecutivo
 										consecutivoArchivo = Integer
 												.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
-									}
+									}*/
 								}
 							} else {
 								for (Integer j : validarDatosO.keySet()) {
@@ -1030,11 +1052,11 @@ public class ValidacionDatosCtrol {
 									}
 								}
 
-								if (Integer.parseInt(cadena.substring(0, 10).trim()) > consecutivoArchivo) {
+								/*if (Integer.parseInt(cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 									// Agregar numero de archivo consecutivo
 									consecutivoArchivo = Integer
 											.parseInt(validacionCadenas.get(0).substring(0, 10).trim());
-								}
+								}*/
 							}
 						} else {
 							for (Integer j : validarLongitudLineas.keySet()) {
@@ -1189,6 +1211,10 @@ public class ValidacionDatosCtrol {
 																								noFacturaGenerada);
 																						totalRegistroCorrectos++;
 																					}
+																					
+																					consecutivoArchivo = Integer
+																							.parseInt(cadenasProcesarBean.get(0)
+																									.substring(0, 10).trim());
 
 																				} else {
 
@@ -1259,7 +1285,7 @@ public class ValidacionDatosCtrol {
 																					totalRegistroError++;
 																				}
 
-																				if (Integer.parseInt((cadena
+																				/*if (Integer.parseInt((cadena
 																						.substring(0, 10).trim().equals(""))
 																								? "0"
 																								: cadena.substring(0, 10)
@@ -1269,7 +1295,7 @@ public class ValidacionDatosCtrol {
 																							.parseInt(validacionCadenas
 																									.get(0).substring(0, 10)
 																									.trim());
-																				}
+																				}*/
 																			}
 
 																			listaBeanFFDAN.clear();
@@ -1321,6 +1347,10 @@ public class ValidacionDatosCtrol {
 																								noFacturaGenerada);
 																						totalRegistroCorrectos++;
 																					}
+																					
+																					consecutivoArchivo = Integer
+																							.parseInt(cadenasProcesarBean.get(0)
+																									.substring(0, 10).trim());
 
 																				} else {
 
@@ -1392,7 +1422,7 @@ public class ValidacionDatosCtrol {
 																					totalRegistroError++;
 																				}
 
-																				if (Integer.parseInt((cadena
+																				/*if (Integer.parseInt((cadena
 																						.substring(0, 10).trim().equals(""))
 																								? "0"
 																								: cadena.substring(0, 10)
@@ -1402,7 +1432,7 @@ public class ValidacionDatosCtrol {
 																							.parseInt(validacionCadenas
 																									.get(0).substring(0, 10)
 																									.trim());
-																				}
+																				}*/
 
 																			}
 
@@ -1450,6 +1480,10 @@ public class ValidacionDatosCtrol {
 																								noFacturaGenerada);
 																						totalRegistroCorrectos++;
 																					}
+																					
+																					consecutivoArchivo = Integer
+																							.parseInt(cadenasProcesarBean.get(0)
+																									.substring(0, 10).trim());
 
 																				} else {
 
@@ -1522,7 +1556,7 @@ public class ValidacionDatosCtrol {
 																					totalRegistroError++;
 																				}
 
-																				if (Integer.parseInt((cadena
+																				/*if (Integer.parseInt((cadena
 																						.substring(0, 10).trim().equals(""))
 																								? "0"
 																								: cadena.substring(0, 10)
@@ -1532,7 +1566,7 @@ public class ValidacionDatosCtrol {
 																							.parseInt(validacionCadenas
 																									.get(0).substring(0, 10)
 																									.trim());
-																				}
+																				}*/
 
 																			}
 
@@ -1590,6 +1624,10 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
+																				
+																				consecutivoArchivo = Integer
+																						.parseInt(cadenasProcesarBean.get(0)
+																								.substring(0, 10).trim());
 
 																			} else {
 
@@ -1653,7 +1691,7 @@ public class ValidacionDatosCtrol {
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena.substring(0, 10)
+																			/*if (Integer.parseInt((cadena.substring(0, 10)
 																					.trim().equals("")) ? "0"
 																							: cadena.substring(0, 10)
 																									.trim()) > consecutivoArchivo) {
@@ -1661,7 +1699,7 @@ public class ValidacionDatosCtrol {
 																				consecutivoArchivo = Integer
 																						.parseInt(validacionCadenas.get(0)
 																								.substring(0, 10).trim());
-																			}
+																			}*/
 
 																		}
 
@@ -1711,6 +1749,11 @@ public class ValidacionDatosCtrol {
 																							noFacturaGenerada);
 																					totalRegistroCorrectos++;
 																				}
+																				
+																				consecutivoArchivo = Integer
+																						.parseInt(cadenasProcesarBean.get(0)
+																								.substring(0, 10).trim());
+																				
 																			} else {
 
 																				// En caso de que la bandera sea false se da
@@ -1773,7 +1816,7 @@ public class ValidacionDatosCtrol {
 																				totalRegistroError++;
 																			}
 
-																			if (Integer.parseInt((cadena.substring(0, 10)
+																			/*if (Integer.parseInt((cadena.substring(0, 10)
 																					.trim().equals("")) ? "0"
 																							: cadena.substring(0, 10)
 																									.trim()) > consecutivoArchivo) {
@@ -1781,7 +1824,7 @@ public class ValidacionDatosCtrol {
 																				consecutivoArchivo = Integer
 																						.parseInt(validacionCadenas.get(0)
 																								.substring(0, 10).trim());
-																			}
+																			}*/
 
 																		}
 																		listaBeanFFIAN.clear();
@@ -1819,6 +1862,10 @@ public class ValidacionDatosCtrol {
 																	}
 
 																	noCartaGenerada = 0;
+																	
+																	consecutivoArchivo = Integer
+																			.parseInt(cadenasProcesar.get(0)
+																					.substring(0, 10).trim());
 
 																} else {
 
@@ -1866,24 +1913,24 @@ public class ValidacionDatosCtrol {
 																	totalRegistroError++;
 																}
 
-																if (Integer.parseInt(
+																/*if (Integer.parseInt(
 																		(cadena.substring(0, 10).trim().equals("")) ? "0"
 																				: cadena.substring(0, 10)
 																						.trim()) > consecutivoArchivo) {
 																	// Agregar numero de archivo consecutivo
 																	consecutivoArchivo = Integer.parseInt(validacionCadenas
 																			.get(0).substring(0, 10).trim());
-																}
+																}*/
 															}
 														}
 
-														if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
+														/*if (Integer.parseInt((cadena.substring(0, 10).trim().equals(""))
 																? "0"
 																: cadena.substring(0, 10).trim()) > consecutivoArchivo) {
 															// Agregar numero de archivo consecutivo
 															consecutivoArchivo = Integer.parseInt(
 																	validacionCadenas.get(0).substring(0, 10).trim());
-														}
+														}*/
 
 													} catch (Exception e) {
 														e.printStackTrace();
@@ -2211,6 +2258,11 @@ public class ValidacionDatosCtrol {
 						validacionCadenas.clear();
 					}
 				}
+				
+			   } catch(Exception e) {
+				   log.error("Error al recuperar datos de la linea " + linea);
+				   log.error(e);
+			   }
 			}
 
 		}
@@ -2479,14 +2531,15 @@ public class ValidacionDatosCtrol {
 		for (String cadena : cadenas) {
 			// log.info("Validar Datos Dependientes de linea " + linea.get(cont));
 			if (validaCamposDepen.size() == 0) {
+				if(!(cadena.substring(145, 157).trim().equals(""))) {
 				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
-				if (validarNuPep) {
-					validaCamposDepen.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
-							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
-							+ " EL VALOR DEL CAMPO \"NUMERO DE PEP\" ES INCORRECTO, YA QUE NO CUMPLE CON EL FORMATO \"00000000-000\"");
-					return validaCamposDepen;
+					if (validarNuPep) {
+						validaCamposDepen.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+								+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
+								+ " EL VALOR DEL CAMPO \"NUMERO DE PEP\" ES INCORRECTO, YA QUE NO CUMPLE CON EL FORMATO \"00000000-000\"");
+						return validaCamposDepen;
+					}
 				}
-
 				if ((!cadena.substring(174, 182).trim().equals(""))
 						&& cadena.substring(174, 182).trim().equals(cadena.substring(38, 48).trim())) {
 					validaCamposDepen.put(2, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
