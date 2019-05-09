@@ -73,15 +73,23 @@ public class AgregarDatosBeanFF1 {
 			registroBeanFF.setUsuarioCreador(cadena.substring(192, 202).trim());
 			registroBeanFF.setCentroCostos(cadena.substring(202, 206).trim());
 			registroBeanFF.setDescripServicio(cadena.substring(206, 306).trim());
-				SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
-			try {
-				registroBeanFF.setFechaInicio(formato.parse(cadena.substring(306, 316).trim()));
+			java.sql.Date sqlDate = null;
+			SimpleDateFormat formato = new SimpleDateFormat("dd/MM/yyyy");
+			try {				
+				java.util.Date parsedUtilDate = formato.parse(cadena.substring(306, 316).trim());
+				sqlDate = new java.sql.Date(parsedUtilDate.getTime());
+				registroBeanFF.setFechaInicio(sqlDate);
+				//registroBeanFF.setFechaInicio(formato.parse(cadena.substring(306, 316).trim()));
+				
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
 			}
 			try {
-				registroBeanFF.setFechaFin(formato.parse(cadena.substring(316, 326).trim()));
+				java.util.Date parsedUtilDate = formato.parse(cadena.substring(316, 326).trim());
+				sqlDate = new java.sql.Date(parsedUtilDate.getTime());
+				registroBeanFF.setFechaFin(sqlDate);
+				//registroBeanFF.setFechaFin(formato.parse(cadena.substring(316, 326).trim()));
 			} catch (ParseException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
@@ -120,9 +128,11 @@ public class AgregarDatosBeanFF1 {
 			}
 
 			if (!(cadena.substring(457, 467).trim().equals(""))) {
-				SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
 				try {
-					registroBeanFF.setFecha_anticipo(formatter.parse(cadena.substring(457, 467).trim()));
+					java.util.Date parsedUtilDate = formato.parse(cadena.substring(457, 467).trim());
+					sqlDate = new java.sql.Date(parsedUtilDate.getTime());
+					registroBeanFF.setFecha_anticipo(sqlDate);
+					//registroBeanFF.setFecha_anticipo(formatter.parse(cadena.substring(457, 467).trim()));
 				} catch (ParseException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
