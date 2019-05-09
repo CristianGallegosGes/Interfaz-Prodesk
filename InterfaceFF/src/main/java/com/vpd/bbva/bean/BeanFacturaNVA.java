@@ -16,10 +16,30 @@ public class BeanFacturaNVA {
 	private String estatusF;
 	private int exito;
 	private String mensaje;
+	private String sociedad;
+	private int proveedor;
+	private String moneda;
 	
 	
 	
-	
+	public String getSociedad() {
+		return sociedad;
+	}
+	public void setSociedad(String sociedad) {
+		this.sociedad = sociedad;
+	}
+	public int getProveedor() {
+		return proveedor;
+	}
+	public void setProveedor(int proveedor) {
+		this.proveedor = proveedor;
+	}
+	public String getMoneda() {
+		return moneda;
+	}
+	public void setMoneda(String moneda) {
+		this.moneda = moneda;
+	}
 	public String getMensaje() {
 		return mensaje;
 	}

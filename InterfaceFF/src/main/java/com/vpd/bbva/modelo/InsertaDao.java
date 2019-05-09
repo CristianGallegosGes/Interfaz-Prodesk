@@ -4,7 +4,6 @@ import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.Date;
-import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,15 +21,16 @@ import oracle.jdbc.internal.OracleTypes;
 
 public class InsertaDao extends GeneralDao{
 	static Logger LOG = Logger.getLogger(InsertaDao.class);
-	
-	Conexion obj ;
-	Connection con;
-	CallableStatement call;
+
 	
 	public BeanRespuesta CreaCarta(List<BeanFF> datosCarta) throws Exception{
 		BeanRespuesta respuesta = new BeanRespuesta();
-		con = obj.AbreConexion();
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		BeanRespuesta listaRet = new BeanRespuesta();
 		
+		boolean ejecucion = false;
 		Integer cerror;	
 		try {
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_CARTA);
@@ -47,8 +47,8 @@ public class InsertaDao extends GeneralDao{
 				call.setInt(6, factura.getCuentaGps());
 				call.setInt(7, factura.getTp_pago());
 				call.setString(8, factura.getNu_anticipo());
-				call.setDate(9,   (Date)factura.getFecha_anticipo()); /*	revisar el casteo */  
-				call.setString(10, null); /*CR*/
+				call.setDate(9, factura.getFecha_anticipo());
+				call.setString(10, null); /*CR*/ 								
 				call.setString(11, factura.getMondena());
 				call.setInt(12, factura.getContrato());
 				call.setString(13, factura.getFideicomiso());
@@ -64,7 +64,11 @@ public class InsertaDao extends GeneralDao{
 				call.registerOutParameter(23, OracleTypes.VARCHAR);	
 				call.execute();
 				LOG.info("Fin de llamada al SP: "+ DBConstantes.SICOFE_CALL_SP_INSERT_CARTA);
+				ejecucion = true;
 				break;
+				}
+				if (ejecucion) {
+					break;
 				}
 			}
 			cerror = new Integer(call.getObject(22).toString());
@@ -79,28 +83,34 @@ public class InsertaDao extends GeneralDao{
 			}
 		}catch (Exception e) {
 			respuesta.setBandera(false);
-			respuesta.setMensaje("No se creo la carta");
+			respuesta.setMensaje("NO SE CREO LA CARTA");
 			LOG.warn(call.getObject(23).toString());
 			LOG.warn("Error: " + e);
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		return respuesta;
 	}
 	
-	public HashMap<String, Object> insertaPosicionFinanciera(BeanPosicionFin posFac) throws SQLException {
-		con = obj.AbreConexion();
+	public HashMap<String, Object> insertaPosicionFinanciera(BeanPosicionFin posFac) throws Exception  {
+
 		Integer exito = null;
 		String nuPosFin = null;
 		HashMap<String, Object> resp = new HashMap();
+		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
 		try {
+			
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_POSICION_FINANCIERA);
 				call.setInt(1, posFac.getNu_carta());
 				call.setString(2, posFac.getStConcep());
 				call.setInt(3, posFac.getCuenta());
 				call.setString(4, posFac.getNb_servicio());
-				call.setDate(5, (Date)posFac.getFh_Inicio());
-				call.setDate(6, (Date)posFac.getFh_Fin());
+				call.setDate(5, posFac.getFh_Inicio());
+				call.setDate(6, posFac.getFh_Fin());
 				call.setInt(7, posFac.getEntidad());
 				call.setInt(8, posFac.getCd_iva());
 				call.setBigDecimal(9, posFac.getIm_iva());
@@ -123,7 +133,7 @@ public class InsertaDao extends GeneralDao{
 			resp.put("exito", exito);
 			LOG.warn("nuPosFin: "+nuPosFin);
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		
 		
@@ -132,11 +142,16 @@ public class InsertaDao extends GeneralDao{
 	
 	
 	
-	public HashMap<String, Object> inserFactura(BeanFactura beanFac) throws SQLException{
+	public HashMap<String, Object> inserFactura(BeanFactura beanFac) throws Exception {
 		HashMap<String, Object> factura = new HashMap<String, Object>();
 		int exito = 0;
-		try {
-			con = obj.AbreConexion();
+		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
+		try {			
+			con = obConexion.AbreConexion();
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_FACTURA);
 			call.setString(1, beanFac.getSt_factura());
 			call.setString(2, beanFac.getCd_usr_modifica());
@@ -164,8 +179,8 @@ public class InsertaDao extends GeneralDao{
 			call.setString(24, beanFac.getNb_motivo());
 			call.setString(25, beanFac.getCd_uso_gral_fac2());
 			call.setString(26, beanFac.getCd_anticipo());
-			call.setDate(27, (Date)beanFac.getFh_anticipo());
-			call.setDate(28, (Date)beanFac.getFh_factura());
+			call.setDate(27, beanFac.getFh_anticipo());
+			call.setDate(28, beanFac.getFh_factura());
 			call.setString(29, beanFac.getCd_folio());
 			call.setString(30, beanFac.getNu_serie());
 			call.registerOutParameter(31, OracleTypes.NUMBER);
@@ -181,16 +196,20 @@ public class InsertaDao extends GeneralDao{
 			LOG.warn("Error: " + e);
 			LOG.warn(call.getObject(33).toString().toString());
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		return factura;
 	}
 	
-	public Integer InsertNota (BeanNota nota) throws SQLException{
+	public Integer InsertNota (BeanNota nota) throws Exception{
 		Integer exito = 0;
 		
-		try {
-			con = obj.AbreConexion();
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
+		try {			
+			con = obConexion.AbreConexion();
 			call= con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA);
 			call.setInt(1, nota.getNu_factura());
 			call.setInt(2, nota.getNu_nota());
@@ -198,8 +217,8 @@ public class InsertaDao extends GeneralDao{
 			call.setString(5, nota.getSt_nota());
 			call.setString(6, nota.getCd_folio_sat());
 			call.setString(7, nota.getNb_servicio());
-			call.setDate(8, (Date) nota.getFh_ini_servicio());
-			call.setDate(10, (Date)nota.getFh_ini_servicio());
+			call.setDate(8,  nota.getFh_ini_servicio());
+			call.setDate(10, nota.getFh_ini_servicio());
 			call.setInt(11, nota.getCd_entidad());
 			call.setInt(12, nota.getCd_iva());
 			call.setBigDecimal(13, nota.getNu_unidad());
@@ -221,16 +240,21 @@ public class InsertaDao extends GeneralDao{
 			LOG.warn("Error: " +e );
 			LOG.warn( call.getObject(22).toString());
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		
 		return exito;
 	}
 	
-	public Integer insertConceptoFinan(BeanConceptoFin conceptoF) throws SQLException{
+	public Integer insertConceptoFinan(BeanConceptoFin conceptoF) throws Exception{
 		Integer exito = 0;
-		try {
-		con = obj.AbreConexion();
+		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
+		try {			
+		con = obConexion.AbreConexion();
 		call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_CONCEPTO_FINANCIERA);
 		call.setInt(1, conceptoF.getNu_factura());
 		call.setString(2, conceptoF.getSt_concepto());
@@ -249,15 +273,20 @@ public class InsertaDao extends GeneralDao{
 			LOG.warn("Error:" + e);
 			LOG.warn(call.getObject(10).toString());
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		return exito;
 	}
 	
-	public Integer insertViaP (int nuFactura, String moneda, String sociedad, int nu_proveedor) throws SQLException {
+	public Integer insertViaP (int nuFactura, String moneda, String sociedad, int nu_proveedor) throws Exception {
 		Integer exito = 0;
-		try {
-			con = obj.AbreConexion();
+		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
+		try {			
+			con = obConexion.AbreConexion();
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERTA_VPAGO);
 			call.setInt(1, nuFactura);
 			call.setString(2, moneda);
@@ -272,7 +301,7 @@ public class InsertaDao extends GeneralDao{
 			LOG.warn("Error: " + e);
 			LOG.warn("Error: " + call.getObject(6).toString());
 		}finally {
-			closeAll(null, null, null, call, con, obj);
+			closeAll(null, null, null, call, con, obConexion);
 		}
 		
 		return exito;
@@ -282,8 +311,14 @@ public class InsertaDao extends GeneralDao{
 	public boolean insertaConceptoNCFin(BeanPosicionFin pNotaCredito, int factura ) throws Exception {
 		 Integer cveError 		= null;
 		 boolean exito			= false;
+		 
+		 	Conexion obConexion   = new Conexion();
+			Connection con =  obConexion.AbreConexion();
+			CallableStatement call = null;
+			
 		 try {
-			 con = obj.AbreConexion();
+				
+			 con = obConexion.AbreConexion();
 			 call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA_FIN);
 			 call.setInt(1, pNotaCredito.getNu_carta());
 			 call.setInt(2, factura);
@@ -292,8 +327,8 @@ public class InsertaDao extends GeneralDao{
 			 call.setString(5, pNotaCredito.getStConcep());
 			 call.setInt(6, pNotaCredito.getCuenta());
 			 call.setString(7, pNotaCredito.getNb_servicio());
-			 call.setDate(8, (Date)pNotaCredito.getFh_Inicio());
-			 call.setDate(9, (Date)pNotaCredito.getFh_Fin());
+			 call.setDate(8, pNotaCredito.getFh_Inicio());
+			 call.setDate(9, pNotaCredito.getFh_Fin());
 			 call.setInt(10, pNotaCredito.getEntidad());
 			 call.setInt(11, pNotaCredito.getCd_iva());
 			 call.setBigDecimal(12, pNotaCredito.getIm_iva());
@@ -313,7 +348,7 @@ public class InsertaDao extends GeneralDao{
 			 LOG.warn("Error: "+e);
 			 LOG.warn("Error: "+call.getObject(19).toString());
 		 }finally {
-				closeAll(null, null, null, call, con, obj);
+				closeAll(null, null, null, call, con, obConexion);
 			}
 		 
 		 return exito;
@@ -321,10 +356,15 @@ public class InsertaDao extends GeneralDao{
 	
 	
 	public boolean calculaImportesFac(int nu_factura,  BigDecimal bdIsrRetenidoNF, BigDecimal bdIvaRetenidoNF, BigDecimal bdImpuestoCedularNF, BigDecimal bdOtrosImpuestosNF,
-			  BigDecimal bdIsrRetenidoNC, BigDecimal bdIvaRetenidoNC, BigDecimal bdImpuestoCedularNC, BigDecimal bdOtrosImpuestosNC ) {
+			  BigDecimal bdIsrRetenidoNC, BigDecimal bdIvaRetenidoNC, BigDecimal bdImpuestoCedularNC, BigDecimal bdOtrosImpuestosNC ) throws Exception {
 		boolean exito = false;
-		try {
-			con = obj.AbreConexion();
+		
+		Conexion obConexion   = new Conexion();
+		Connection con =  obConexion.AbreConexion();
+		CallableStatement call = null;
+		
+		try {			
+			con = obConexion.AbreConexion();
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_UPDATE_IMP_FACTURA);
 			call.setInt(1, nu_factura);
 			call.setBigDecimal(2, bdIsrRetenidoNF);
@@ -340,12 +380,12 @@ public class InsertaDao extends GeneralDao{
 			call.execute();
 			
 			if(new Integer(call.getObject(10).toString()) == 0) {
-				exito = false;
+				exito = true;
 			}
 		}catch (Exception e) {
 			// TODO: handle exception
 		}finally {
-				closeAll(null, null, null, call, con, obj);
+				closeAll(null, null, null, call, con, obConexion);
 		}
 		return exito;
 	}

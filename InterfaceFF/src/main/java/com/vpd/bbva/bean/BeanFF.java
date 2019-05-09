@@ -1,7 +1,7 @@
 package main.java.com.vpd.bbva.bean;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 
 public class BeanFF {
@@ -54,8 +54,30 @@ public class BeanFF {
 	private String estatusF;
 	private String aplicativoOrg;
 	
+	private String dbfideicomiso; 
+	private String dbperiodificacion; 
+	private String dbproviEjerAnterior;
 	
 	
+	
+	public String getDbfideicomiso() {
+		return dbfideicomiso;
+	}
+	public void setDbfideicomiso(String dbfideicomiso) {
+		this.dbfideicomiso = dbfideicomiso;
+	}
+	public String getDbperiodificacion() {
+		return dbperiodificacion;
+	}
+	public void setDbperiodificacion(String dbperiodificacion) {
+		this.dbperiodificacion = dbperiodificacion;
+	}
+	public String getDbproviEjerAnterior() {
+		return dbproviEjerAnterior;
+	}
+	public void setDbproviEjerAnterior(String dbproviEjerAnterior) {
+		this.dbproviEjerAnterior = dbproviEjerAnterior;
+	}
 	public String getDescError() {
 		return descError;
 	}

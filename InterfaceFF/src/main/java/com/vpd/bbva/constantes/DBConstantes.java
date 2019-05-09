@@ -7,7 +7,7 @@ public final class DBConstantes {
 	public static final String SICOFE_SPC_S_VALIDA_CARTA				= "{ call " + SICOFE_SPN_S_VALIDA_CARTA + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 	
 	public static final String SICOFE_NOM_VALIDA_FACTURA 				= DBPACKAGE + ".SP_VALIDA_FACTURA";
-	public static final String SICOFE_CALL_VALIDA_FACTURA				= "{ call " + SICOFE_NOM_VALIDA_FACTURA + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
+	public static final String SICOFE_CALL_VALIDA_FACTURA				= "{ call " + SICOFE_NOM_VALIDA_FACTURA + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";
 	
 	public static final String SICOFE_NOM_SP_INSERT_CARTA				= DBPACKAGE + ".SP_INSERT_CARTA";
 	public static final String SICOFE_CALL_SP_INSERT_CARTA				= "{ call " + SICOFE_NOM_SP_INSERT_CARTA + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)}";

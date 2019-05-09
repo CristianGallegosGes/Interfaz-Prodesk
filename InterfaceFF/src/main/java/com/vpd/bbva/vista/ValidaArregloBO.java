@@ -83,15 +83,19 @@ try {
 		ValidaDatos validaFac = new ValidaDatos();
 		LlenaObj objDB = new LlenaObj();
 		int consecutivoA = 0;
+		boolean validacion = false;
 		for(BeanFF leeF : factura) {
+			if(validacion) {
+				break;
+			}
 			BeanRes.setCarta(leeF.getNu_carta());
-			++consecutivoA;
+			
 			String existe = validaDB.existe(leeF.getTp_registro());
 			if(existe != null) {
-				String notaCredito = validaDB.parametro(10, leeF.getTp_registro());
+				String notaFactura = validaDB.parametro(8, leeF.getTp_registro());
 				
 				if(leeF.getNu_factura()>0) {  /** Existe la Factura */
-				while(leeF.getTp_registro().equals(notaCredito)) {   /**NC*/
+				while(leeF.getTp_registro().equals(notaFactura)) {   /**NC*/
 					
 											
 						int facturaI = leeF.getNu_factura();
@@ -104,7 +108,7 @@ try {
 						/* OK */	
 						if(beanFacNdb.getExito() == 0 ) {  	
 									/* LLENAR OBJETO DE DE FACTURA NUEVA*/
-									BeanFacturaNVA beanFacN = objDB.llenaFacNva(factura, notaCredito);
+									BeanFacturaNVA beanFacN = objDB.llenaFacNva(factura, notaFactura);
 									/* COMPARAR DATOS DE LA FACTURA QUE VIENEN EN EL LAY OUT VS BASE DE DATOS*/
 								BeanRes = validaFac.ComparaArrevsDBFactura(beanFacN, beanFacNdb); 
 									/* SI ES OK */
@@ -112,24 +116,25 @@ try {
 										BeanRes.setFactura(facturaI);
 										BeanRes.setBandera(true);
 										BeanRes.setConsecutivoA(consecutivoA);
+										validacion = true;
 									}else {
 										BeanRes.setConsecutivoA(consecutivoA);
-										
+										validacion = true;
 									}
 							}else {
 								BeanRes.setBandera(false);
 								BeanRes.setMensaje(beanFacNdb.getMensaje());
 								BeanRes.setConsecutivoA(consecutivoA);
-								
+								validacion = true;
 							}
 						break;
 				}
 				
 					}else {													/** Validacion para crear Factura nueva */
 						/* VALIDACION DE DATOS PARA CREAR UNA NUEVA FACTURA */
-						String notaFactura = validaDB.parametro(8, leeF.getTp_registro());
 						while(leeF.getTp_registro().equals(notaFactura)) {   /**NF*/
 							BeanRes = objDB.llenaFacConNva(factura,notaFactura); 		/** Validacion de Concepto **/
+							validacion = true;
 							break;
 						}
 						}
@@ -138,9 +143,10 @@ try {
 				BeanRes.setBandera(false);
 				BeanRes.setMensaje("TIPO REGISTRO " + leeF.getTp_registro() + "NO EXISTE");
 				BeanRes.setConsecutivoA(consecutivoA);
+				validacion = true;
 				break; 
 			}
-		
+			++consecutivoA;
 	}return BeanRes;
 	}
 	
@@ -252,7 +258,7 @@ try {
 						notas.add(respNota);
 					}
 					}else {
-						String msjError = "LOS CALULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
+						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
 						respNota.setConsecutivoA(consecutivoA);

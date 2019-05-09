@@ -1,6 +1,7 @@
 package main.java.com.vpd.bbva.control;
 
 import java.math.BigDecimal;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -38,8 +39,8 @@ public class LlenaObj {
 				concep.setStConcep(status);
 				concep.setCuenta(beanFF.getCuentaGps());
 				concep.setNb_servicio(beanFF.getDescripServicio());
-				concep.setFh_Inicio(beanFF.getFechaInicio());
-				concep.setFh_Fin(beanFF.getFechaFin());
+				concep.setFh_Inicio(new Date(beanFF.getFechaInicio().getTime()));
+				concep.setFh_Fin(new Date(beanFF.getFechaFin().getTime()));
 				concep.setEntidad(beanFF.getEstado());
 				concep.setCd_iva(beanFF.getIva());
 				concep.setIm_iva(im_iva);
@@ -107,7 +108,7 @@ public class LlenaObj {
 			factura.setNb_motivo("");
 			factura.setCd_uso_gral_fac2("");
 			factura.setCd_anticipo(beanFF.getNu_anticipo());
-			factura.setFh_anticipo(beanFF.getFecha_anticipo());
+			factura.setFh_anticipo(new Date( beanFF.getFecha_anticipo().getTime()));
 			factura.setCd_folio(null);
 			factura.setNu_serie(null);
 			break;
@@ -132,8 +133,8 @@ public class LlenaObj {
 			nota.setSt_nota(estatusN); /**PEN*/
 			nota.setCd_folio_sat(null);
 			nota.setNb_servicio(beanFF.getDescripServicio());
-			nota.setFh_ini_servicio(beanFF.getFechaInicio());
-			nota.setFg_fin_servicio(beanFF.getFechaFin());
+			nota.setFh_ini_servicio(new Date(beanFF.getFechaInicio().getTime()));
+			nota.setFg_fin_servicio(new Date(beanFF.getFechaFin().getTime()));
 			nota.setCd_entidad(0);       
 			nota.setCd_iva(0);
 				BigDecimal im_ivaDB = new BigDecimal( (dao.cdIva(beanFF.getIva()) / 100 ));
@@ -172,12 +173,12 @@ public class LlenaObj {
 	public BeanRespuesta llenaFacConNva(List<BeanFF> factura, String nf) throws Exception {
 		BeanFacturaNVA facNva = new BeanFacturaNVA();
 			ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
-			int consecutivoA = 0;
+			int consecBean = 0;
 			BeanRespuesta respFacNva = new BeanRespuesta();
+			boolean error = false;
 			for (BeanFF beanFF : factura) {
-				
 				while(beanFF.getTp_registro().equals(nf)) {
-					++consecutivoA;
+				
 					facNva.setNu_factura(beanFF.getNu_carta());
 					facNva.setNu_carta(beanFF.getNu_carta());
 					facNva.setEstado(beanFF.getEstado());
@@ -189,21 +190,29 @@ public class LlenaObj {
 					facNva.setCuentaBanc(beanFF.getCuentaBanc());
 					facNva.setTpBanco(beanFF.getTpBanco());
 					facNva.setEstatusF(beanFF.getEstatusF());
-					if(consecutivoA == 1) {
+					facNva.setProveedor(beanFF.getNu_proveedor());
+					facNva.setSociedad(beanFF.getSociedadRec());
+					facNva.setMoneda(beanFF.getMondena());
+					if(consecBean == 0) {
 					respFacNva = validaDB.DatosNvaFactura(facNva);
 						if(respFacNva.GetBandera()==false) {
-							respFacNva.setConsecutivoA(consecutivoA);
-							break;
-						}
+							respFacNva.setConsecutivoA(consecBean);
+							error = true;
+						}break;
 					
 					}else {				/** VALIDAR ESTADO Y TIPO DE IVA  DE CADA CONCEPTO**/
 						respFacNva = validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva());
 						if(respFacNva.GetBandera()==false) {
-							respFacNva.setConsecutivoA(consecutivoA);
+							respFacNva.setConsecutivoA(consecBean);
+							error = true;
 							break;
-						}
+						}break;
 					}
-					respFacNva.setConsecutivoA(consecutivoA);
+					
+				}++consecBean;
+				
+				if(error) {
+					break;
 				}
 			}
 		
@@ -270,7 +279,7 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 	for (BeanFF beanFF : listaBloque) {
 		while(beanFF.getTp_registro().equals(nc) && posicion == numFila) {
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
-				String status = dao.parametro(param,beanFF.getEstatusF());
+				String status = dao.paramNC(param,beanFF.getEstatusF());
 				BigDecimal im_ivaDB = new BigDecimal( (dao.cdIva(beanFF.getIva()) / 100 ));
 				BigDecimal im_iva = (beanFF.getNu_unidades().multiply(beanFF.getImporteUn())).multiply(im_ivaDB);
 			concep.setNu_carta(carta);
@@ -280,8 +289,8 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 			concep.setTp_nota(nc);
 			concep.setCuenta(beanFF.getCuentaGps());
 			concep.setNb_servicio(beanFF.getDescripServicio());
-			concep.setFh_Inicio(beanFF.getFechaInicio());
-			concep.setFh_Fin(beanFF.getFechaFin());
+			concep.setFh_Inicio(new Date(beanFF.getFechaInicio().getTime()));
+			concep.setFh_Fin(new Date(beanFF.getFechaFin().getTime()));
 			concep.setEntidad(beanFF.getEstado());
 			concep.setCd_iva(beanFF.getIva());
 			concep.setIm_iva(im_iva);

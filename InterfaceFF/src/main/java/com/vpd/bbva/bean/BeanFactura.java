@@ -1,7 +1,7 @@
 package main.java.com.vpd.bbva.bean;
 
 import java.math.BigDecimal;
-import java.util.Date;
+import java.sql.Date;
 
 public class BeanFactura {
 	private String st_factura;

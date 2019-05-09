@@ -31,7 +31,7 @@ public class ControlBloqueaDB {
 				if(statusF.GetBandera() == true) {  	/** Validacion de Factura correcta*/
 					if(existeFac == 0) {				/** Si la factura no existe, crear carta, factura, concepto, nota de credito */
 						/* CREA CARTA */
-						BeanRespuesta creaCt = insert.CreaCarta(listaBloque);	
+						BeanRespuesta creaCt =  insert.CreaCarta(listaBloque);	
 						ListAControlF.add(creaCt);
 							if(creaCt.GetBandera() == true) {	
 								carta = creaCt.getCarta();

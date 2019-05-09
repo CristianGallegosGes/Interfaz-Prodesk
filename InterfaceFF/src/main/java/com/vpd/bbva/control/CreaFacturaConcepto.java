@@ -1,6 +1,5 @@
 package main.java.com.vpd.bbva.control;
 
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
