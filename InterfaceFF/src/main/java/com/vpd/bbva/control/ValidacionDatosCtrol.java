@@ -189,8 +189,10 @@ public class ValidacionDatosCtrol {
 																if (listaBeanFF.get(conta)
 																		.getConsecNota() == listaBeanFF.get(i - 2)
 																				.getConsecNota()) {
-																	listaBeanN.add(listaBeanFF.get(conta));
-																	listaBeanFFIAN.addAll(listaBeanN);
+																	if(conta == 1) {
+																		listaBeanFFIAN.addAll(listaBeanN);
+																	}
+																	listaBeanFFIAN.add(listaBeanFF.get(conta));
 																	cadenasProcesarBean.add(cadenasProcesar.get(conta));
 																	lineasProcesar.add(cadenaLinea.get(conta));
 																	if (i == totalListaBeanFF) {
@@ -598,9 +600,11 @@ public class ValidacionDatosCtrol {
 																		cadenasProcesarBean.clear();
 																		lineasProcesar.clear();
 																	}
-
-																	listaBeanN.add(listaBeanFF.get(conta));
-																	listaBeanFFDAN.addAll(listaBeanN);
+																	
+																	if(conta == 1) {
+																		listaBeanFFDAN.addAll(listaBeanN);
+																	}
+																	listaBeanFFDAN.add(listaBeanFF.get(conta));
 																	cadenasProcesarBean.add(cadenasProcesar.get(conta));
 																	lineasProcesar.add(cadenaLinea.get(conta));
 																}
@@ -1166,8 +1170,11 @@ public class ValidacionDatosCtrol {
 																	if (listaBeanFF.get(conta)
 																			.getConsecNota() == listaBeanFF.get(i - 2)
 																					.getConsecNota()) {
-																		listaBeanN.add(listaBeanFF.get(conta));
-																		listaBeanFFIAN.addAll(listaBeanN);
+																		if(conta == 1) {
+																			listaBeanFFIAN.addAll(listaBeanN);
+																			listaBeanN.clear();
+																		}
+																		listaBeanFFIAN.add(listaBeanFF.get(conta));
 																		cadenasProcesarBean.add(cadenasProcesar.get(conta));
 																		lineasProcesar.add(cadenaLinea.get(conta));
 																		if (i == totalListaBeanFF) {
@@ -1575,9 +1582,13 @@ public class ValidacionDatosCtrol {
 																			cadenasProcesarBean.clear();
 																			lineasProcesar.clear();
 																		}
-
-																		listaBeanN.add(listaBeanFF.get(conta));
-																		listaBeanFFDAN.addAll(listaBeanN);
+																		
+																		if(conta == 1) {
+																			listaBeanFFDAN.addAll(listaBeanN);
+																			listaBeanN.clear();
+																		}
+																		
+																		listaBeanFFDAN.add(listaBeanFF.get(conta));
 																		cadenasProcesarBean.add(cadenasProcesar.get(conta));
 																		lineasProcesar.add(cadenaLinea.get(conta));
 																	}
