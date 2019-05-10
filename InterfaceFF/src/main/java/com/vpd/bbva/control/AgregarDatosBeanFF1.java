@@ -101,10 +101,14 @@ public class AgregarDatosBeanFF1 {
 
 			if (!(cadena.substring(365, 377).trim().equals(""))) {
 				registroBeanFF.setIsrRetenido(new BigDecimal(cadena.substring(365, 377).trim()));
+			} else {
+				registroBeanFF.setIsrRetenido(BigDecimal.ZERO);
 			}
 
 			if (!(cadena.substring(377, 389).trim().equals(""))) {
 				registroBeanFF.setIvaRetenido(new BigDecimal(cadena.substring(377, 389).trim()));
+			} else {
+				registroBeanFF.setIvaRetenido(BigDecimal.ZERO);
 			}
 
 			if (!(cadena.substring(389, 401).trim().equals(""))) {
@@ -113,14 +117,20 @@ public class AgregarDatosBeanFF1 {
 
 			if (!(cadena.substring(401, 413).trim().equals(""))) {
 				registroBeanFF.setOtrosImpuestos(new BigDecimal(cadena.substring(401, 413).trim()));
+			} else {
+				registroBeanFF.setOtrosImpuestos(BigDecimal.ZERO);
 			}
 
 			if (!(cadena.substring(413, 425).trim().equals(""))) {
 				registroBeanFF.setDescuento(new BigDecimal(cadena.substring(413, 425).trim()));
+			} else {
+				registroBeanFF.setDescuento(BigDecimal.ZERO);
 			}
 
 			if (!(cadena.substring(425, 427).trim().equals(""))) {
 				registroBeanFF.setComprobacion(cadena.substring(425, 427).trim());
+			} else {
+				
 			}
 
 			if (!(cadena.substring(427, 457).trim().equals(""))) {
