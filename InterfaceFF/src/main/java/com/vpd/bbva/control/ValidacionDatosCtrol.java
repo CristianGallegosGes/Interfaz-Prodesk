@@ -2283,7 +2283,7 @@ public class ValidacionDatosCtrol {
 		br.close();
 		eliminarArchivo(archivo);
 		log.info("Total de registros procesados: " + linea);
-		log.info("Total de registros enviados a BD: " + totalRegistroCorrectos);
+		log.info("Total de registros correctos: " + totalRegistroCorrectos);
 		log.info("Total de registros con error: " + totalRegistroError);
 	}
 
