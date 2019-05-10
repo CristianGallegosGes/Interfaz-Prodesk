@@ -22,16 +22,20 @@ public class CreaFacturaConcepto {
 		int nuPosFin ;
 		String nf = null;
 		String error = null;
-		int posicion = 0;
+		String posicion = null;
 		/** Insertar posicion fin */
+		try {
 		ArrayList<HashMap<String, Object>> posicFin = llenaObj.llenaPosicionF(BloqueFac, carta);
 			for (HashMap<String, Object> control : posicFin) {
 				exito = Integer.parseInt(control.get("exito").toString());
 				nf = (String) control.get("notaFactura");
 				error = control.get("nu_posicion_F").toString();
-				posicion = new Integer(control.get("posicion").toString());
+				posicion = (control.get("posicion").toString());
 				if(exito > 0) {
-					break;
+					respEjec.setBandera(false);
+					respEjec.setMensaje(error);
+					respEjec.setConsecutivoA(Integer.parseInt(posicion));
+					return respEjec;
 				}
 				
 			}
@@ -61,33 +65,48 @@ public class CreaFacturaConcepto {
 									/** Inserta Concepto */
 										BeanConceptoFin beanConF = llenaObj.llenaConceptoF(usuario, nuFactura, carta, nuPosFin, nu_nota);
 										Integer inserConcFin = dao.insertConceptoFinan(beanConF);
+										
 								}
-								String moneda = null;
-								String sociedad = null;
-								int nu_proveedor = 0;
 								String tpBanco = null;
-								
+								String viaPa = null;
+								boolean run = false;
 								for(BeanFF bean : BloqueFac) {
+									if (run) {
+										break;
+									}
 									while(bean.getTp_registro().equals(nf)) {
-									moneda = bean.getMondena();
-									sociedad = bean.getSociedadRec();
-									nu_proveedor = bean.getNu_proveedor();
-									tpBanco = bean.getTpBanco();
+										viaPa = bean.getViaP();	
+										tpBanco = bean.getTpBanco();
+										run = true;
 									break;
 									}
 								}
 								
-								Integer viaP = dao.insertViaP(nuFactura, moneda, sociedad, nu_proveedor);
-								
-								if(viaP == 0) {
+								if(viaPa != null || viaPa.isEmpty()) {
+									
+										Integer viaPagoInser = dao.insertViaP(nuFactura,viaPa, tpBanco );
+										
+										if(viaPagoInser == 0) {
+											/**      OK    */
+											respEjec.setBandera(true);
+											respEjec.setFactura(nuFactura);
+											respEjec.setCarta(carta);
+										}else {
+											respEjec.setBandera(true);
+											respEjec.setMensaje("No se inserto via de pago" ); // para prueba
+											respEjec.setFactura(nuFactura);
+											respEjec.setCarta(carta);
+										}
+										
+								}else {
 									/**      OK    */
 									respEjec.setBandera(true);
 									respEjec.setFactura(nuFactura);
-								}else {
-									respEjec.setBandera(true);
-									respEjec.setMensaje("No se pudo insertar la via de pago" ); // para prueba
-									respEjec.setFactura(nuFactura);
+									respEjec.setCarta(carta);
 								}
+							}else {
+								respEjec.setBandera(false);
+								respEjec.setMensaje("Error al insertar la factura" + descOpera); // para prueba
 							}
 							
 						}else {
@@ -97,8 +116,11 @@ public class CreaFacturaConcepto {
 				}else {
 					respEjec.setBandera(false);
 					respEjec.setMensaje("Error al insertar posicion de la factura" + error); // para prueba
-					respEjec.setConsecutivoA(posicion);
+					respEjec.setConsecutivoA(Integer.parseInt(posicion));
 				}
+	}catch (Exception e) {
+			// TODO: handle exception
+		}
 		return respEjec;
 	}
 	

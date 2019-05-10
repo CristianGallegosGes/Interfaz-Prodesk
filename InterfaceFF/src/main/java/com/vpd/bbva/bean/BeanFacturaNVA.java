@@ -6,7 +6,7 @@ public class BeanFacturaNVA {
 	private int nu_factura = 0;
 	private int nu_carta = 0;
 	private int estado;
-	private int iva;
+	private String iva;
 	private BigDecimal IsrRetenido ;
 	private BigDecimal IvaRetenido;
 	private BigDecimal ImpuestoCedular;
@@ -70,10 +70,10 @@ public class BeanFacturaNVA {
 	public void setEstado(int estado) {
 		this.estado = estado;
 	}
-	public int getIva() {
+	public String getIva() {
 		return iva;
 	}
-	public void setIva(int iva) {
+	public void setIva(String iva) {
 		this.iva = iva;
 	}
 	public BigDecimal getIsrRetenido() {

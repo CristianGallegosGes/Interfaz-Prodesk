@@ -28,19 +28,16 @@ public class ControlBloqueaDB {
 				statusF	= validaBO.ValidaFactura(listaBloque);
 				int existeFac = statusF.getFactura();
 				
-				if(statusF.GetBandera() == true) {  	/** Validacion de Factura correcta*/
+				if(statusF.GetBandera() == true) {  	/** VALIDACION DE FACTURA*/
 					if(existeFac == 0) {				/** Si la factura no existe, crear carta, factura, concepto, nota de credito */
 						/* CREA CARTA */
 						BeanRespuesta creaCt =  insert.CreaCarta(listaBloque);	
-						ListAControlF.add(creaCt);
 							if(creaCt.GetBandera() == true) {	
 								carta = creaCt.getCarta();
 								/*	CREA FACTURA */
-								BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);	
-								ListAControlF.add(beanfacConp);
+								BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);								
 								
-								
-								/* CREAR NOTAS DE CREDITO */
+								/* CREAR NOTAS DE CREDITO  */
 								int factura = beanfacConp.getFactura();
 								ValidaArregloBO valida = new ValidaArregloBO();
 								List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, carta,factura );
@@ -49,6 +46,9 @@ public class ControlBloqueaDB {
 										ListAControlF.add(informeNC);
 									}
 								}
+								ListAControlF.add(beanfacConp);
+							}else {
+								ListAControlF.add(creaCt);
 							}
 					}else {							
 						/* SI LA FACTURA EXISTE, SOLO CREAR NOTAS DE CREDITO*/

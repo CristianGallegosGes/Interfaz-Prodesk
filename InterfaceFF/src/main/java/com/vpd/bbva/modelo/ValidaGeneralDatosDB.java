@@ -93,30 +93,32 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
-			call.setInt(4, 2);		
-			call.setInt(5, factura.getNu_factura());
-			call.setInt(6, factura.getNu_carta());System.out.println(factura.getNu_carta());
-			call.setInt(7, factura.getEstado());System.out.println(factura.getEstado());
-			call.setInt(8, factura.getIva());System.out.println(factura.getIva());
-			call.setBigDecimal(9, (factura.getIsrRetenido()));System.out.println("isr RET"+factura.getIsrRetenido());
-			call.setBigDecimal(10, factura.getIvaRetenido());System.out.println(factura.getIvaRetenido());
-			call.setBigDecimal(11, factura.getImpuestoCedular());System.out.println(factura.getImpuestoCedular());
-			call.setString(12, factura.getViaP());System.out.println(factura.getViaP());
-			call.setInt(13, factura.getCuentaBanc());System.out.println(factura.getCuentaBanc());
-			call.setString(14, factura.getTpBanco());System.out.println(factura.getTpBanco());
-			call.setString(15, factura.getEstatusF());System.out.println(factura.getEstatusF());
-			call.setInt(16, factura.getProveedor());System.out.println(factura.getProveedor());
-			call.setString(17, factura.getSociedad());System.out.println(factura.getSociedad());
-			call.setString(18, factura.getMoneda());System.out.println(factura.getMoneda());
+			call.registerOutParameter(4, OracleTypes.NUMBER);
+			call.setInt(5, 2);		
+			call.setInt(6, factura.getNu_factura());
+			call.setInt(7, factura.getNu_carta());
+			call.setInt(8, factura.getEstado());System.out.println(factura.getEstado());
+			call.setString(9, factura.getIva());System.out.println(factura.getIva());
+			call.setBigDecimal(10, (factura.getIsrRetenido()));System.out.println("isr RET"+factura.getIsrRetenido());
+			call.setBigDecimal(11, factura.getIvaRetenido());System.out.println(factura.getIvaRetenido());
+			call.setBigDecimal(12, factura.getImpuestoCedular());System.out.println(factura.getImpuestoCedular());
+			call.setString(13, factura.getViaP());System.out.println(factura.getViaP());
+			call.setInt(14, factura.getCuentaBanc());System.out.println(factura.getCuentaBanc());
+			call.setString(15, factura.getTpBanco());System.out.println(factura.getTpBanco());
+			call.setString(16, factura.getEstatusF());System.out.println(factura.getEstatusF());
+			call.setInt(17, factura.getProveedor());System.out.println(factura.getProveedor());
+			call.setString(18, factura.getSociedad());System.out.println(factura.getSociedad());
+			call.setString(19, factura.getMoneda());System.out.println(factura.getMoneda());
 			call.execute();
 			
 			nuerror = new Integer(call.getObject(1).toString());
 			
-			System.out.println("object 1 "+call.getObject(1));
+			System.out.println("object 1 "+call.getObject(4));
 			System.out.println("object 2 "+call.getObject(2));
 			nuerror = Integer.parseInt(call.getObject(1).toString());
 			if(nuerror == 0) {
 				listaRet.setBandera(true);
+				listaRet.setIvaout(Integer.parseInt(call.getObject(4).toString()));
 			}else {
 				listaRet.setBandera(false);
 			}
@@ -135,7 +137,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 	
 	
 	
-	public BeanRespuesta ValidaDatosConcep (int estado, int iva ) throws Exception {
+	public BeanRespuesta ValidaDatosConcep (int estado, String iva ) throws Exception {
 		BeanRespuesta respCon = new BeanRespuesta();
 		Integer nuerror = null;
 		ResultSet result = null;
@@ -147,26 +149,29 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.registerOutParameter(1, OracleTypes.NUMBER);
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
-			call.setInt(4, 3);	//P_ACCION 3	
-			call.setInt(5, 0);
+			call.registerOutParameter(4, OracleTypes.NUMBER);
+			call.setInt(5, 3);	//P_ACCION 3	
 			call.setInt(6, 0);
-			call.setInt(7, estado);
-			call.setInt(8, iva);
-			call.setBigDecimal(9, new BigDecimal("0.0"));
+			call.setInt(7, 0);
+			call.setInt(8, estado);
+			call.setString(9, iva);
 			call.setBigDecimal(10, new BigDecimal("0.0"));
 			call.setBigDecimal(11, new BigDecimal("0.0"));
-			call.setString(12, "");
-			call.setInt(13, 0);
-			call.setString(14, "");
+			call.setBigDecimal(12, new BigDecimal("0.0"));
+			call.setString(13, "");
+			call.setInt(14, 0);
 			call.setString(15, "");
-			call.setInt(16, 0);
-			call.setString(17, "SOCIEDAD");
-			call.setString(18, "MONEDA");
+			call.setString(16, "");
+			call.setInt(17, 0);
+			call.setString(18, "SOCIEDAD");
+			call.setString(19, "MONEDA");
 			call.execute();
 	
 			nuerror = new Integer(call.getObject(1).toString());
 			if(nuerror == 0) {
 				respCon.setBandera(true);
+				respCon.setIvaout(new Integer(call.getObject(4).toString()));
+				System.out.println(call.getObject(4).toString());
 			}else {
 				respCon.setBandera(false);
 			}
@@ -357,20 +362,22 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 	
 	
 	
-	public int cdIva(int cd_iva) throws Exception {
-		int iva = 0;
+	public BigDecimal cdIva(String cd_iva) throws Exception {
+		BigDecimal iva = null;
 		ResultSet resultSet = null;
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
 		CallableStatement call = null;
+		
 		try {
-			call = con.prepareCall("SELECT CD_VALOR_IVA FROM TXWV123_IVA WHERE NB_IVA = " + cd_iva);
+			String qry = "SELECT CD_VALOR_IVA FROM TXWV123_IVA WHERE NB_IVA = '" + cd_iva + "'";
+			call = con.prepareCall(qry);
 			resultSet = call.executeQuery();
 			while(resultSet.next()) {
-				iva = Integer.parseInt(resultSet.getString("CD_VALOR_IVA"));
+				iva = new BigDecimal(resultSet.getString("CD_VALOR_IVA"));
 			}
 		}catch (Exception e) {
-			LOG.warn("Error en al consultar cd_iva " + e);
+			LOG.warn("Error en al consultar cd_iva "+ e);
 		}finally {
 			closeAll(null, resultSet, null, call, con, obConexion);
 		}
@@ -379,13 +386,15 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 	}
 	
 	
-	public String parametro(int tp_param, String estatus) throws Exception {
+	public String parametro(int tp_param, String estatus){
 		String parametro = null;
-		ResultSet resultSet = null;
-		Conexion obConexion   = new Conexion();
-		Connection con =  obConexion.AbreConexion();
-		CallableStatement call = null;
+
 		try {
+			ResultSet resultSet = null;
+			Conexion obConexion   = new Conexion();
+			Connection con =  obConexion.AbreConexion();
+			CallableStatement call = null;
+			
 			String sql="SELECT CD_PARAM FROM GORAPR.TXWV180_PARAM_ALTA_FF WHERE TP_PARAM = " + tp_param +" AND CD_PARAM = '" + estatus+"'";
 			call = con.prepareCall(sql);
 			resultSet = call.executeQuery();
@@ -393,11 +402,10 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 				parametro = resultSet.getString("CD_PARAM");
 			}
 			
+			closeAll(null, resultSet, null, call, con, obConexion);
 			
 		}catch (Exception e) {
 			LOG.warn("Error" + e);
-		}finally {
-			closeAll(null, resultSet, null, call, con, obConexion);
 		}
 		return parametro;
 	}

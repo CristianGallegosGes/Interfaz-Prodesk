@@ -38,7 +38,7 @@ public class BeanFF {
 	private int estado;
 	private BigDecimal importeUn;   /*con dos decimales*/
 	private BigDecimal nu_unidades; /*con dos decimales*/
-	private int iva;
+	private String iva;
 	private BigDecimal isrRetenido;
 	private BigDecimal ivaRetenido;
 	private BigDecimal impuestoCedular;
@@ -57,9 +57,17 @@ public class BeanFF {
 	private String dbfideicomiso; 
 	private String dbperiodificacion; 
 	private String dbproviEjerAnterior;
+	private int dbiva;
 	
 	
 	
+	
+	public int getDbiva() {
+		return dbiva;
+	}
+	public void setDbiva(int dbiva) {
+		this.dbiva = dbiva;
+	}
 	public String getDbfideicomiso() {
 		return dbfideicomiso;
 	}
@@ -258,10 +266,10 @@ public class BeanFF {
 	public void setNu_unidades(BigDecimal nu_unidades) {
 		this.nu_unidades = nu_unidades;
 	}
-	public int getIva() {
+	public String getIva() {
 		return iva;
 	}
-	public void setIva(int iva) {
+	public void setIva(String iva) {
 		this.iva = iva;
 	}
 	public BigDecimal getIsrRetenido() {

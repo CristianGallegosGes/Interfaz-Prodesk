@@ -60,14 +60,12 @@ public class Conexion {
 		Context ctx = null;
 		DataSource dataSource = null;
 		try {
-			LOG.info("Connection AbreConexion");
 			ctx = new InitialContext();
 			dataSource = (DataSource) ctx.lookup("jdbc/xwvEXTMX");
 			conn = dataSource.getConnection();
 			LOG.info("Conexion CON Datasource");
 
 		} catch (Exception e) {
-			LOG.info(e.getMessage());
 
 			try {
 				OracleDataSource ods = new OracleDataSource();

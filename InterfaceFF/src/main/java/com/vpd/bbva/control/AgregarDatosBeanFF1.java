@@ -97,7 +97,7 @@ public class AgregarDatosBeanFF1 {
 			registroBeanFF.setEstado(Integer.parseInt(cadena.substring(326, 328).trim()));
 			registroBeanFF.setImporteUn(new BigDecimal(cadena.substring(328, 340).trim()));
 			registroBeanFF.setNu_unidades(new BigDecimal(cadena.substring(340, 353).trim()));
-			registroBeanFF.setIva(new Integer(cadena.substring(353, 365).trim()));
+			registroBeanFF.setIva(cadena.substring(353, 365).trim());
 
 			if (!(cadena.substring(365, 377).trim().equals(""))) {
 				registroBeanFF.setIsrRetenido(new BigDecimal(cadena.substring(365, 377).trim()));

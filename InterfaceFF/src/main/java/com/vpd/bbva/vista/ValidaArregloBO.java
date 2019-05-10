@@ -172,7 +172,7 @@ try {
 					boolean exito = false;
 					/*EN NOTA DE CREDITO SOLO SE VALIDA EL IVA EN LA DB ANTES DE CREARLA*/
 					int estado = 0;      
-					int iva    = leeNC.getIva();
+					String iva    = leeNC.getIva();
 					respNota = valida.ValidaDatosConcep(estado, iva);
 					if(respNota.GetBandera()) {
 						/* 1 Insertar posicion fin */
@@ -321,6 +321,8 @@ try {
 			
 		}catch (Exception e) {
 			respNota.setBandera(false);
+			respNota.setCarta(carta);
+			respNota.setFactura(factura);
 			respNota.setMensaje("ERROR AL CREAR LA NOTA DE CREDITO");
 		}
 		

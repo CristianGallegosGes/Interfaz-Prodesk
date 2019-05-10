@@ -3,7 +3,6 @@ package main.java.com.vpd.bbva.modelo;
 import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.Connection;
-import java.sql.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -17,7 +16,7 @@ import main.java.com.vpd.bbva.bean.BeanPosicionFin;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.conexion.Conexion;
 import main.java.com.vpd.bbva.constantes.DBConstantes;
-import oracle.jdbc.internal.OracleTypes;
+import oracle.jdbc.OracleTypes;
 
 public class InsertaDao extends GeneralDao{
 	static Logger LOG = Logger.getLogger(InsertaDao.class);
@@ -39,25 +38,25 @@ public class InsertaDao extends GeneralDao{
 				String nf = validaDatos.parametro(8, factura.getTp_registro());
 				while(factura.getTp_registro().equals(nf)) {
 			
-				call.setString(1, factura.getTp_carta());
-				call.setString(2, factura.getUsuarioCreador());
-				call.setString(3, factura.getSociedadRec());
-				call.setInt(4, factura.getNu_proveedor());
-				call.setString(5, factura.getGlg());
-				call.setInt(6, factura.getCuentaGps());
-				call.setInt(7, factura.getTp_pago());
-				call.setString(8, factura.getNu_anticipo());
-				call.setDate(9, factura.getFecha_anticipo());
-				call.setString(10, null); /*CR*/ 								
-				call.setString(11, factura.getMondena());
-				call.setInt(12, factura.getContrato());
-				call.setString(13, factura.getFideicomiso());
-				call.setString(14, factura.getNu_acreditado());
-				call.setInt(15, factura.getRecAlternativo());
-				call.setString(16, factura.getEmpGasBursa());
-				call.setString(17, factura.getNu_pep());
-				call.setString(18, factura.getPeriodificacion());
-				call.setString(19, factura.getProviEjerAnterior());
+				call.setString(1, factura.getTp_carta());  				
+				call.setString(2, factura.getUsuarioCreador());			
+				call.setString(3, factura.getSociedadRec());			
+				call.setInt(4, factura.getNu_proveedor());				
+				call.setString(5, factura.getGlg());					
+				call.setInt(6, factura.getCuentaGps());					
+				call.setInt(7, factura.getTp_pago());					
+				call.setString(8, factura.getNu_anticipo());			
+				call.setDate(9, factura.getFecha_anticipo());  			System.out.println(factura.getFecha_anticipo());
+				call.setString(10, null); /*CR*/ 									
+				call.setString(11, factura.getMondena());				
+				call.setInt(12, factura.getContrato());					
+				call.setString(13, factura.getDbfideicomiso());			System.out.println(factura.getDbfideicomiso());
+				call.setString(14, factura.getNu_acreditado());			
+				call.setInt(15, factura.getRecAlternativo());			
+				call.setString(16, factura.getEmpGasBursa());			
+				call.setString(17, factura.getNu_pep());				
+				call.setString(18, factura.getDbperiodificacion());		System.out.println(factura.getDbperiodificacion());
+				call.setString(19, factura.getDbproviEjerAnterior());	System.out.println(factura.getDbproviEjerAnterior());
 				call.registerOutParameter(20, OracleTypes.NUMBER);
 				call.registerOutParameter(21, OracleTypes.DATE);
 				call.registerOutParameter(22, OracleTypes.NUMBER);
@@ -105,21 +104,21 @@ public class InsertaDao extends GeneralDao{
 		try {
 			
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_POSICION_FINANCIERA);
-				call.setInt(1, posFac.getNu_carta());
-				call.setString(2, posFac.getStConcep());
-				call.setInt(3, posFac.getCuenta());
-				call.setString(4, posFac.getNb_servicio());
-				call.setDate(5, posFac.getFh_Inicio());
-				call.setDate(6, posFac.getFh_Fin());
-				call.setInt(7, posFac.getEntidad());
-				call.setInt(8, posFac.getCd_iva());
-				call.setBigDecimal(9, posFac.getIm_iva());
-				call.setBigDecimal(10, posFac.getNu_unidad());
-				call.setBigDecimal(11, posFac.getIm_sin_iva());
-				call.setBigDecimal(12, posFac.getIm_subtotal());
-				call.setString(13, posFac.getCd_uso_gral_pos1());
-				call.setString(14, posFac.getCd_uso_gral_pos2());
-				call.setString(15, posFac.getCd_cr());
+				call.setInt(1, posFac.getNu_carta());		System.out.println(posFac.getNu_carta());
+				call.setString(2, posFac.getStConcep());	System.out.println(posFac.getStConcep());
+				call.setInt(3, posFac.getCuenta());			System.out.println(posFac.getCuenta());
+				call.setString(4, posFac.getNb_servicio());	System.out.println(posFac.getNb_servicio());
+				call.setDate(5, posFac.getFh_Inicio());		System.out.println(posFac.getFh_Inicio());
+				call.setDate(6, posFac.getFh_Fin());		System.out.println(posFac.getFh_Fin());
+				call.setInt(7, posFac.getEntidad());		System.out.println(posFac.getEntidad());
+				call.setInt(8, posFac.getCd_iva());			System.out.println(posFac.getCd_iva());
+				call.setBigDecimal(9, posFac.getIm_iva());	System.out.println(posFac.getIm_iva());
+				call.setBigDecimal(10, posFac.getNu_unidad());	System.out.println(posFac.getNu_unidad());
+				call.setBigDecimal(11, posFac.getIm_sin_iva());	System.out.println(posFac.getIm_sin_iva());
+				call.setBigDecimal(12, posFac.getIm_subtotal());System.out.println(posFac.getIm_subtotal());
+				call.setString(13, posFac.getCd_uso_gral_pos1());System.out.println(posFac.getCd_uso_gral_pos1());
+				call.setString(14, posFac.getCd_uso_gral_pos2());System.out.println(posFac.getCd_uso_gral_pos2());
+				call.setString(15, posFac.getCd_cr());			System.out.println(posFac.getCd_cr());
 				call.registerOutParameter(16, OracleTypes.NUMBER);
 				call.registerOutParameter(17, OracleTypes.VARCHAR);
 				call.execute();
@@ -188,8 +187,8 @@ public class InsertaDao extends GeneralDao{
 			call.registerOutParameter(33, OracleTypes.VARCHAR);
 			call.execute();
 			
-				factura.put("factura", call.getObject(31).toString());
-				factura.put("exito", Integer.parseInt(call.getObject(32).toString()));
+				factura.put("factura", call.getObject(31).toString()); System.out.println(call.getObject(31).toString());
+				factura.put("exito", Integer.parseInt(call.getObject(32).toString())); System.out.println(call.getObject(32).toString());
 				factura.put("error", call.getObject(33).toString());
 				
 		}catch (Exception e) {
@@ -214,24 +213,25 @@ public class InsertaDao extends GeneralDao{
 			call.setInt(1, nota.getNu_factura());
 			call.setInt(2, nota.getNu_nota());
 			call.setString(3, nota.getTp_nota());
-			call.setString(5, nota.getSt_nota());
-			call.setString(6, nota.getCd_folio_sat());
-			call.setString(7, nota.getNb_servicio());
-			call.setDate(8,  nota.getFh_ini_servicio());
-			call.setDate(10, nota.getFh_ini_servicio());
-			call.setInt(11, nota.getCd_entidad());
-			call.setInt(12, nota.getCd_iva());
-			call.setBigDecimal(13, nota.getNu_unidad());
-			call.setBigDecimal(14, nota.getIm_sin_iva());
-			call.setBigDecimal(15, nota.getIm_subtotal());
-			call.setString(16, nota.getNb_motivo());
-			call.setString(17, nota.getCd_usr_modifica());
-			call.setString(18, nota.getNb_nombre_xml());
-			call.setString(19, nota.getNb_nombre_pdf());
-			call.setString(20, nota.getTp_carga());
-			call.setString(21, nota.getCd_uso_gral_not2());
-			call.registerOutParameter(22, OracleTypes.NUMBER);
-			call.registerOutParameter(23, OracleTypes.VARCHAR);
+			call.setString(4, nota.getSt_nota());
+			call.setString(5, nota.getCd_folio_sat());
+			call.setString(6, nota.getNb_servicio());
+			call.setDate(7,  nota.getFh_ini_servicio());
+			call.setDate(8, nota.getFg_fin_servicio());
+			call.setInt(9, nota.getCd_entidad());
+			call.setInt(10, nota.getCd_iva());
+			call.setBigDecimal(11, nota.getIm_iva());
+			call.setBigDecimal(12, nota.getNu_unidad());
+			call.setBigDecimal(13, nota.getIm_sin_iva());
+			call.setBigDecimal(14, nota.getIm_subtotal());
+			call.setString(15, nota.getNb_motivo());
+			call.setString(16, nota.getCd_usr_modifica());
+			call.setString(17, nota.getNb_nombre_xml());
+			call.setString(18, nota.getNb_nombre_pdf());
+			call.setString(19, nota.getTp_carga());
+			call.setString(20, nota.getCd_uso_gral_not2());
+			call.registerOutParameter(21, OracleTypes.NUMBER);
+			call.registerOutParameter(22, OracleTypes.VARCHAR);
 			call.execute();
 			
 			exito = Integer.parseInt(call.getObject(22).toString());
@@ -247,7 +247,7 @@ public class InsertaDao extends GeneralDao{
 	}
 	
 	public Integer insertConceptoFinan(BeanConceptoFin conceptoF) throws Exception{
-		Integer exito = 0;
+		Integer exito = null;
 		
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
@@ -256,19 +256,21 @@ public class InsertaDao extends GeneralDao{
 		try {			
 		con = obConexion.AbreConexion();
 		call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_CONCEPTO_FINANCIERA);
-		call.setInt(1, conceptoF.getNu_factura());
-		call.setString(2, conceptoF.getSt_concepto());
-		call.setInt(3, conceptoF.getNu_carta());
-		call.setInt(4, conceptoF.getNu_posicion_fin());
-		call.setString(5, conceptoF.getCd_usr_modifica());
-		call.setString(6, conceptoF.getCd_usr_gral_con1());
-		call.setString(7, conceptoF.getCd_usr_gral_con2());
-		call.setInt(8, conceptoF.getNu_nota());
+		
+		call.setInt(1, conceptoF.getNu_factura());				System.out.println(conceptoF.getNu_factura()+ ".");
+		call.setString(2, conceptoF.getSt_concepto());			System.out.println(conceptoF.getSt_concepto() + ".");
+		call.setInt(3, conceptoF.getNu_carta());				System.out.println(conceptoF.getNu_carta()+ ".");
+		call.setInt(4, conceptoF.getNu_posicion_fin());			System.out.println(conceptoF.getNu_posicion_fin()+".");
+		call.setString(5, conceptoF.getCd_usr_modifica());		System.out.println(conceptoF.getCd_usr_modifica());
+		call.setString(6, conceptoF.getCd_usr_gral_con1());		System.out.println(conceptoF.getCd_usr_gral_con1()+".");
+		call.setString(7, conceptoF.getCd_usr_gral_con2());		System.out.println(conceptoF.getCd_usr_gral_con2());
+		call.setInt(8, conceptoF.getNu_nota());					System.out.println(conceptoF.getNu_nota()+ ".");  
 		call.registerOutParameter(9, OracleTypes.NUMBER);
 		call.registerOutParameter(10, OracleTypes.VARCHAR);
-		
+		call.execute();
+		System.out.println("exito: "+call.getObject(9).toString());	
 		exito = Integer.parseInt(call.getObject(9).toString());
-				
+			
 		}catch (Exception e) {
 			LOG.warn("Error:" + e);
 			LOG.warn(call.getObject(10).toString());
@@ -278,7 +280,7 @@ public class InsertaDao extends GeneralDao{
 		return exito;
 	}
 	
-	public Integer insertViaP (int nuFactura, String moneda, String sociedad, int nu_proveedor) throws Exception {
+	public Integer insertViaP (int nuFactura, String viaPa,  String tpBanco) throws Exception {
 		Integer exito = 0;
 		
 		Conexion obConexion   = new Conexion();
@@ -289,17 +291,16 @@ public class InsertaDao extends GeneralDao{
 			con = obConexion.AbreConexion();
 			call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERTA_VPAGO);
 			call.setInt(1, nuFactura);
-			call.setString(2, moneda);
-			call.setString(3, sociedad);
-			call.setInt(4, nu_proveedor);
-			call.registerOutParameter(5, OracleTypes.NUMBER);
-			call.registerOutParameter(6, OracleTypes.VARCHAR);
+			call.setString(2, viaPa);
+			call.setString(3, tpBanco);
+			call.registerOutParameter(4, OracleTypes.NUMBER);
+			call.registerOutParameter(5, OracleTypes.VARCHAR);
 			call.execute();
 			exito = Integer.parseInt(call.getObject(5).toString());
 			
 		}catch (Exception e) {
 			LOG.warn("Error: " + e);
-			LOG.warn("Error: " + call.getObject(6).toString());
+			LOG.warn("Error: " + call.getObject(5).toString());
 		}finally {
 			closeAll(null, null, null, call, con, obConexion);
 		}

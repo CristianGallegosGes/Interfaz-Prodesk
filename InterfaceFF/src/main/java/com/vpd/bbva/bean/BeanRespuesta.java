@@ -7,11 +7,17 @@ public class BeanRespuesta {
 	private int factura = 0;
 	private int carta;
 	private String tp_registro;
+	private int ivaout;
 	
 	
 	
 	
-	
+	public int getIvaout() {
+		return ivaout;
+	}
+	public void setIvaout(int ivaout) {
+		this.ivaout = ivaout;
+	}
 	public String getTp_registro() {
 		return tp_registro;
 	}
