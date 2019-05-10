@@ -161,8 +161,8 @@ public class InsertaDao extends GeneralDao{
 			call.setBigDecimal(7, beanFac.getIm_sub_iva_oi_nf());
 			call.setBigDecimal(8, beanFac.getIm_isr_retenido_nf());
 			call.setBigDecimal(9, beanFac.getIm_iva_retenido_nf());
-			call.setBigDecimal(10, beanFac.getIm_impto_cedula_nf());
-			call.setBigDecimal(11, beanFac.getIm_impo_otros_nf());
+			call.setBigDecimal(10, beanFac.getIm_descuento());
+			call.setBigDecimal(11, beanFac.getIm_impo_otros_nf()); System.out.println(beanFac.getIm_impo_otros_nf());
 			call.setBigDecimal(12, beanFac.getIm_total_nf());
 			call.setBigDecimal(13, beanFac.getIm_subtotal_nc());
 			call.setBigDecimal(14, beanFac.getIm_iva_total_nc());

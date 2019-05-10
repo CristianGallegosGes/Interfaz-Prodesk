@@ -8,24 +8,24 @@ public class BeanFactura {
 	private String cd_usr_modifica;
 	private int nu_pedido;
 	private int nu_carta;
-	private BigDecimal im_subtotal_nf;
-	private BigDecimal im_iva_total_nf;
-	private BigDecimal im_sub_iva_oi_nf;
-	private BigDecimal im_isr_retenido_nf;
-	private BigDecimal im_iva_retenido_nf;
-	private BigDecimal im_impto_cedula_nf;
-	private BigDecimal im_impo_otros_nf;
-	private BigDecimal im_total_nf;
-	private BigDecimal im_subtotal_nc;
-	private BigDecimal im_iva_total_nc;
-	private BigDecimal im_sub_iva_oi_nc;
-	private BigDecimal im_isr_retenido_nc;
-	private BigDecimal im_iva_retenido_nc;
-	private BigDecimal im_impto_cedula_nc;
-	private BigDecimal im_impto_otros_nc;
-	private BigDecimal im_total_nc;
-	private BigDecimal im_bruto;
-	private BigDecimal im_neto_a_pagar;
+	private BigDecimal im_subtotal_nf= new BigDecimal("0");
+	private BigDecimal im_iva_total_nf= new BigDecimal("0");
+	private BigDecimal im_sub_iva_oi_nf= new BigDecimal("0");
+	private BigDecimal im_isr_retenido_nf= new BigDecimal("0");
+	private BigDecimal im_iva_retenido_nf= new BigDecimal("0");
+	private BigDecimal im_descuento= new BigDecimal("0");
+	private BigDecimal im_impo_otros_nf = new BigDecimal("0");
+	private BigDecimal im_total_nf= new BigDecimal("0");
+	private BigDecimal im_subtotal_nc= new BigDecimal("0");
+	private BigDecimal im_iva_total_nc= new BigDecimal("0");
+	private BigDecimal im_sub_iva_oi_nc= new BigDecimal("0");
+	private BigDecimal im_isr_retenido_nc= new BigDecimal("0");
+	private BigDecimal im_iva_retenido_nc= new BigDecimal("0");
+	private BigDecimal im_impto_cedula_nc= new BigDecimal("0");
+	private BigDecimal im_impto_otros_nc= new BigDecimal("0");
+	private BigDecimal im_total_nc= new BigDecimal("0");
+	private BigDecimal im_bruto= new BigDecimal("0");
+	private BigDecimal im_neto_a_pagar= new BigDecimal("0");
 	private String 	   nb_importe_letra;
 	private String 	   nb_motivo;
 	private String     cd_uso_gral_fac2;
@@ -88,11 +88,15 @@ public class BeanFactura {
 	public void setIm_iva_retenido_nf(BigDecimal im_iva_retenido_nf) {
 		this.im_iva_retenido_nf = im_iva_retenido_nf;
 	}
-	public BigDecimal getIm_impto_cedula_nf() {
-		return im_impto_cedula_nf;
+
+	
+	
+	
+	public BigDecimal getIm_descuento() {
+		return im_descuento;
 	}
-	public void setIm_impto_cedula_nf(BigDecimal im_impto_cedula_nf) {
-		this.im_impto_cedula_nf = im_impto_cedula_nf;
+	public void setIm_descuento(BigDecimal im_descuento) {
+		this.im_descuento = im_descuento;
 	}
 	public BigDecimal getIm_impo_otros_nf() {
 		return im_impo_otros_nf;
