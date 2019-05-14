@@ -321,23 +321,23 @@ public class InsertaDao extends GeneralDao{
 				
 			 con = obConexion.AbreConexion();
 			 call = con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA_FIN);
-			 call.setInt(1, pNotaCredito.getNu_carta());
-			 call.setInt(2, factura);
-			 call.setInt(3, pNotaCredito.getNu_nota());
-			 call.setString(4, pNotaCredito.getTp_nota());
-			 call.setString(5, pNotaCredito.getStConcep());
-			 call.setInt(6, pNotaCredito.getCuenta());
-			 call.setString(7, pNotaCredito.getNb_servicio());
-			 call.setDate(8, pNotaCredito.getFh_Inicio());
-			 call.setDate(9, pNotaCredito.getFh_Fin());
-			 call.setInt(10, pNotaCredito.getEntidad());
-			 call.setInt(11, pNotaCredito.getCd_iva());
-			 call.setBigDecimal(12, pNotaCredito.getIm_iva());
-			 call.setBigDecimal(13, pNotaCredito.getNu_unidad());
-			 call.setBigDecimal(14, pNotaCredito.getIm_sin_iva());
-			 call.setBigDecimal(15, pNotaCredito.getIm_subtotal());
-			 call.setString(16, pNotaCredito.getCd_cr());
-			 call.setString(17, pNotaCredito.getCd_usr_modifica());
+			 call.setInt(1, pNotaCredito.getNu_carta());			System.out.println(pNotaCredito.getNu_carta());
+			 call.setInt(2, factura);								System.out.println();
+			 call.setInt(3, pNotaCredito.getNu_nota());				System.out.println(pNotaCredito.getNu_nota());
+			 call.setString(4, pNotaCredito.getTp_nota());			System.out.println(pNotaCredito.getTp_nota());
+			 call.setString(5, pNotaCredito.getStConcep());			System.out.println(pNotaCredito.getStConcep());
+			 call.setInt(6, pNotaCredito.getCuenta());				System.out.println(pNotaCredito.getCuenta());
+			 call.setString(7, pNotaCredito.getNb_servicio());		System.out.println(pNotaCredito.getNb_servicio());
+			 call.setDate(8, pNotaCredito.getFh_Inicio());			System.out.println(pNotaCredito.getFh_Inicio());
+			 call.setDate(9, pNotaCredito.getFh_Fin());				System.out.println(pNotaCredito.getFh_Fin());
+			 call.setInt(10, pNotaCredito.getEntidad());			System.out.println(pNotaCredito.getEntidad());
+			 call.setInt(11, pNotaCredito.getCd_iva());				System.out.println(pNotaCredito.getCd_iva());
+			 call.setBigDecimal(12, pNotaCredito.getIm_iva());		System.out.println(pNotaCredito.getIm_iva());
+			 call.setBigDecimal(13, pNotaCredito.getNu_unidad());	System.out.println(pNotaCredito.getNu_unidad());
+			 call.setBigDecimal(14, pNotaCredito.getIm_sin_iva());	System.out.println(pNotaCredito.getIm_sin_iva());
+			 call.setBigDecimal(15, pNotaCredito.getIm_subtotal());	System.out.println(pNotaCredito.getIm_subtotal());
+			 call.setString(16, pNotaCredito.getCd_cr());			System.out.println(pNotaCredito.getCd_cr());
+			 call.setString(17, pNotaCredito.getCd_usr_modifica());	System.out.println(pNotaCredito.getCd_usr_modifica());
 			 call.registerOutParameter(18, OracleTypes.NUMBER);
 			 call.registerOutParameter(19, OracleTypes.VARCHAR);
 			 call.execute();
@@ -385,6 +385,7 @@ public class InsertaDao extends GeneralDao{
 			}
 		}catch (Exception e) {
 			LOG.warn("Error: "+e);
+			LOG.warn(call.getObject(11).toString());
 		}finally {
 				closeAll(null, null, null, call, con, obConexion);
 		}

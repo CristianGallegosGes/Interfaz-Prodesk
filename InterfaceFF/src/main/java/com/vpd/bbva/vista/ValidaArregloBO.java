@@ -156,14 +156,16 @@ try {
 		BeanRespuesta respNota = new BeanRespuesta();
 		int consecutivoA = 0;
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
-		ValidaGeneralDatosDB valida = new ValidaGeneralDatosDB(); 
+		ValidaGeneralDatosDB valida = new ValidaGeneralDatosDB();
+		int numFila = 0;
+		BigDecimal totalCredito = new BigDecimal("0.0") ;
 		for(BeanFF leeNC: notaC) {
+			++numFila;
 			try{
-			
 			String existe = dao.existe(leeNC.getTp_registro());
 			if(existe != null) {
 				String notaCredito = dao.parametro(10, leeNC.getTp_registro());
-				int numFila = 0;
+				
 				while(leeNC.getTp_registro().equals(notaCredito)) {
 					InsertaDao insert = new InsertaDao();
 					
@@ -177,42 +179,45 @@ try {
 					boolean exitoNC = new Boolean(respNotaCre.get("bandera").toString());
 					if(exitoNC) {
 						BigDecimal valorIva = new BigDecimal(respNotaCre.get("valorIva").toString());
+						leeNC.setDbiva(valorIva.intValue());
 						/* 1 Insertar posicion fin */
 						
 						LlenaObj llenaNotaC = new LlenaObj();
 						BeanPosicionFin nota;
 						
+						/*CONSULTAR EL TOTAL DE LA FACTURA*/
+						ValidaGeneralDatosDB consulTotal = new ValidaGeneralDatosDB();
+						BigDecimal totalFactura = null;
+						BigDecimal bdIsrRetenidoNF = null;
+						BigDecimal bdIvaRetenidoNF = null;
+						BigDecimal bdImpuestoCedularNF = null;
+						BigDecimal bdOtrosImpuestosNF = null;
+						ArrayList<BigDecimal> totalFac = consulTotal.totalNF(factura); /*TOTAL DE LA FACTURA*/
+						
+						for (int i=0; i<totalFac.size(); i++) {
+							totalFactura = totalFac.get(0);
+							bdIsrRetenidoNF = totalFac.get(1);
+							bdIvaRetenidoNF = totalFac.get(2);
+							bdImpuestoCedularNF = totalFac.get(3);
+							bdOtrosImpuestosNF = totalFac.get(4);
+						}
+						
+						
+						
+						
 						if(consecutivoA==0) {
+							++consecutivoA;
 						/*VALIDACIONES DE NEGOCIO*/
 							int param = 6;
 							nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param, valorIva);
 						boolean consulta = false;
 						
-							/*CONSULTAR EL TOTAL DE LA FACTURA*/
-							ValidaGeneralDatosDB consulTotal = new ValidaGeneralDatosDB();
-							BigDecimal totalFactura = null;
-							BigDecimal bdIsrRetenidoNF = null;
-							BigDecimal bdIvaRetenidoNF = null;
-							BigDecimal bdImpuestoCedularNF = null;
-							BigDecimal bdOtrosImpuestosNF = null;
-							ArrayList<BigDecimal> totalFac = consulTotal.totalNF(factura); /*TOTAL DE LA FACTURA*/
-							
-							for (int i=0; i<totalFac.size(); i++) {
-								totalFactura = totalFac.get(0);
-								bdIsrRetenidoNF = totalFac.get(1);
-								bdIvaRetenidoNF = totalFac.get(2);
-								bdImpuestoCedularNF = totalFac.get(3);
-								bdOtrosImpuestosNF = totalFac.get(4);
-							}
-						
-							
-						
-						BigDecimal totalCredito = null ;   /*SUMA TOTAL DE TODAS LAS NOTAS DE CREDITO*/
+						/*SUMA TOTAL DE TODAS LAS NOTAS DE CREDITO*/
 						BigDecimal impIVA = nota.getIm_iva();			/*IMPORTE DEL IVA DE LA NOTA DE CREDITO*/
 						BigDecimal unidades = nota.getNu_unidad();		/* No. UDIDADES DE LA NOTA DE CREDITO*/
 						BigDecimal importSinIVA = nota.getIm_sin_iva();	/* IMPORTE SIN I.V.A.*/
 						
-						totalCredito = totalCredito.add(unidades).multiply(importSinIVA).add(impIVA);
+						totalCredito = totalCredito.add(impIVA).add((unidades).multiply(importSinIVA));
 						
 						/*Total Credito < = Total Factura*/
 						if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
@@ -222,7 +227,7 @@ try {
 							/* RETENCIONES = ISR RETENIDO + IVA RETENIDO + IMPUESTO CEDULAR */
 							/* TOTAL DE CREDITO = (UNIDADES * IMPORTE SIN IVA) + IVA */
 							
-							BigDecimal retencion = leeNC.getIsrRetenido().add(leeNC.getIvaRetenido().add(leeNC.getImpuestoCedular()));
+							BigDecimal retencion = leeNC.getIsrRetenido().add(leeNC.getIvaRetenido().add(leeNC.getDescuento()));
 							
 							/* RETENCIONES <= TOTAL CREDITO */
 							if (retencion.compareTo(totalCredito) == -1 || retencion.compareTo(totalCredito) == 1) {
@@ -235,97 +240,130 @@ try {
 								
 							
 								/*CALCULAR IMPORTES DE FACTURA*/
-								insert.calculaImportesFac(factura, bdIsrRetenidoNF, bdIvaRetenidoNF, bdImpuestoCedularNF, bdOtrosImpuestosNF, 
-								leeNC.getIsrRetenido(),	leeNC.getIvaRetenido(), leeNC.getImpuestoCedular(), leeNC.getOtrosImpuestos());
+								insert.calculaImportesFac(factura, new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), 
+								leeNC.getIsrRetenido(),	leeNC.getIvaRetenido(), leeNC.getDescuento(), leeNC.getOtrosImpuestos());
 							
 								respNota.setBandera(true);
 								respNota.setCarta(carta);
 								respNota.setFactura(factura);
 								respNota.setMensaje("NOTA DE CREDITO CREADA");
-								respNota.setConsecutivoA(consecutivoA);
+								respNota.setConsecutivoA(numFila);
 								notas.add(respNota);
+								break;
 							}else {
 								String msjError = "ERROR AL CREAR NOTA CREDITO";
 								respNota.setBandera(false);
 								respNota.setMensaje(msjError);
-								respNota.setConsecutivoA(consecutivoA);
+								respNota.setConsecutivoA(numFila);
 								notas.add(respNota);
+								return notas;
 								
 							}
 					}else {
 						String msjError = "LOS MONTOS GENERAN UN TOTAL DE CREDITO MENOR A CERO";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
-						respNota.setConsecutivoA(consecutivoA);
+						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
 					}
 					}else {
 						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
-						respNota.setConsecutivoA(consecutivoA);
+						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
 					}
 	}else {
+		++consecutivoA;
 		/*CREAR CONCEPTO DE NOTA CREDITO*/
 		int param = 14;
 		nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param, valorIva);
-		HashMap<String, Object> posicion = insert.insertaPosicionFinanciera(nota);
 		
-		String nuPos= posicion.get("nu_posicion_F").toString();
-		Integer ok  = new Integer(posicion.get("exito").toString());
-		if(ok == 0) {
-			
+		/*SUMA TOTAL DE TODAS LAS NOTAS DE CREDITO*/
+		BigDecimal impIVA = nota.getIm_iva();			/*IMPORTE DEL IVA DE LA NOTA DE CREDITO*/
+		BigDecimal unidades = nota.getNu_unidad();		/* No. UDIDADES DE LA NOTA DE CREDITO*/
+		BigDecimal importSinIVA = nota.getIm_sin_iva();	/* IMPORTE SIN I.V.A.*/
 		
-			BeanConceptoFin concFin = llenaNotaC.llenaConceptoF(leeNC.getUsuarioCreador(), factura, carta, new Integer(nuPos), nota.getNu_nota()-1) ;
-			Integer proceso = insert.insertConceptoFinan(concFin);
-			if(proceso > 1) {
-				/*CALCULAR IMPORTES DE FACTURA*/
-				insert.calculaImportesFac(factura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
-						new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
-						new BigDecimal("0"));  
+		totalCredito = totalCredito.add((unidades).multiply(importSinIVA)).add(impIVA);
+		
+		/*Total Credito < = Total Factura*/
+		if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
+
+			/* CALCULOS DE NEGOCIO */
+			/* RETENCIONES = ISR RETENIDO + IVA RETENIDO + IMPUESTO CEDULAR */
+			/* TOTAL DE CREDITO = (UNIDADES * IMPORTE SIN IVA) + IVA */
+		
+				HashMap<String, Object> posicion = insert.insertaPosicionFinanciera(nota);
 				
-				respNota.setBandera(true);
-				respNota.setCarta(carta);
-				respNota.setFactura(factura);
-				respNota.setMensaje("CONCEPTO DE NOTA DE CREDITO CREADO");
-				respNota.setConsecutivoA(consecutivoA);
-				notas.add(respNota);
-			}else {
-				respNota.setBandera(false);
-				respNota.setMensaje("ERROR AL GUARDAR NUEVO CONCEPTO DE NC");
-				respNota.setConsecutivoA(consecutivoA);
-				notas.add(respNota);
-			}
-		
+				String nuPos= posicion.get("nu_posicion_F").toString();
+				Integer ok  = new Integer(posicion.get("exito").toString());
+				if(ok == 0) {
+					
+				
+					BeanConceptoFin concFin = llenaNotaC.llenaConceptoF(leeNC.getUsuarioCreador(), factura, carta, new Integer(nuPos), nota.getNu_nota()-1) ;
+					Integer proceso = insert.insertConceptoFinan(concFin);
+					if(proceso == 0) {
+						/*CALCULAR IMPORTES DE FACTURA*/
+						insert.calculaImportesFac(factura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+								new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+								new BigDecimal("0"));  
+						
+						respNota.setBandera(true);
+						respNota.setCarta(carta);
+						respNota.setFactura(factura);
+						respNota.setMensaje("CONCEPTO DE NOTA DE CREDITO CREADO");
+						respNota.setConsecutivoA(numFila);
+						notas.add(respNota);
+						break;
+					}else {
+						respNota.setBandera(false);
+						respNota.setMensaje("ERROR AL GUARDAR NUEVO CONCEPTO DE NC");
+						respNota.setConsecutivoA(numFila);
+						notas.add(respNota);
+						break;
+					}
+				
+				}else {
+					respNota.setBandera(false);
+					respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC" + nuPos);
+					respNota.setConsecutivoA(numFila);
+					notas.add(respNota);
+					break;
+				}
+
 		}else {
+			String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
 			respNota.setBandera(false);
-			respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC" + nuPos);
-			respNota.setConsecutivoA(consecutivoA);
+			respNota.setMensaje(msjError);
+			respNota.setConsecutivoA(numFila);
 			notas.add(respNota);
+			return notas;
 		}
+		
+	
 		
 		
 	}
 					}else {
-						respNota.setConsecutivoA(consecutivoA);
+						respNota.setConsecutivoA(numFila);
 						respNota.setBandera(exitoNC);
 						respNota.setMensaje(respNotaCre.get("mensaje").toString());
 						notas.add(respNota);
+						return notas;
 					}
-					
-					++numFila;	
-				
+
 				}
+				
 			}else {
 				respNota.setBandera(false);
 				respNota.setMensaje("TIPO REGISTRO " + leeNC.getTp_registro() + "NO EXISTE");
-				respNota.setConsecutivoA(consecutivoA);
+				respNota.setConsecutivoA(numFila);
 				notas.add(respNota);
+				return notas;
 			}
 				
 			
-			++consecutivoA;
+				
 			
 		}catch (Exception e) {
 			respNota.setBandera(false);
@@ -333,7 +371,7 @@ try {
 			respNota.setFactura(factura);
 			respNota.setMensaje("ERROR AL CREAR LA NOTA DE CREDITO");
 		}
-		
+				
 		}return notas;
 	}
 	

@@ -11,6 +11,7 @@ import java.util.List;
 
 import org.apache.log4j.Logger;
 
+import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
 import main.java.com.vpd.bbva.bean.BeanFacturaNVA;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;

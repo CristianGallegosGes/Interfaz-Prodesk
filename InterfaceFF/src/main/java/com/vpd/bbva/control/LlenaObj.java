@@ -354,12 +354,12 @@ public class LlenaObj {
 public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc, int numFila, int carta, int factura, int param, BigDecimal valorIva) throws Exception {
 	int posicion = 0;
 	BeanPosicionFin concep = new BeanPosicionFin();
-	for (BeanFF beanFF : listaBloque) {
+	for (BeanFF beanFF : listaBloque) {								System.out.println(beanFF.getTp_registro());
+	++posicion;
 		while(beanFF.getTp_registro().equals(nc) && posicion == numFila) {
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
 				String status = dao.paramNC(param,beanFF.getEstatusF());
-				BigDecimal im_ivaDB =(valorIva).divide(new BigDecimal("100"));
-				BigDecimal im_iva = (beanFF.getNu_unidades().multiply(beanFF.getImporteUn())).multiply(im_ivaDB);
+				BigDecimal im_iva = (beanFF.getNu_unidades().multiply(beanFF.getImporteUn().multiply(valorIva))).divide(new BigDecimal("100")).setScale(2, BigDecimal.ROUND_HALF_UP);
 			concep.setNu_carta(carta);
 			concep.setStConcep(status);
 				int num_nota = dao.nuNota(factura);
@@ -367,10 +367,10 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 			concep.setTp_nota(nc);
 			concep.setCuenta(beanFF.getCuentaGps());
 			concep.setNb_servicio(beanFF.getDescripServicio());
-			concep.setFh_Inicio(new Date(beanFF.getFechaInicio().getTime()));
-			concep.setFh_Fin(new Date(beanFF.getFechaFin().getTime()));
+			concep.setFh_Inicio(beanFF.getFechaInicio());
+			concep.setFh_Fin(beanFF.getFechaFin());
 			concep.setEntidad(beanFF.getEstado());
-			concep.setCd_iva(beanFF.getDbiva());
+			concep.setCd_iva(beanFF.getDbiva());System.out.println(beanFF.getDbiva());
 			concep.setIm_iva(im_iva);
 			concep.setNu_unidad(beanFF.getNu_unidades());  			/*	Numero de unidades */
 			concep.setIm_sin_iva(beanFF.getImporteUn());			/*	Importe unitario */
@@ -380,7 +380,8 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 			concep.setCd_uso_gral_pos1("");
 			concep.setCd_uso_gral_pos2("");
 			concep.setCd_cr(beanFF.getCentroCostos());
-		}++posicion;
+			break;
+		}
 	}
 	return concep;
 	}
