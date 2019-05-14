@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 import org.apache.log4j.Logger;
@@ -78,14 +79,14 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 		
 	}
 	
-	public BeanRespuesta DatosNvaFactura(BeanFacturaNVA factura) throws Exception {
+	public HashMap<String, Object> DatosNvaFactura(BeanFacturaNVA factura) throws Exception {
 		
 		Integer nuerror = null;
 		ResultSet result = null;
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
 		CallableStatement call = null;
-		BeanRespuesta listaRet = new BeanRespuesta();
+		HashMap<String, Object> beanres= new HashMap();
 		
 		try {
 			
@@ -94,35 +95,39 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
 			call.registerOutParameter(4, OracleTypes.NUMBER);
-			call.setInt(5, 2);		
-			call.setInt(6, factura.getNu_factura());
-			call.setInt(7, factura.getNu_carta());
-			call.setInt(8, factura.getEstado());System.out.println(factura.getEstado());
-			call.setString(9, factura.getIva());System.out.println(factura.getIva());
-			call.setBigDecimal(10, (factura.getIsrRetenido()));System.out.println("isr RET"+factura.getIsrRetenido());
-			call.setBigDecimal(11, factura.getIvaRetenido());System.out.println(factura.getIvaRetenido());
-			call.setBigDecimal(12, factura.getImpuestoCedular());System.out.println(factura.getImpuestoCedular());
-			call.setString(13, factura.getViaP());System.out.println(factura.getViaP());
-			call.setInt(14, factura.getCuentaBanc());System.out.println(factura.getCuentaBanc());
-			call.setString(15, factura.getTpBanco());System.out.println(factura.getTpBanco());
-			call.setString(16, factura.getEstatusF());System.out.println(factura.getEstatusF());
-			call.setInt(17, factura.getProveedor());System.out.println(factura.getProveedor());
-			call.setString(18, factura.getSociedad());System.out.println(factura.getSociedad());
-			call.setString(19, factura.getMoneda());System.out.println(factura.getMoneda());
+			call.registerOutParameter(5, OracleTypes.NUMBER);
+			call.setInt(6, 2);		
+			call.setInt(7, factura.getNu_factura());
+			call.setInt(8, factura.getNu_carta());
+			call.setInt(9, factura.getEstado());System.out.println(factura.getEstado());
+			call.setString(10, factura.getIva());System.out.println(factura.getIva());
+			call.setBigDecimal(11, (factura.getIsrRetenido()));System.out.println("isr RET"+factura.getIsrRetenido());
+			call.setBigDecimal(12, factura.getIvaRetenido());System.out.println(factura.getIvaRetenido());
+			call.setBigDecimal(13, factura.getImpuestoCedular());System.out.println(factura.getImpuestoCedular());
+			call.setString(14, factura.getViaP());System.out.println(factura.getViaP());
+			call.setInt(15, factura.getCuentaBanc());System.out.println(factura.getCuentaBanc());
+			call.setString(16, factura.getTpBanco());System.out.println(factura.getTpBanco());
+			call.setString(17, factura.getEstatusF());System.out.println(factura.getEstatusF());
+			call.setInt(18, factura.getProveedor());System.out.println(factura.getProveedor());
+			call.setString(19, factura.getSociedad());System.out.println(factura.getSociedad());
+			call.setString(20, factura.getMoneda());System.out.println(factura.getMoneda());
 			call.execute();
 			
 			nuerror = new Integer(call.getObject(1).toString());
 			
 			System.out.println("object 1 "+call.getObject(4));
-			System.out.println("object 2 "+call.getObject(2));
+			System.out.println("Valor iva "+call.getObject(5));
 			nuerror = Integer.parseInt(call.getObject(1).toString());
 			if(nuerror == 0) {
-				listaRet.setBandera(true);
-				listaRet.setIvaout(Integer.parseInt(call.getObject(4).toString()));
+				beanres.put("bandera", true);
+				beanres.put("iva", call.getObject(4).toString());
+				beanres.put("valorIva", call.getObject(5).toString());
+				System.out.println(call.getObject(5).toString());
+				System.out.println(call.getObject(4).toString());
 			}else {
-				listaRet.setBandera(false);
+				beanres.put("bandera", false);
 			}
-			listaRet.setMensaje(call.getObject(2).toString());
+			beanres.put("mensaje", call.getObject(2).toString());
 			
 			
 		}catch(Exception e){
@@ -132,13 +137,13 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			closeAll(null, result, null, call, con, obConexion);
 		}
 		
-		return listaRet;
+		return beanres;
 	}
 	
 	
 	
-	public BeanRespuesta ValidaDatosConcep (int estado, String iva ) throws Exception {
-		BeanRespuesta respCon = new BeanRespuesta();
+	public HashMap<String, Object> ValidaDatosConcep (int estado, String iva ) throws Exception {
+		HashMap<String, Object> respCon = new HashMap<String, Object>();
 		Integer nuerror = null;
 		ResultSet result = null;
 		Conexion obConexion   = new Conexion();
@@ -150,33 +155,35 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.registerOutParameter(2, OracleTypes.VARCHAR);
 			call.registerOutParameter(3, OracleTypes.CURSOR);
 			call.registerOutParameter(4, OracleTypes.NUMBER);
-			call.setInt(5, 3);	//P_ACCION 3	
-			call.setInt(6, 0);
+			call.registerOutParameter(5, OracleTypes.NUMBER);
+			call.setInt(6, 3);	//P_ACCION 3	
 			call.setInt(7, 0);
-			call.setInt(8, estado);
-			call.setString(9, iva);
-			call.setBigDecimal(10, new BigDecimal("0.0"));
+			call.setInt(8, 0);
+			call.setInt(9, estado);
+			call.setString(10, iva);
 			call.setBigDecimal(11, new BigDecimal("0.0"));
 			call.setBigDecimal(12, new BigDecimal("0.0"));
-			call.setString(13, "");
-			call.setInt(14, 0);
-			call.setString(15, "");
+			call.setBigDecimal(13, new BigDecimal("0.0"));
+			call.setString(14, "");
+			call.setInt(15, 0);
 			call.setString(16, "");
-			call.setInt(17, 0);
-			call.setString(18, "SOCIEDAD");
-			call.setString(19, "MONEDA");
+			call.setString(17, "");
+			call.setInt(18, 0);
+			call.setString(19, "SOCIEDAD");
+			call.setString(20, "MONEDA");
 			call.execute();
 	
 			nuerror = new Integer(call.getObject(1).toString());
 			if(nuerror == 0) {
-				respCon.setBandera(true);
-				respCon.setIvaout(new Integer(call.getObject(4).toString()));
+				respCon.put("bandera", true);
+				respCon.put("iva", call.getObject(4).toString());
+				respCon.put("valorIva", call.getObject(5).toString());
+				System.out.println(call.getObject(5).toString());
 				System.out.println(call.getObject(4).toString());
 			}else {
-				respCon.setBandera(false);
+				respCon.put("bandera", false);
 			}
-			respCon.setMensaje(call.getObject(2).toString());
-			
+			respCon.put("mensaje", call.getObject(2).toString());
 			
 		}catch(Exception e){
 			LOG.warn("Error: "+e);

@@ -191,17 +191,19 @@ public class LlenaObj {
 			int consecBean = 0;
 			BeanRespuesta respFacNva = new BeanRespuesta();
 			boolean error = false;
+			BigDecimal otrosImp = null;
+			BigDecimal totalFactura = new BigDecimal("0.0");
+			BigDecimal descuenTotal = null;
+			try {
 			for (BeanFF beanFF : factura) {
-				System.out.println("hola " + consecBean);
 				while(beanFF.getTp_registro().equals(nf)) {
-				
 					facNva.setNu_factura(beanFF.getNu_carta());
 					facNva.setNu_carta(beanFF.getNu_carta());
 					facNva.setEstado(beanFF.getEstado());System.out.println(beanFF.getEstado());
 					facNva.setIva(beanFF.getIva());System.out.println(beanFF.getIva());
 					facNva.setIsrRetenido(beanFF.getIsrRetenido());
 					facNva.setIvaRetenido(beanFF.getIvaRetenido());
-					facNva.setImpuestoCedular(beanFF.getImpuestoCedular());
+					facNva.setImpuestoCedular(beanFF.getDescuento());
 					facNva.setViaP(beanFF.getViaP());
 					facNva.setCuentaBanc(beanFF.getCuentaBanc());
 					facNva.setTpBanco(beanFF.getTpBanco());
@@ -209,22 +211,75 @@ public class LlenaObj {
 					facNva.setProveedor(beanFF.getNu_proveedor());
 					facNva.setSociedad(beanFF.getSociedadRec());
 					facNva.setMoneda(beanFF.getMondena());
+					
+					/*DESCUENTO DE FACTURA */
+					descuenTotal =  beanFF.getIsrRetenido().add(beanFF.getIvaRetenido().add(beanFF.getDescuento()));
+					boolean datosDao = false;
 					if(consecBean == 0) {
-					respFacNva = validaDB.DatosNvaFactura(facNva);
-					beanFF.setDbiva(respFacNva.getIvaout());System.out.println(respFacNva.getIvaout());
-						if(respFacNva.GetBandera()==false) {
+					HashMap<String, Object>  daoVal= validaDB.DatosNvaFactura(facNva);
+						datosDao = new Boolean(daoVal.get("bandera").toString());
+						String mensaje = daoVal.get("mensaje").toString();
+						
+						if(datosDao) {
+							/*	VALIDACIONES DE IMPORTES */
+							beanFF.setDbiva(Integer.parseInt(daoVal.get("iva").toString()));	System.out.println("cd iva "+daoVal.get("iva").toString());
+							
+							BigDecimal valorIva = new BigDecimal(daoVal.get("valorIva").toString());
+							BigDecimal subtotal = new BigDecimal("0.0");
+									   subtotal = subtotal.add(beanFF.getNu_unidades().multiply(beanFF.getImporteUn()));
+							BigDecimal iva = (subtotal.multiply(valorIva)).divide(new BigDecimal("100"));
+							otrosImp = beanFF.getOtrosImpuestos();
+							totalFactura = totalFactura.add(subtotal.add(iva).add(otrosImp));
+							if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+								respFacNva.setBandera(datosDao);
+							}else {
+								respFacNva.setBandera(false);
+								respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+								respFacNva.setConsecutivoA(consecBean);
+								error = true;
+							}
+							
+							
+						}else {
+							respFacNva.setBandera(datosDao);
+							respFacNva.setMensaje(mensaje);
 							respFacNva.setConsecutivoA(consecBean);
 							error = true;
-						}break;
+						}
+						break;
 					
 					}else {				/** VALIDAR ESTADO Y TIPO DE IVA  DE CADA CONCEPTO**/
-						respFacNva = validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva());
-						beanFF.setDbiva(respFacNva.getIvaout());System.out.println("iva con" + respFacNva.getIvaout());
-						if(respFacNva.GetBandera()==false) {
-							respFacNva.setConsecutivoA(consecBean);
-							error = true;
-							break;
-						}break;
+								HashMap<String, Object> concepto= validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva());
+								beanFF.setDbiva(Integer.parseInt(concepto.get("iva").toString()));		System.out.println("cd iva" + respFacNva.getIvaout());
+								datosDao = new Boolean(concepto.get("bandera").toString());
+								String mensaje = concepto.get("mensaje").toString();
+								/*LOS DATOS EN LA BASE DE DATOS FUERON CORRECTOS*/
+								if(datosDao) {
+									/*CALCULAR IMPORTES*/
+									BigDecimal valorIvaCon = new BigDecimal(concepto.get("valorIva").toString());
+									BigDecimal subtotalCon = new BigDecimal("0.0");
+									subtotalCon = subtotalCon.add(beanFF.getNu_unidades().multiply(beanFF.getImporteUn()));
+									BigDecimal iva = (subtotalCon.multiply(valorIvaCon)).divide(new BigDecimal("100"));
+									otrosImp = beanFF.getOtrosImpuestos();
+									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
+									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+										respFacNva.setBandera(datosDao);
+									}else {
+										respFacNva.setBandera(false);
+										respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+										respFacNva.setConsecutivoA(consecBean);
+										error = true;
+									}
+									
+									
+								}else {
+									respFacNva.setConsecutivoA(consecBean);
+									respFacNva.setBandera(datosDao);
+									respFacNva.setMensaje(mensaje);
+									error = true;
+									break;
+								}
+								break;
 					}
 					
 				}++consecBean;
@@ -232,6 +287,11 @@ public class LlenaObj {
 				if(error) {
 					break;
 				}
+			}
+			}catch (Exception e) {
+				respFacNva.setBandera(false);
+				respFacNva.setMensaje("ERROR AL VALIDAR LOS DATOS DE FACTURA");
+				respFacNva.setConsecutivoA(consecBean);
 			}
 		
 			return respFacNva;
@@ -249,7 +309,7 @@ public class LlenaObj {
 					facNva.setNu_carta(beanFF.getNu_carta());
 					facNva.setIsrRetenido(beanFF.getIsrRetenido());
 					facNva.setIvaRetenido(beanFF.getIvaRetenido());
-					facNva.setImpuestoCedular(beanFF.getImpuestoCedular());
+					facNva.setImpuestoCedular(beanFF.getDescuento());
 					
 					facNva.setViaP(beanFF.getViaP());
 					facNva.setCuentaBanc(beanFF.getCuentaBanc());
@@ -291,14 +351,14 @@ public class LlenaObj {
 	}
 
 
-public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc, int numFila, int carta, int factura, int param) throws Exception {
+public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc, int numFila, int carta, int factura, int param, BigDecimal valorIva) throws Exception {
 	int posicion = 0;
 	BeanPosicionFin concep = new BeanPosicionFin();
 	for (BeanFF beanFF : listaBloque) {
 		while(beanFF.getTp_registro().equals(nc) && posicion == numFila) {
 		ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
 				String status = dao.paramNC(param,beanFF.getEstatusF());
-				BigDecimal im_ivaDB =(dao.cdIva(beanFF.getIva())).divide(new BigDecimal("100"));
+				BigDecimal im_ivaDB =(valorIva).divide(new BigDecimal("100"));
 				BigDecimal im_iva = (beanFF.getNu_unidades().multiply(beanFF.getImporteUn())).multiply(im_ivaDB);
 			concep.setNu_carta(carta);
 			concep.setStConcep(status);

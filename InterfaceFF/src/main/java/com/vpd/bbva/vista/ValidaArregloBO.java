@@ -173,8 +173,10 @@ try {
 					/*EN NOTA DE CREDITO SOLO SE VALIDA EL IVA EN LA DB ANTES DE CREARLA*/
 					int estado = 0;      
 					String iva    = leeNC.getIva();
-					respNota = valida.ValidaDatosConcep(estado, iva);
-					if(respNota.GetBandera()) {
+					HashMap<String, Object> respNotaCre= valida.ValidaDatosConcep(estado, iva);
+					boolean exitoNC = new Boolean(respNotaCre.get("bandera").toString());
+					if(exitoNC) {
+						BigDecimal valorIva = new BigDecimal(respNotaCre.get("valorIva").toString());
 						/* 1 Insertar posicion fin */
 						
 						LlenaObj llenaNotaC = new LlenaObj();
@@ -183,7 +185,7 @@ try {
 						if(consecutivoA==0) {
 						/*VALIDACIONES DE NEGOCIO*/
 							int param = 6;
-							nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param);
+							nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param, valorIva);
 						boolean consulta = false;
 						
 							/*CONSULTAR EL TOTAL DE LA FACTURA*/
@@ -264,45 +266,51 @@ try {
 						respNota.setConsecutivoA(consecutivoA);
 						notas.add(respNota);
 					}
-						}else {
-							/*CREAR CONCEPTO DE NOTA CREDITO*/
-							int param = 14;
-							nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param);
-							HashMap<String, Object> posicion = insert.insertaPosicionFinanciera(nota);
-							
-							String nuPos= posicion.get("nu_posicion_F").toString();
-							Integer ok  = new Integer(posicion.get("exito").toString());
-							if(ok == 0) {
-								
-							
-								BeanConceptoFin concFin = llenaNotaC.llenaConceptoF(leeNC.getUsuarioCreador(), factura, carta, new Integer(nuPos), nota.getNu_nota()-1) ;
-								Integer proceso = insert.insertConceptoFinan(concFin);
-								if(proceso > 1) {
-									/*CALCULAR IMPORTES DE FACTURA*/
-									respNota.setBandera(true);
-									respNota.setCarta(carta);
-									respNota.setFactura(factura);
-									respNota.setMensaje("CONCEPTO DE NOTA DE CREDITO CREADO");
-									respNota.setConsecutivoA(consecutivoA);
-									notas.add(respNota);
-								}else {
-									respNota.setBandera(false);
-									respNota.setMensaje("ERROR AL GUARDAR NUEVO CONCEPTO DE NC");
-									respNota.setConsecutivoA(consecutivoA);
-									notas.add(respNota);
-								}
-							
-							}else {
-								respNota.setBandera(false);
-								respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC" + nuPos);
-								respNota.setConsecutivoA(consecutivoA);
-								notas.add(respNota);
-							}
-							
-							
-						}
+	}else {
+		/*CREAR CONCEPTO DE NOTA CREDITO*/
+		int param = 14;
+		nota =  llenaNotaC.llenaPosicionFNotaC(notaC, notaCredito, numFila, carta, factura,param, valorIva);
+		HashMap<String, Object> posicion = insert.insertaPosicionFinanciera(nota);
+		
+		String nuPos= posicion.get("nu_posicion_F").toString();
+		Integer ok  = new Integer(posicion.get("exito").toString());
+		if(ok == 0) {
+			
+		
+			BeanConceptoFin concFin = llenaNotaC.llenaConceptoF(leeNC.getUsuarioCreador(), factura, carta, new Integer(nuPos), nota.getNu_nota()-1) ;
+			Integer proceso = insert.insertConceptoFinan(concFin);
+			if(proceso > 1) {
+				/*CALCULAR IMPORTES DE FACTURA*/
+				insert.calculaImportesFac(factura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+						new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+						new BigDecimal("0"));  
+				
+				respNota.setBandera(true);
+				respNota.setCarta(carta);
+				respNota.setFactura(factura);
+				respNota.setMensaje("CONCEPTO DE NOTA DE CREDITO CREADO");
+				respNota.setConsecutivoA(consecutivoA);
+				notas.add(respNota);
+			}else {
+				respNota.setBandera(false);
+				respNota.setMensaje("ERROR AL GUARDAR NUEVO CONCEPTO DE NC");
+				respNota.setConsecutivoA(consecutivoA);
+				notas.add(respNota);
+			}
+		
+		}else {
+			respNota.setBandera(false);
+			respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC" + nuPos);
+			respNota.setConsecutivoA(consecutivoA);
+			notas.add(respNota);
+		}
+		
+		
+	}
 					}else {
 						respNota.setConsecutivoA(consecutivoA);
+						respNota.setBandera(exitoNC);
+						respNota.setMensaje(respNotaCre.get("mensaje").toString());
 						notas.add(respNota);
 					}
 					

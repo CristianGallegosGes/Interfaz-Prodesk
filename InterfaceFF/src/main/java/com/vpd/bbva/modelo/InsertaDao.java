@@ -384,7 +384,7 @@ public class InsertaDao extends GeneralDao{
 				exito = true;
 			}
 		}catch (Exception e) {
-			// TODO: handle exception
+			LOG.warn("Error: "+e);
 		}finally {
 				closeAll(null, null, null, call, con, obConexion);
 		}

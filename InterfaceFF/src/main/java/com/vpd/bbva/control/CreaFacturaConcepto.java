@@ -1,5 +1,6 @@
 package main.java.com.vpd.bbva.control;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -61,10 +62,16 @@ public class CreaFacturaConcepto {
 									int conArchivo = 0;
 									
 									nuPosFin = Integer.parseInt(listPosF.get("nu_posicion_F").toString());
-									    
+									 
 									/** Inserta Concepto */
 										BeanConceptoFin beanConF = llenaObj.llenaConceptoF(usuario, nuFactura, carta, nuPosFin, nu_nota);
 										Integer inserConcFin = dao.insertConceptoFinan(beanConF);
+										
+										/*CALCULAR IMPORTES, SE INVOCA AL METODO CADA VEZ QUE SE INSERTA UN COCEPTO*/
+										InsertaDao insert = new InsertaDao();
+										insert.calculaImportesFac(nuFactura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+												new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+												new BigDecimal("0"));  
 										
 								}
 								String tpBanco = null;
