@@ -97,7 +97,7 @@ public class LlenaObj {
 			factura.setIm_iva_retenido_nf(beanFF.getIvaRetenido());
 			factura.setIm_descuento(beanFF.getDescuento());
 			factura.setIm_impto_otros_nc(beanFF.getOtrosImpuestos());
-			factura.setIm_total_nf(subtotalIva_oi.subtract(beanFF.getIsrRetenido().subtract(beanFF.getIvaRetenido().subtract(beanFF.getImpuestoCedular()))));  /** total =  */
+			factura.setIm_total_nf(subtotalIva_oi.subtract(beanFF.getIsrRetenido().subtract(beanFF.getIvaRetenido().subtract(beanFF.getDescuento()))));  /** total =  */
 			factura.setIm_subtotal_nc(new BigDecimal("0"));
 			factura.setIm_iva_total_nc(new BigDecimal("0"));
 			factura.setIm_sub_iva_oi_nc(new BigDecimal("0"));
@@ -203,7 +203,7 @@ public class LlenaObj {
 					facNva.setIva(beanFF.getIva());System.out.println(beanFF.getIva());
 					facNva.setIsrRetenido(beanFF.getIsrRetenido());
 					facNva.setIvaRetenido(beanFF.getIvaRetenido());
-					facNva.setImpuestoCedular(beanFF.getDescuento());
+					facNva.setImpuestoCedular(beanFF.getImpuestoCedular());
 					facNva.setViaP(beanFF.getViaP());
 					facNva.setCuentaBanc(beanFF.getCuentaBanc());
 					facNva.setTpBanco(beanFF.getTpBanco());

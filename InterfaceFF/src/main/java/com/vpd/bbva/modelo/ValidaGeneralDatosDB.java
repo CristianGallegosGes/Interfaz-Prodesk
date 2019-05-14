@@ -61,7 +61,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 					beanFacN.setEstatusF(result.getString(++i));
 					beanFacN.setViaP(result.getString(++i));
 					beanFacN.setCuentaBanc(result.getInt(++i));
-					beanFacN.setTpBanco(result.getString(++i));
+					//beanFacN.setTpBanco(result.getString(++i));
 				}
 			}else {
 				beanFacN.setExito(nuerror);
@@ -102,7 +102,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.setInt(9, factura.getEstado());System.out.println(factura.getEstado());
 			call.setString(10, factura.getIva());System.out.println(factura.getIva());
 			call.setBigDecimal(11, (factura.getIsrRetenido()));System.out.println("isr RET"+factura.getIsrRetenido());
-			call.setBigDecimal(12, factura.getIvaRetenido());System.out.println(factura.getIvaRetenido());
+			call.setBigDecimal(12, factura.getIvaRetenido());System.out.println("UVA RET "+factura.getIvaRetenido());
 			call.setBigDecimal(13, factura.getImpuestoCedular());System.out.println(factura.getImpuestoCedular());
 			call.setString(14, factura.getViaP());System.out.println(factura.getViaP());
 			call.setInt(15, factura.getCuentaBanc());System.out.println(factura.getCuentaBanc());
