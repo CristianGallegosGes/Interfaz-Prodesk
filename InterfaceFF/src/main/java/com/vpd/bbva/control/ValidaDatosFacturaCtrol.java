@@ -182,7 +182,7 @@ public class ValidaDatosFacturaCtrol {
 					return validaFacturaConse;
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(!(listaCadenas.get(contLinea).getComprobacion() == null && listaCadenas.get(i).getComprobacion() == null )) {
 						if(!(listaCadenas.get(contLinea).getComprobacion().equals(listaCadenas.get(i).getComprobacion()))) {
 							validaFacturaConse.put(7, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
@@ -193,7 +193,7 @@ public class ValidaDatosFacturaCtrol {
 					}
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(!(listaCadenas.get(contLinea).getNu_anticipo() == null && listaCadenas.get(i).getNu_anticipo() == null)) {
 						if(!(listaCadenas.get(contLinea).getNu_anticipo().equals(listaCadenas.get(i).getNu_anticipo()))) {
 							validaFacturaConse.put(8, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
@@ -204,7 +204,7 @@ public class ValidaDatosFacturaCtrol {
 					}
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(!(listaCadenas.get(contLinea).getFecha_anticipo() == null && listaCadenas.get(i).getFecha_anticipo() == null)) {
 						if(!(listaCadenas.get(contLinea).getFecha_anticipo().equals(listaCadenas.get(i).getFecha_anticipo()))) {
 							validaFacturaConse.put(9, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
@@ -215,7 +215,7 @@ public class ValidaDatosFacturaCtrol {
 					}
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(!(listaCadenas.get(contLinea).getViaP() == null && listaCadenas.get(i).getViaP() == null)) {
 						if(!(listaCadenas.get(contLinea).getViaP().equals(listaCadenas.get(i).getViaP()))) {
 							validaFacturaConse.put(10, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
@@ -226,7 +226,7 @@ public class ValidaDatosFacturaCtrol {
 					}
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(listaCadenas.get(contLinea).getCuentaBanc() != listaCadenas.get(i).getCuentaBanc()) {
 						validaFacturaConse.put(11, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
 								+ listaCadenas.get(contLinea).getConsecArch() + "/"
@@ -235,7 +235,7 @@ public class ValidaDatosFacturaCtrol {
 					}
 				}
 				
-				if(listaCadenas.get(contLinea).getTp_registro().equals("NF")) {
+				if(listaCadenas.get(contLinea).getTp_registro().equals("NF") && listaCadenas.get(i).getTp_registro().equals("NF")) {
 					if(!(listaCadenas.get(contLinea).getTpBanco() == null && listaCadenas.get(i).getTpBanco() == null)) {
 						if(!(listaCadenas.get(contLinea).getTpBanco().equals(listaCadenas.get(i).getTpBanco()))) {
 							validaFacturaConse.put(12, "ERROR EN LINEA" + linea.get(i) + " CONSECUTIVO  "
