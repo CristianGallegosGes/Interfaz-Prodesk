@@ -32,4 +32,8 @@ public final class DBConstantes {
 	
 	public static final String SICOFE_NOM_SP_UPDATE_IMP_FACTURA			= DBPACKAGE + ".SP_UPDATE_IMP_FACTURA";
 	public static final String SICOFE_CALL_SP_UPDATE_IMP_FACTURA		= "{ call " + SICOFE_NOM_SP_UPDATE_IMP_FACTURA + "(?,?,?,?,?,?,?,?,?,?,?) } ";
+	
+	public static final String SICOFE_SPN_SP_UPDATE_IMPUESTO 			= DBPACKAGE + ".SP_UPDATE_IMPUESTO";
+	public static final String SICOFE_SPC_SP_UPDATE_IMPUESTO			= "{ call " + SICOFE_SPN_SP_UPDATE_IMPUESTO + "(?,?,?,?,?,?,?,?,?)}";
+	
 }

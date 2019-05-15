@@ -69,8 +69,8 @@ public class CreaFacturaConcepto {
 										
 										/*CALCULAR IMPORTES, SE INVOCA AL METODO CADA VEZ QUE SE INSERTA UN COCEPTO*/
 										InsertaDao insert = new InsertaDao();
-										insert.calculaImportesFac(nuFactura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
-												new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
+										insert.calculaImportesFac(nuFactura,beanFactura.getIm_isr_retenido_nf(), beanFactura.getIm_iva_retenido_nf(), beanFactura.getIm_descuento(), 
+												beanFactura.getIm_impo_otros_nf(), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
 												new BigDecimal("0"));  
 										
 								}

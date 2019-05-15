@@ -392,5 +392,61 @@ public class InsertaDao extends GeneralDao{
 		return exito;
 	}
 	
+	
+	
+	
+	
+	
+	
+	public boolean actualizaImportesNota(int bdCdFactura, int bdCdNota, BigDecimal bdIvaSubTotalOi,
+			BigDecimal bdIsrRetenidoNC, BigDecimal bdIvaRetenidoNC, BigDecimal bdImpuestoCedular,
+			BigDecimal bdOtrosImpuestosNC) throws Exception {
+
+			LOG.warn("Inicio actualizaImportesNota DAO");
+			Conexion objConexion = new Conexion();
+			Connection con = objConexion.AbreConexion();
+			CallableStatement proc 	= null;
+			
+			Integer cveError 		= null;
+			String descError 		= new String("");
+			boolean booInsert		= false;
+			
+			try{
+			proc = con.prepareCall(DBConstantes.SICOFE_SPC_SP_UPDATE_IMPUESTO);
+			
+			proc.setInt(1,bdCdFactura);
+			proc.setInt(2,bdCdNota);
+			proc.setBigDecimal(3,bdIvaSubTotalOi);
+			proc.setBigDecimal(4,bdIsrRetenidoNC);
+			proc.setBigDecimal(5,bdIvaRetenidoNC);
+			proc.setBigDecimal(6,bdImpuestoCedular);
+			proc.setBigDecimal(7,bdOtrosImpuestosNC);
+			proc.registerOutParameter(8, OracleTypes.NUMBER);
+			proc.registerOutParameter(9, OracleTypes.VARCHAR);
+			
+			LOG.warn("Se llama al SP: " + DBConstantes.SICOFE_SPN_SP_UPDATE_IMPUESTO);
+			proc.execute();
+			LOG.warn("Regresa del llamado a: " + DBConstantes.SICOFE_SPN_SP_UPDATE_IMPUESTO);
+			
+			cveError  		= new Integer(proc.getObject(8).toString());
+			descError 		= proc.getObject(9).toString();
+			
+			if(cveError == 0){
+			booInsert = true;
+			}
+			
+			LOG.warn("Fin de llamada a procedimiento SP: " + DBConstantes.SICOFE_SPN_SP_UPDATE_IMPUESTO);
+			LOG.warn("Clave --> " + cveError);
+			LOG.warn("Descripcion --> " + descError);
+			
+			} catch (Exception e) {
+			LOG.warn("Error en SP " + DBConstantes.SICOFE_SPN_SP_UPDATE_IMPUESTO, e);
+			} finally {
+			closeAll(null, null, null, proc, con,objConexion);
+			}
+			LOG.warn("FIN actualizaImportesNota DAO");
+			return booInsert;
+			}
+	
 }
 

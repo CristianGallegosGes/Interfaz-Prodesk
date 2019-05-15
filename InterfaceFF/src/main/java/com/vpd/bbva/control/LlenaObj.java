@@ -95,7 +95,7 @@ public class LlenaObj {
 			factura.setIm_sub_iva_oi_nf(subtotalIva_oi); 
 			factura.setIm_isr_retenido_nf(beanFF.getIsrRetenido());
 			factura.setIm_iva_retenido_nf(beanFF.getIvaRetenido());
-			factura.setIm_descuento(beanFF.getDescuento());
+			factura.setIm_descuento(beanFF.getDescuento()); System.out.println(beanFF.getDescuento());
 			factura.setIm_impto_otros_nc(beanFF.getOtrosImpuestos());
 			factura.setIm_total_nf(subtotalIva_oi.subtract(beanFF.getIsrRetenido().subtract(beanFF.getIvaRetenido().subtract(beanFF.getDescuento()))));  /** total =  */
 			factura.setIm_subtotal_nc(new BigDecimal("0"));
@@ -238,7 +238,8 @@ public class LlenaObj {
 								respFacNva.setConsecutivoA(consecBean);
 								error = true;
 							}
-							
+							totalFactura = totalFactura.subtract(otrosImp);
+							System.out.println(totalFactura);
 							
 						}else {
 							respFacNva.setBandera(datosDao);
@@ -249,7 +250,7 @@ public class LlenaObj {
 						break;
 					
 					}else {				/** VALIDAR ESTADO Y TIPO DE IVA  DE CADA CONCEPTO**/
-								HashMap<String, Object> concepto= validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva());
+								HashMap<String, Object> concepto= validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva(), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 0, null);
 								beanFF.setDbiva(Integer.parseInt(concepto.get("iva").toString()));		System.out.println("cd iva" + respFacNva.getIvaout());
 								datosDao = new Boolean(concepto.get("bandera").toString());
 								String mensaje = concepto.get("mensaje").toString();
@@ -264,6 +265,7 @@ public class LlenaObj {
 									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
 									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
 										respFacNva.setBandera(datosDao);
+										totalFactura = totalFactura.subtract(otrosImp);
 									}else {
 										respFacNva.setBandera(false);
 										respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
@@ -296,6 +298,97 @@ public class LlenaObj {
 		
 			return respFacNva;
 	}
+	
+	
+	
+	public BeanRespuesta llenaFacConceptoNva(List<BeanFF> factura, String nf, int nu_fatura) throws Exception {
+		BeanFacturaNVA facNva = new BeanFacturaNVA();
+			ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
+			int consecBean = 0;
+			BeanRespuesta respFacNva = new BeanRespuesta();
+			boolean error = false;
+			BigDecimal otrosImp = null;
+			BigDecimal descuenTotal = null;
+			try {
+				
+				
+				/*CONSULTAR EL TOTAL DE LA FACTURA*/
+				ValidaGeneralDatosDB consulTotal = new ValidaGeneralDatosDB();
+				BigDecimal totalFactura = null;
+				ArrayList<BigDecimal> totalFac = consulTotal.totalNF(nu_fatura); /*TOTAL DE LA FACTURA*/
+				
+				for (int i=0; i<totalFac.size(); i++) {
+					totalFactura = totalFac.get(0);
+				}
+				
+			for (BeanFF beanFF : factura) {
+				while(beanFF.getTp_registro().equals(nf)) {
+					facNva.setEstado(beanFF.getEstado());System.out.println(beanFF.getEstado());
+					facNva.setIva(beanFF.getIva());System.out.println(beanFF.getIva());
+					
+					/*DESCUENTO DE FACTURA */
+					descuenTotal =  beanFF.getIsrRetenido().add(beanFF.getIvaRetenido().add(beanFF.getDescuento()));
+					boolean datosDao = false;
+								/** VALIDAR ESTADO Y TIPO DE IVA  DE CADA CONCEPTO**/
+								HashMap<String, Object> concepto= validaDB.ValidaDatosConcep(beanFF.getEstado(), beanFF.getIva(), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 0, null);
+								beanFF.setDbiva(Integer.parseInt(concepto.get("iva").toString()));		System.out.println("cd iva" + respFacNva.getIvaout());
+								datosDao = new Boolean(concepto.get("bandera").toString());
+								String mensaje = concepto.get("mensaje").toString();
+								/*LOS DATOS EN LA BASE DE DATOS FUERON CORRECTOS*/
+								if(datosDao) {
+									/*CALCULAR IMPORTES*/
+									BigDecimal valorIvaCon = new BigDecimal(concepto.get("valorIva").toString());
+									BigDecimal subtotalCon = new BigDecimal("0.0");
+									subtotalCon = subtotalCon.add(beanFF.getNu_unidades().multiply(beanFF.getImporteUn()));
+									BigDecimal iva = (subtotalCon.multiply(valorIvaCon)).divide(new BigDecimal("100"));
+									otrosImp = beanFF.getOtrosImpuestos();
+									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
+									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+										respFacNva.setBandera(datosDao);
+										totalFactura = totalFactura.subtract(otrosImp);
+									}else {
+										respFacNva.setBandera(false);
+										respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+										respFacNva.setConsecutivoA(consecBean);
+										error = true;
+									}
+									
+									
+								}else {
+									respFacNva.setConsecutivoA(consecBean);
+									respFacNva.setBandera(datosDao);
+									respFacNva.setMensaje(mensaje);
+									error = true;
+									break;
+								}
+								break;
+					
+					
+				}++consecBean;
+				
+				if(error) {
+					break;
+				}
+			}
+			}catch (Exception e) {
+				respFacNva.setBandera(false);
+				respFacNva.setMensaje("ERROR AL VALIDAR LOS DATOS DE FACTURA");
+				respFacNva.setConsecutivoA(consecBean);
+			}
+		
+			return respFacNva;
+	}
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
+	
 	
 	
 	public BeanFacturaNVA llenaFacNva(List<BeanFF> factura, String nf) throws SQLException {
@@ -386,4 +479,32 @@ public BeanPosicionFin llenaPosicionFNotaC (List<BeanFF> listaBloque, String nc,
 	return concep;
 	}
 
+
+
+
+public ArrayList<BigDecimal> llenaImportes (List<BeanFF> listaBloque) throws Exception {
+	int nu_factura = 0 ;
+	ValidaGeneralDatosDB dao = new ValidaGeneralDatosDB();
+	ArrayList<BigDecimal> factura = new ArrayList<BigDecimal>();
+	boolean completo = false;
+	for (BeanFF beanFF : listaBloque) {
+		if(completo) {
+			break;
+		}
+		String notaFactura = dao.parametro(8, beanFF.getTp_registro());
+		while(beanFF.getTp_registro().equals(notaFactura)) {
+		
+			
+		factura.add(beanFF.getIvaRetenido()); 
+		factura.add(beanFF.getIsrRetenido()); 
+		factura.add(beanFF.getDescuento()); 
+		factura.add(beanFF.getOtrosImpuestos()); 
+		
+		completo = true;
+		break;
+		}
+		
+	}
+	return factura;
+}
 }

@@ -1,5 +1,7 @@
 package main.java.com.vpd.bbva.bean;
 
+import java.math.BigDecimal;
+
 public class BeanRespuesta {
 	private String mensaje;
 	private int consecutivoA;
@@ -9,9 +11,14 @@ public class BeanRespuesta {
 	private String tp_registro;
 	private int ivaout;
 	
+
 	
 	
 	
+	
+	public boolean isBandera() {
+		return bandera;
+	}
 	public int getIvaout() {
 		return ivaout;
 	}

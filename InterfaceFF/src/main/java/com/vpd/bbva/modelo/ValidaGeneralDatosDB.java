@@ -143,7 +143,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 	
 	
 	
-	public HashMap<String, Object> ValidaDatosConcep (int estado, String iva ) throws Exception {
+	public HashMap<String, Object> ValidaDatosConcep (int estado, String iva, BigDecimal isrRetenido, BigDecimal ivaRet, BigDecimal impuestoC, int proveedor, String sociedad ) throws Exception {
 		HashMap<String, Object> respCon = new HashMap<String, Object>();
 		Integer nuerror = null;
 		ResultSet result = null;
@@ -162,15 +162,15 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.setInt(8, 0);
 			call.setInt(9, estado);
 			call.setString(10, iva);
-			call.setBigDecimal(11, new BigDecimal("0.0"));
-			call.setBigDecimal(12, new BigDecimal("0.0"));
-			call.setBigDecimal(13, new BigDecimal("0.0"));
+			call.setBigDecimal(11, isrRetenido);
+			call.setBigDecimal(12, ivaRet);
+			call.setBigDecimal(13, impuestoC);
 			call.setString(14, "");
 			call.setInt(15, 0);
 			call.setString(16, "");
 			call.setString(17, "");
-			call.setInt(18, 0);
-			call.setString(19, "SOCIEDAD");
+			call.setInt(18, proveedor);
+			call.setString(19, sociedad);
 			call.setString(20, "MONEDA");
 			call.execute();
 	

@@ -1,11 +1,13 @@
 package main.java.com.vpd.bbva.control;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanFF;
+import main.java.com.vpd.bbva.bean.BeanFactura;
 import main.java.com.vpd.bbva.bean.BeanRespuesta;
 import main.java.com.vpd.bbva.modelo.InsertaDao;
 import main.java.com.vpd.bbva.vista.ValidaArregloBO;
@@ -37,16 +39,24 @@ public class ControlBloqueaDB {
 								/*	CREA FACTURA */
 								BeanRespuesta beanfacConp = creaFac.creaFactura(listaBloque, carta);								
 								
-								/* CREAR NOTAS DE CREDITO  */
-								int factura = beanfacConp.getFactura();
-								ValidaArregloBO valida = new ValidaArregloBO();
-								List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, carta,factura );
-								if(!notaCredito.isEmpty()) {
-									for(BeanRespuesta informeNC : notaCredito) {
-										ListAControlF.add(informeNC);
-									}
+								if(beanfacConp.GetBandera()) {
+										/* CREAR NOTAS DE CREDITO  */
+										int factura = beanfacConp.getFactura();
+										ValidaArregloBO valida = new ValidaArregloBO();
+										
+										
+										List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, carta,factura);
+										if(!notaCredito.isEmpty()) {
+											for(BeanRespuesta informeNC : notaCredito) {
+												ListAControlF.add(informeNC);
+											}
+										}
+								
+								
 								}
 								ListAControlF.add(beanfacConp);
+								
+								
 							}else {
 								ListAControlF.add(creaCt);
 							}
@@ -55,6 +65,7 @@ public class ControlBloqueaDB {
 						/* CREAR NOTAS DE CREDITO */
 						int factura = statusF.getFactura();
 						
+						ArrayList<BigDecimal> importes = new ArrayList<BigDecimal>();
 						ValidaArregloBO valida = new ValidaArregloBO();
 						List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque,carta,factura );
 						if(!notaCredito.isEmpty()) {
@@ -80,6 +91,7 @@ public class ControlBloqueaDB {
 				int cartav = statusF.getCarta();
 				/*	CREA FACTURA */
 				BeanRespuesta beanfac = creaFac.creaFactura(listaBloque, cartav);	
+				
 				/* CREAR NOTAS DE CREDITO */
 				int factura = beanfac.getFactura();
 				ValidaArregloBO valida = new ValidaArregloBO();

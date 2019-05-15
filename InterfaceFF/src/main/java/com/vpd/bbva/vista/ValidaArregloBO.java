@@ -10,6 +10,7 @@ import org.apache.log4j.Logger;
 
 import main.java.com.vpd.bbva.bean.BeanConceptoFin;
 import main.java.com.vpd.bbva.bean.BeanFF;
+import main.java.com.vpd.bbva.bean.BeanFactura;
 import main.java.com.vpd.bbva.bean.BeanFacturaNVA;
 import main.java.com.vpd.bbva.bean.BeanNotaCreFin;
 import main.java.com.vpd.bbva.bean.BeanPosicionFin;
@@ -113,10 +114,18 @@ try {
 								BeanRes = validaFac.ComparaArrevsDBFactura(beanFacN, beanFacNdb); 
 									/* SI ES OK */
 									if(BeanRes.GetBandera()==true) {
+										BeanRes = objDB.llenaFacConceptoNva(factura,notaFactura,leeF.getNu_factura()); 		/** Validacion de Concepto **/
+										if(BeanRes.GetBandera()) {
 										BeanRes.setFactura(facturaI);
 										BeanRes.setBandera(true);
 										BeanRes.setConsecutivoA(consecutivoA);
 										validacion = true;
+										break;
+										}else {
+											BeanRes.setConsecutivoA(consecutivoA);
+											validacion = true;
+										}
+										
 									}else {
 										BeanRes.setConsecutivoA(consecutivoA);
 										validacion = true;
@@ -159,6 +168,8 @@ try {
 		ValidaGeneralDatosDB valida = new ValidaGeneralDatosDB();
 		int numFila = 0;
 		BigDecimal totalCredito = new BigDecimal("0.0") ;
+
+		
 		for(BeanFF leeNC: notaC) {
 			++numFila;
 			try{
@@ -175,7 +186,8 @@ try {
 					/*EN NOTA DE CREDITO SOLO SE VALIDA EL IVA EN LA DB ANTES DE CREARLA*/
 					int estado = 0;      
 					String iva    = leeNC.getIva();
-					HashMap<String, Object> respNotaCre= valida.ValidaDatosConcep(estado, iva);
+					HashMap<String, Object> respNotaCre= valida.ValidaDatosConcep(estado, iva,leeNC.getIsrRetenido(),leeNC.getIvaRetenido(), leeNC.getImpuestoCedular(), leeNC.getNu_proveedor(), leeNC.getSociedadRec());
+					System.out.println(leeNC.getDescuento());
 					boolean exitoNC = new Boolean(respNotaCre.get("bandera").toString());
 					if(exitoNC) {
 						BigDecimal valorIva = new BigDecimal(respNotaCre.get("valorIva").toString());
@@ -217,7 +229,7 @@ try {
 						BigDecimal unidades = nota.getNu_unidad();		/* No. UDIDADES DE LA NOTA DE CREDITO*/
 						BigDecimal importSinIVA = nota.getIm_sin_iva();	/* IMPORTE SIN I.V.A.*/
 						
-						totalCredito = totalCredito.add(impIVA).add((unidades).multiply(importSinIVA));
+						totalCredito = totalCredito.add(impIVA).add(leeNC.getOtrosImpuestos()).add((unidades).multiply(importSinIVA));
 						
 						/*Total Credito < = Total Factura*/
 						if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
@@ -231,8 +243,8 @@ try {
 							
 							/* RETENCIONES <= TOTAL CREDITO */
 							if (retencion.compareTo(totalCredito) == -1 || retencion.compareTo(totalCredito) == 1) {
-								
-							
+							/*SE RESTA OTROS IMPUESTOS DE TOTAL DE FACTURA PARA QUE EL SEGUNDO CONCEPTO LO VUELVA A SUMAR*/	
+								totalCredito = totalCredito.subtract(leeNC.getOtrosImpuestos());
 							
 						/*CREAR NOTA DE CREDITO*/
 						exito = insert.insertaConceptoNCFin(nota,factura);
@@ -240,9 +252,15 @@ try {
 								
 							
 								/*CALCULAR IMPORTES DE FACTURA*/
-								insert.calculaImportesFac(factura, new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), new BigDecimal("0.0"), 
+								
+								boolean updateImpues = insert.actualizaImportesNota(factura, nota.getNu_nota(), new BigDecimal("0"), leeNC.getIsrRetenido(),
+										leeNC.getIvaRetenido(), leeNC.getDescuento(), leeNC.getOtrosImpuestos());
+								
+								
+								insert.calculaImportesFac(factura, bdIsrRetenidoNF, bdIvaRetenidoNF, bdImpuestoCedularNF, bdOtrosImpuestosNF, 
 								leeNC.getIsrRetenido(),	leeNC.getIvaRetenido(), leeNC.getDescuento(), leeNC.getOtrosImpuestos());
-							
+								
+								
 								respNota.setBandera(true);
 								respNota.setCarta(carta);
 								respNota.setFactura(factura);
@@ -288,11 +306,14 @@ try {
 		
 		/*Total Credito < = Total Factura*/
 		if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
-
+			
 			/* CALCULOS DE NEGOCIO */
 			/* RETENCIONES = ISR RETENIDO + IVA RETENIDO + IMPUESTO CEDULAR */
 			/* TOTAL DE CREDITO = (UNIDADES * IMPORTE SIN IVA) + IVA */
-		
+			
+			/*SE RESTA OTROS IMPUESTOS DE TOTAL DE FACTURA PARA QUE EL SEGUNDO CONCEPTO LO VUELVA A SUMAR*/	
+			totalCredito = totalCredito.subtract(leeNC.getOtrosImpuestos());
+			
 				HashMap<String, Object> posicion = insert.insertaPosicionFinanciera(nota);
 				
 				String nuPos= posicion.get("nu_posicion_F").toString();
@@ -304,9 +325,11 @@ try {
 					Integer proceso = insert.insertConceptoFinan(concFin);
 					if(proceso == 0) {
 						/*CALCULAR IMPORTES DE FACTURA*/
-						insert.calculaImportesFac(factura,new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
-								new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), new BigDecimal("0"), 
-								new BigDecimal("0"));  
+						boolean updateImpuesCon = insert.actualizaImportesNota(factura, nota.getNu_nota(), new BigDecimal("0"), leeNC.getIsrRetenido(),
+								leeNC.getIvaRetenido(), leeNC.getDescuento(), leeNC.getOtrosImpuestos());
+						
+						insert.calculaImportesFac(factura, bdIsrRetenidoNF, bdIvaRetenidoNF, bdImpuestoCedularNF, bdOtrosImpuestosNF,
+								leeNC.getIsrRetenido(), leeNC.getIvaRetenido(), leeNC.getDescuento(), leeNC.getOtrosImpuestos());  
 						
 						respNota.setBandera(true);
 						respNota.setCarta(carta);
