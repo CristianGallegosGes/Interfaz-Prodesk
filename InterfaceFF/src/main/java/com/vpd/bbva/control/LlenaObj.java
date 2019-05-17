@@ -186,7 +186,7 @@ public class LlenaObj {
 	
 	
 	public BeanRespuesta llenaFacConNva(List<BeanFF> factura, String nf) throws Exception {
-		BeanFacturaNVA facNva = new BeanFacturaNVA();
+		BeanFacturaNVA facNva = new BeanFacturaNVA(); 
 			ValidaGeneralDatosDB validaDB = new ValidaGeneralDatosDB();
 			int consecBean = 0;
 			BeanRespuesta respFacNva = new BeanRespuesta();
@@ -211,7 +211,7 @@ public class LlenaObj {
 					facNva.setProveedor(beanFF.getNu_proveedor());
 					facNva.setSociedad(beanFF.getSociedadRec());
 					facNva.setMoneda(beanFF.getMondena());
-					
+					facNva.setReceptorAlter(beanFF.getRecAlternativo());   System.out.println(beanFF.getRecAlternativo());
 					/*DESCUENTO DE FACTURA */
 					descuenTotal =  beanFF.getIsrRetenido().add(beanFF.getIvaRetenido().add(beanFF.getDescuento()));
 					boolean datosDao = false;

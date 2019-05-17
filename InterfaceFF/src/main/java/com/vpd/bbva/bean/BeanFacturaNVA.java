@@ -19,9 +19,16 @@ public class BeanFacturaNVA {
 	private String sociedad;
 	private int proveedor;
 	private String moneda;
+	private int receptorAlter;
 	
 	
 	
+	public int getReceptorAlter() {
+		return receptorAlter;
+	}
+	public void setReceptorAlter(int receptorAlter) {
+		this.receptorAlter = receptorAlter;
+	}
 	public String getSociedad() {
 		return sociedad;
 	}

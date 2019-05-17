@@ -112,6 +112,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.setInt(18, factura.getProveedor());System.out.println(factura.getProveedor());
 			call.setString(19, factura.getSociedad());System.out.println(factura.getSociedad());
 			call.setString(20, factura.getMoneda());System.out.println(factura.getMoneda());
+			call.setInt(21, factura.getReceptorAlter());
 			call.execute();
 			
 			nuerror = new Integer(call.getObject(1).toString());
@@ -172,6 +173,7 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 			call.setInt(18, proveedor);
 			call.setString(19, sociedad);
 			call.setString(20, "MONEDA");
+			call.setInt(21, 0);
 			call.execute();
 	
 			nuerror = new Integer(call.getObject(1).toString());
