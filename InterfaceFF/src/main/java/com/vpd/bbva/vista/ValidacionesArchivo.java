@@ -12,8 +12,6 @@ import java.io.OutputStream;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.mozilla.universalchardet.UniversalDetector;
@@ -42,14 +40,8 @@ public class ValidacionesArchivo implements FilenameFilter {
 
 		log.info("Valida Nomencaltura de archivo: " + nombreA);
 		boolean validacionN = false;
-		String fecha = obtenerFecha();
 
 		if (nombreA.length() == 20) {
-			String[] parts = fecha.split("-");
-			String anio = parts[0];
-			String mes = parts[1];
-			String dia = parts[2];
-			String hora = parts[3];
 
 			String aplicativo = nombreA.substring(0, 3);
 			String interfaz = nombreA.substring(3, 5);
@@ -65,10 +57,10 @@ public class ValidacionesArchivo implements FilenameFilter {
 			if (aplicativo.equals("VPD")) {
 				if (interfaz.equals("FF")) {
 					if (proyectoConsulta) {
-						if (anioA.equals(anio)) {
-							if (mesA.equals(mes)) {
-								if (diaA.equals(dia)) {
-									if (horaA.equals(hora)) {
+						if (anioA.length() == 4) {
+							if (mesA.length() == 2) {
+								if (diaA.length() == 2) {
+									if (horaA.length() == 2) {
 										if (Integer.parseInt(numeroA) >= 0 || Integer.parseInt(numeroA) <= 99) {
 											validacionN = true;
 										}
@@ -189,15 +181,6 @@ public class ValidacionesArchivo implements FilenameFilter {
 				ex.printStackTrace();
 			}
 		}
-	}
-
-	public String obtenerFecha() {
-		String fecha = null;
-		Date objDate = new Date();
-		String strDateFormat = "yyyy-MM-dd-kk";
-		SimpleDateFormat objSDF = new SimpleDateFormat(strDateFormat);
-		fecha = objSDF.format(objDate);
-		return fecha;
 	}
 
 	private void handleData(FileInputStream fis, UniversalDetector detector) throws IOException {
