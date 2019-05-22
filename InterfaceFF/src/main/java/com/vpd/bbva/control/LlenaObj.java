@@ -201,7 +201,7 @@ public class LlenaObj {
 					facNva.setNu_carta(beanFF.getNu_carta());
 					facNva.setEstado(beanFF.getEstado());System.out.println(beanFF.getEstado());
 					facNva.setIva(beanFF.getIva());System.out.println(beanFF.getIva());
-					facNva.setIsrRetenido(beanFF.getIsrRetenido());
+					facNva.setIsrRetenido(beanFF.getIsrRetenido()); System.out.println(beanFF.getIsrRetenido());
 					facNva.setIvaRetenido(beanFF.getIvaRetenido());
 					facNva.setImpuestoCedular(beanFF.getImpuestoCedular());
 					facNva.setViaP(beanFF.getViaP());
@@ -230,7 +230,7 @@ public class LlenaObj {
 							BigDecimal iva = (subtotal.multiply(valorIva)).divide(new BigDecimal("100"));
 							otrosImp = beanFF.getOtrosImpuestos();
 							totalFactura = totalFactura.add(subtotal.add(iva).add(otrosImp));
-							if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+							if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 0 ) {
 								respFacNva.setBandera(datosDao);
 							}else {
 								respFacNva.setBandera(false);
@@ -263,7 +263,7 @@ public class LlenaObj {
 									BigDecimal iva = (subtotalCon.multiply(valorIvaCon)).divide(new BigDecimal("100"));
 									otrosImp = beanFF.getOtrosImpuestos();
 									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
-									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 0 ) {
 										respFacNva.setBandera(datosDao);
 										totalFactura = totalFactura.subtract(otrosImp);
 									}else {
