@@ -200,6 +200,21 @@ public class InsertaDao extends GeneralDao{
 		return factura;
 	}
 	
+	
+	public void aplicativoOrig(int nu_factura , String aplicativo) throws Exception {
+		Conexion obCon = new Conexion();
+		Connection con = obCon.AbreConexion();
+		CallableStatement call = null;
+		try {
+			String sql = "UPDATE TXWV103_FACTURA SET NB_IMPORTE_LETRA ='"+ aplicativo+"' WHERE NU_FACTURA = "+ nu_factura;
+			call = con.prepareCall(sql);
+			call.execute();
+		}catch (Exception e) {
+			LOG.warn("Error: " + e);
+		}
+	}
+	
+	
 	public Integer InsertNota (BeanNota nota) throws Exception{
 		Integer exito = 0;
 		
@@ -280,9 +295,8 @@ public class InsertaDao extends GeneralDao{
 		return exito;
 	}
 	
-	public Integer insertViaP (int nuFactura, String viaPa,  String tpBanco) throws Exception {
+	public Integer insertViaP (int nuFactura, String viaPa,  String tpBanco, int proveedor) throws Exception {
 		Integer exito = 0;
-		
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
 		CallableStatement call = null;
@@ -293,14 +307,14 @@ public class InsertaDao extends GeneralDao{
 			call.setInt(1, nuFactura);
 			call.setString(2, viaPa);
 			call.setString(3, tpBanco);
-			call.registerOutParameter(4, OracleTypes.NUMBER);
-			call.registerOutParameter(5, OracleTypes.VARCHAR);
+			call.setInt(4, proveedor);
+			call.registerOutParameter(5, OracleTypes.NUMBER);
+			call.registerOutParameter(6, OracleTypes.VARCHAR);
 			call.execute();
 			exito = Integer.parseInt(call.getObject(5).toString());
-			
 		}catch (Exception e) {
 			LOG.warn("Error: " + e);
-			LOG.warn("Error: " + call.getObject(5).toString());
+			LOG.warn("Error: " + call.getObject(6).toString());
 		}finally {
 			closeAll(null, null, null, call, con, obConexion);
 		}

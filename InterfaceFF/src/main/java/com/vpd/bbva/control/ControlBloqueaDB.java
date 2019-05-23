@@ -48,6 +48,9 @@ public class ControlBloqueaDB {
 										List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, carta,factura);
 										if(!notaCredito.isEmpty()) {
 											for(BeanRespuesta informeNC : notaCredito) {
+												informeNC.setCarta(carta);
+												informeNC.setBandera(true);
+												informeNC.setFactura(factura);
 												ListAControlF.add(informeNC);
 											}
 										}
@@ -98,6 +101,9 @@ public class ControlBloqueaDB {
 				List<BeanRespuesta> notaCredito = valida.validaInserNotaCredito(listaBloque, cartav,factura );
 				if(!notaCredito.isEmpty()) {
 					for(BeanRespuesta informeNC : notaCredito) {
+						informeNC.setCarta(carta);
+						informeNC.setBandera(true);
+						informeNC.setFactura(factura);
 						ListAControlF.add(informeNC);
 					}
 				}

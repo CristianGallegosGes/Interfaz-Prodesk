@@ -25,7 +25,7 @@ public final class DBConstantes {
 	public static final String SICOFE_CALL_SP_INSERT_CONCEPTO_FINANCIERA= "{ call " + SICOFE_NOM_SP_INSERT_CONCEPTO_FINANCIERA + "(?,?,?,?,?,?,?,?,?,?)}";
 	
 	public static final String SICOFE_NOM_SP_INSERTA_VPAGO				= DBPACKAGE + ".SP_INSERT_VIA_PAGO";  
-	public static final String SICOFE_CALL_SP_INSERTA_VPAGO				= "{ call " + SICOFE_NOM_SP_INSERTA_VPAGO + "(?,?,?,?,?)}";
+	public static final String SICOFE_CALL_SP_INSERTA_VPAGO				= "{ call " + SICOFE_NOM_SP_INSERTA_VPAGO + "(?,?,?,?,?,?)}";
 	
 	public static final String SICOFE_NOM_SP_INSERT_NOTA_FIN			= DBPACKAGE +".SP_INSERT_NOTA_FIN";
 	public static final String SICOFE_CALL_SP_INSERT_NOTA_FIN			= "{ call " + SICOFE_NOM_SP_INSERT_NOTA_FIN + "(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) }";

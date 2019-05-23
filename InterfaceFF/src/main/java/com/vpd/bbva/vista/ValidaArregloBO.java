@@ -213,6 +213,7 @@ try {
 							bdIvaRetenidoNF = totalFac.get(2);
 							bdImpuestoCedularNF = totalFac.get(3);
 							bdOtrosImpuestosNF = totalFac.get(4);
+							break;
 						}
 						
 						
@@ -279,18 +280,19 @@ try {
 								
 							}
 					}else {
-						String msjError = "LOS MONTOS GENERAN UN TOTAL DE CREDITO MENOR A CERO";
+						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE LA NOTA DE CREDITO";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
 						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
 					}
 					}else {
-						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
+						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA AL AGREGAR NOTA DE CREDITO";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
 						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
+						return notas;
 					}
 	}else {
 		++consecutivoA;
@@ -356,7 +358,7 @@ try {
 				}
 
 		}else {
-			String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
+			String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA AL AGREGAR CONCEPTO DE NC";
 			respNota.setBandera(false);
 			respNota.setMensaje(msjError);
 			respNota.setConsecutivoA(numFila);

@@ -48,8 +48,8 @@ public class Conexion {
 		} else {
 			exito = true;
 		}
-
-		LOG.info("Parametros de conexion suficientes : " + exito);
+//
+//		LOG.info("Parametros de conexion suficientes : " + exito);
 		conn = null;
 		return exito;
 
