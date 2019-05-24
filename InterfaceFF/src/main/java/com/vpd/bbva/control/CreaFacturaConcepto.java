@@ -45,12 +45,14 @@ public class CreaFacturaConcepto {
 					BeanFactura beanFactura = llenaObj.llenaFactura(BloqueFac, carta, nf);
 						String usuario = beanFactura.getCd_usr_modifica();
 					HashMap<String, Object> inserFac = dao.inserFactura(beanFactura);
+					
 						exito = Integer.parseInt(inserFac.get("exito").toString());
 						descOpera = inserFac.get("error").toString();
 						
 						if(exito == 0) {
 							int nuFactura = Integer.parseInt(inserFac.get("factura").toString());
-							
+							String aplicativo = beanFactura.getAplicativo();
+							dao.aplicativoOrig(nuFactura,aplicativo);
 							/** Inserta Nota de factura*/
 							BeanNota beaNota = llenaObj.llenaNota(BloqueFac, nuFactura, nf);
 							Integer inserNotaF = dao.InsertNota(beaNota);
@@ -76,6 +78,7 @@ public class CreaFacturaConcepto {
 								}
 								String tpBanco = null;
 								String viaPa = null;
+								int proveedor = 0;
 								boolean run = false;
 								for(BeanFF bean : BloqueFac) {
 									if (run) {
@@ -84,6 +87,11 @@ public class CreaFacturaConcepto {
 									while(bean.getTp_registro().equals(nf)) {
 										viaPa = bean.getViaP();	
 										tpBanco = bean.getTpBanco();
+										if(bean.getRecAlternativo() > 0) {
+											proveedor = bean.getRecAlternativo();
+										}else {
+											proveedor = bean.getNu_proveedor();
+										}
 										run = true;
 									break;
 									}
@@ -91,7 +99,7 @@ public class CreaFacturaConcepto {
 								
 								if(viaPa != null || viaPa.isEmpty()) {
 									
-										Integer viaPagoInser = dao.insertViaP(nuFactura,viaPa, tpBanco );
+										Integer viaPagoInser = dao.insertViaP(nuFactura,viaPa, tpBanco, proveedor );
 										
 										if(viaPagoInser == 0) {
 											/**      OK    */
@@ -100,7 +108,7 @@ public class CreaFacturaConcepto {
 											respEjec.setCarta(carta);
 										}else {
 											respEjec.setBandera(true);
-											respEjec.setMensaje("No se inserto via de pago" ); // para prueba
+											respEjec.setMensaje("ERROR AL INSERTAR VIA DE PAGO" ); // para prueba
 											respEjec.setFactura(nuFactura);
 											respEjec.setCarta(carta);
 										}

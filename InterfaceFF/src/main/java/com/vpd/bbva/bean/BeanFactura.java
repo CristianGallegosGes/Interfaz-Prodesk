@@ -34,6 +34,16 @@ public class BeanFactura {
 	private Date	   fh_factura;
 	private String     cd_folio;
 	private String	   nu_serie;
+	private String 	   aplicativo;
+	
+	
+	
+	public String getAplicativo() {
+		return aplicativo;
+	}
+	public void setAplicativo(String aplicativo) {
+		this.aplicativo = aplicativo;
+	}
 	public String getSt_factura() {
 		return st_factura;
 	}

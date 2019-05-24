@@ -62,7 +62,7 @@ try {
 			}
 		}else {
 			respReturn.setBandera(false);
-			respReturn.setMensaje("TIPO REGISTRO " + beanFF.getTp_registro() + "NO EXISTE");
+			respReturn.setMensaje("TIPO REGISTRO " + beanFF.getTp_registro() + " NO EXISTE");
 			respReturn.setConsecutivoA(consecutivoA);
 			return respReturn;
 		}++consecutivoA;
@@ -90,6 +90,7 @@ try {
 				break;
 			}
 			BeanRes.setCarta(leeF.getNu_carta());
+			System.out.println(leeF.getNu_carta());
 			
 			String existe = validaDB.existe(leeF.getTp_registro());
 			if(existe != null) {
@@ -150,7 +151,7 @@ try {
 			
 		}else {
 				BeanRes.setBandera(false);
-				BeanRes.setMensaje("TIPO REGISTRO " + leeF.getTp_registro() + "NO EXISTE");
+				BeanRes.setMensaje("TIPO REGISTRO " + leeF.getTp_registro() + " NO EXISTE");
 				BeanRes.setConsecutivoA(consecutivoA);
 				validacion = true;
 				break; 
@@ -212,6 +213,7 @@ try {
 							bdIvaRetenidoNF = totalFac.get(2);
 							bdImpuestoCedularNF = totalFac.get(3);
 							bdOtrosImpuestosNF = totalFac.get(4);
+							break;
 						}
 						
 						
@@ -232,7 +234,7 @@ try {
 						totalCredito = totalCredito.add(impIVA).add(leeNC.getOtrosImpuestos()).add((unidades).multiply(importSinIVA));
 						
 						/*Total Credito < = Total Factura*/
-						if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
+						if(totalCredito.compareTo(totalFactura) == 0 || totalCredito.compareTo(totalFactura) == -1) {
 						
 							
 							/* CALCULOS DE NEGOCIO */
@@ -242,7 +244,7 @@ try {
 							BigDecimal retencion = leeNC.getIsrRetenido().add(leeNC.getIvaRetenido().add(leeNC.getDescuento()));
 							
 							/* RETENCIONES <= TOTAL CREDITO */
-							if (retencion.compareTo(totalCredito) == -1 || retencion.compareTo(totalCredito) == 1) {
+							if (retencion.compareTo(totalCredito) == -1 || retencion.compareTo(totalCredito) == 0) {
 							/*SE RESTA OTROS IMPUESTOS DE TOTAL DE FACTURA PARA QUE EL SEGUNDO CONCEPTO LO VUELVA A SUMAR*/	
 								totalCredito = totalCredito.subtract(leeNC.getOtrosImpuestos());
 							
@@ -278,18 +280,19 @@ try {
 								
 							}
 					}else {
-						String msjError = "LOS MONTOS GENERAN UN TOTAL DE CREDITO MENOR A CERO";
+						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE LA NOTA DE CREDITO";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
 						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
 					}
 					}else {
-						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
+						String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA AL AGREGAR NOTA DE CREDITO";
 						respNota.setBandera(false);
 						respNota.setMensaje(msjError);
 						respNota.setConsecutivoA(numFila);
 						notas.add(respNota);
+						return notas;
 					}
 	}else {
 		++consecutivoA;
@@ -305,7 +308,7 @@ try {
 		totalCredito = totalCredito.add((unidades).multiply(importSinIVA)).add(impIVA);
 		
 		/*Total Credito < = Total Factura*/
-		if(totalCredito.compareTo(totalFactura) == 1 || totalCredito.compareTo(totalFactura) == -1) {
+		if(totalCredito.compareTo(totalFactura) == 0 || totalCredito.compareTo(totalFactura) == -1) {
 			
 			/* CALCULOS DE NEGOCIO */
 			/* RETENCIONES = ISR RETENIDO + IVA RETENIDO + IMPUESTO CEDULAR */
@@ -348,14 +351,14 @@ try {
 				
 				}else {
 					respNota.setBandera(false);
-					respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC" + nuPos);
+					respNota.setMensaje("ERROR AL GUARDAR CONCEPTO DE NC " + nuPos);
 					respNota.setConsecutivoA(numFila);
 					notas.add(respNota);
 					break;
 				}
 
 		}else {
-			String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA";
+			String msjError = "LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA AL AGREGAR CONCEPTO DE NC";
 			respNota.setBandera(false);
 			respNota.setMensaje(msjError);
 			respNota.setConsecutivoA(numFila);
@@ -379,7 +382,7 @@ try {
 				
 			}else {
 				respNota.setBandera(false);
-				respNota.setMensaje("TIPO REGISTRO " + leeNC.getTp_registro() + "NO EXISTE");
+				respNota.setMensaje("TIPO REGISTRO " + leeNC.getTp_registro() + " NO EXISTE");
 				respNota.setConsecutivoA(numFila);
 				notas.add(respNota);
 				return notas;

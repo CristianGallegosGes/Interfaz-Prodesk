@@ -1,7 +1,6 @@
 package main.java.com.vpd.bbva.control;
 
 import java.math.BigDecimal;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -96,7 +95,7 @@ public class LlenaObj {
 			factura.setIm_isr_retenido_nf(beanFF.getIsrRetenido());
 			factura.setIm_iva_retenido_nf(beanFF.getIvaRetenido());
 			factura.setIm_descuento(beanFF.getDescuento()); System.out.println(beanFF.getDescuento());
-			factura.setIm_impto_otros_nc(beanFF.getOtrosImpuestos());
+			factura.setIm_impo_otros_nf(beanFF.getOtrosImpuestos());
 			factura.setIm_total_nf(subtotalIva_oi.subtract(beanFF.getIsrRetenido().subtract(beanFF.getIvaRetenido().subtract(beanFF.getDescuento()))));  /** total =  */
 			factura.setIm_subtotal_nc(new BigDecimal("0"));
 			factura.setIm_iva_total_nc(new BigDecimal("0"));
@@ -115,6 +114,8 @@ public class LlenaObj {
 			factura.setFh_anticipo(beanFF.getFecha_anticipo());
 			factura.setCd_folio(null);
 			factura.setNu_serie(null);
+			
+			factura.setAplicativo(beanFF.getAplicativoOrg());
 			completo = true;
 			break;
 			}
@@ -201,7 +202,7 @@ public class LlenaObj {
 					facNva.setNu_carta(beanFF.getNu_carta());
 					facNva.setEstado(beanFF.getEstado());System.out.println(beanFF.getEstado());
 					facNva.setIva(beanFF.getIva());System.out.println(beanFF.getIva());
-					facNva.setIsrRetenido(beanFF.getIsrRetenido());
+					facNva.setIsrRetenido(beanFF.getIsrRetenido()); System.out.println(beanFF.getIsrRetenido());
 					facNva.setIvaRetenido(beanFF.getIvaRetenido());
 					facNva.setImpuestoCedular(beanFF.getImpuestoCedular());
 					facNva.setViaP(beanFF.getViaP());
@@ -230,11 +231,11 @@ public class LlenaObj {
 							BigDecimal iva = (subtotal.multiply(valorIva)).divide(new BigDecimal("100"));
 							otrosImp = beanFF.getOtrosImpuestos();
 							totalFactura = totalFactura.add(subtotal.add(iva).add(otrosImp));
-							if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+							if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 0 ) {
 								respFacNva.setBandera(datosDao);
 							}else {
 								respFacNva.setBandera(false);
-								respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+								respFacNva.setMensaje("LA SUMA DE RETENCIONES Y DESCUENTO ES MAYOR AL TOTAL DE FACTURA");
 								respFacNva.setConsecutivoA(consecBean);
 								error = true;
 							}
@@ -263,12 +264,12 @@ public class LlenaObj {
 									BigDecimal iva = (subtotalCon.multiply(valorIvaCon)).divide(new BigDecimal("100"));
 									otrosImp = beanFF.getOtrosImpuestos();
 									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
-									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 0 ) {
 										respFacNva.setBandera(datosDao);
 										totalFactura = totalFactura.subtract(otrosImp);
 									}else {
 										respFacNva.setBandera(false);
-										respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+										respFacNva.setMensaje("LA SUMA DE RETENCIONES Y DESCUENTO ES MAYOR AL TOTAL DE FACTURA");
 										respFacNva.setConsecutivoA(consecBean);
 										error = true;
 									}
@@ -343,12 +344,12 @@ public class LlenaObj {
 									BigDecimal iva = (subtotalCon.multiply(valorIvaCon)).divide(new BigDecimal("100"));
 									otrosImp = beanFF.getOtrosImpuestos();
 									totalFactura = totalFactura.add(subtotalCon.add(iva).add(otrosImp));
-									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 1 ) {
+									if(descuenTotal.compareTo(totalFactura) == -1 ||descuenTotal.compareTo(totalFactura) == 0 ) {
 										respFacNva.setBandera(datosDao);
 										totalFactura = totalFactura.subtract(otrosImp);
 									}else {
 										respFacNva.setBandera(false);
-										respFacNva.setMensaje("LOS CALCULOS GENERAN UN TOTAL DE CREDITO MAYOR AL TOTAL DE FACTURA");
+										respFacNva.setMensaje("LA SUMA DE RETENCIONES Y DESCUENTO ES MAYOR AL TOTAL DE FACTURA");
 										respFacNva.setConsecutivoA(consecBean);
 										error = true;
 									}
