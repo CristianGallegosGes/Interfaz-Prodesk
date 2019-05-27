@@ -51,6 +51,7 @@ public class ControlBloqueaDB {
 												informeNC.setCarta(carta);
 												informeNC.setBandera(true);
 												informeNC.setFactura(factura);
+												informeNC.setConsecutivoA(beanfacConp.getConsecutivoA());
 												ListAControlF.add(informeNC);
 											}
 										}
@@ -94,7 +95,7 @@ public class ControlBloqueaDB {
 				int cartav = statusF.getCarta();
 				/*	CREA FACTURA */
 				BeanRespuesta beanfac = creaFac.creaFactura(listaBloque, cartav);	
-				
+				beanfac.setConsecutivoA(statusF.getConsecutivoA());
 				/* CREAR NOTAS DE CREDITO */
 				int factura = beanfac.getFactura();
 				ValidaArregloBO valida = new ValidaArregloBO();
@@ -104,8 +105,11 @@ public class ControlBloqueaDB {
 						informeNC.setCarta(carta);
 						informeNC.setBandera(true);
 						informeNC.setFactura(factura);
+						informeNC.setConsecutivoA(beanfac.getConsecutivoA());
 						ListAControlF.add(informeNC);
 					}
+				}else {
+					ListAControlF.add(beanfac);
 				}
 				
 				}else {

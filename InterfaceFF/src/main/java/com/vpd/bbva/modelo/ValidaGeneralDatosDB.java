@@ -240,8 +240,8 @@ public class ValidaGeneralDatosDB extends GeneralDao{
 					if(nuerror == 0) {
 						resp.setBandera(true);
 						resp.setMensaje(call.getObject(2).toString());
-						if(new Integer(bean.getEmpGasBursa()) > 0) {
-							bean.setDbfideicomiso(call.getObject(4).toString());System.out.println(bean.getDbfideicomiso());
+						if(bean.getEmpGasBursa() != null) {
+							bean.setDbfideicomiso(call.getObject(4).toString()); System.out.println("Error "+bean.getDbfideicomiso());
 						}
 						bean.setDbperiodificacion(call.getObject(5).toString());System.out.println(bean.getDbperiodificacion());
 						bean.setDbproviEjerAnterior(call.getObject(6).toString());System.out.println(bean.getDbproviEjerAnterior());

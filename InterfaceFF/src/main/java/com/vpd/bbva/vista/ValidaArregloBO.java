@@ -89,8 +89,6 @@ try {
 			if(validacion) {
 				break;
 			}
-			BeanRes.setCarta(leeF.getNu_carta());
-			System.out.println(leeF.getNu_carta());
 			
 			String existe = validaDB.existe(leeF.getTp_registro());
 			if(existe != null) {
@@ -120,6 +118,7 @@ try {
 										BeanRes.setFactura(facturaI);
 										BeanRes.setBandera(true);
 										BeanRes.setConsecutivoA(consecutivoA);
+										BeanRes.setCarta(leeF.getNu_carta());
 										validacion = true;
 										break;
 										}else {
@@ -144,6 +143,7 @@ try {
 						/* VALIDACION DE DATOS PARA CREAR UNA NUEVA FACTURA */
 						while(leeF.getTp_registro().equals(notaFactura)) {   /**NF*/
 							BeanRes = objDB.llenaFacConNva(factura,notaFactura); 		/** Validacion de Concepto **/
+							BeanRes.setCarta(leeF.getNu_carta());
 							validacion = true;
 							break;
 						}
