@@ -232,7 +232,7 @@ public class ValidacionDatosCtrol {
 																					// consecutivo
 																					if (noCartaGenerada > 0) {
 																						cartaGenerada = true;
-																						for(BeanFF listaBeanFFDANN : listaBeanFFDAN) {
+																						for(BeanFF listaBeanFFDANN : listaBeanFFIAN) {
 																							listaBeanFFDANN.setNu_carta(noCartaGenerada);
 																						}
 																					}
@@ -848,7 +848,7 @@ public class ValidacionDatosCtrol {
 																				// consecutivo
 																				if (noCartaGenerada > 0) {
 																					cartaGenerada = true;
-																					for(BeanFF listaBeanFFDANN : listaBeanFFDAN) {
+																					for(BeanFF listaBeanFFDANN : listaBeanFFIAN) {
 																						listaBeanFFDANN.setNu_carta(noCartaGenerada);
 																					}
 																				}
@@ -1407,7 +1407,7 @@ public class ValidacionDatosCtrol {
 																						// consecutivo
 																						if (noCartaGenerada > 0) {
 																							cartaGenerada = true;
-																							for(BeanFF listaBeanFFDANN : listaBeanFFDAN) {
+																							for(BeanFF listaBeanFFDANN : listaBeanFFIAN) {
 																								listaBeanFFDANN.setNu_carta(noCartaGenerada);
 																							}
 																						}
@@ -2024,7 +2024,7 @@ public class ValidacionDatosCtrol {
 																					// consecutivo
 																					if (noCartaGenerada > 0) {
 																						cartaGenerada = true;
-																						for(BeanFF listaBeanFFDANN : listaBeanFFDAN) {
+																						for(BeanFF listaBeanFFDANN : listaBeanFFIAN) {
 																							listaBeanFFDANN.setNu_carta(noCartaGenerada);
 																						}
 																					}
