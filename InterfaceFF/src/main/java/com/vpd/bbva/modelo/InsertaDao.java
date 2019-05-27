@@ -216,7 +216,7 @@ public class InsertaDao extends GeneralDao{
 	
 	
 	public Integer InsertNota (BeanNota nota) throws Exception{
-		Integer exito = 0;
+		Integer exito = 1;
 		
 		Conexion obConexion   = new Conexion();
 		Connection con =  obConexion.AbreConexion();
@@ -225,34 +225,34 @@ public class InsertaDao extends GeneralDao{
 		try {			
 			con = obConexion.AbreConexion();
 			call= con.prepareCall(DBConstantes.SICOFE_CALL_SP_INSERT_NOTA);
-			call.setInt(1, nota.getNu_factura());
-			call.setInt(2, nota.getNu_nota());
-			call.setString(3, nota.getTp_nota());
-			call.setString(4, nota.getSt_nota());
-			call.setString(5, nota.getCd_folio_sat());
-			call.setString(6, nota.getNb_servicio());
-			call.setDate(7,  nota.getFh_ini_servicio());
-			call.setDate(8, nota.getFg_fin_servicio());
-			call.setInt(9, nota.getCd_entidad());
-			call.setInt(10, nota.getCd_iva());
-			call.setBigDecimal(11, nota.getIm_iva());
-			call.setBigDecimal(12, nota.getNu_unidad());
-			call.setBigDecimal(13, nota.getIm_sin_iva());
-			call.setBigDecimal(14, nota.getIm_subtotal());
-			call.setString(15, nota.getNb_motivo());
-			call.setString(16, nota.getCd_usr_modifica());
-			call.setString(17, nota.getNb_nombre_xml());
-			call.setString(18, nota.getNb_nombre_pdf());
-			call.setString(19, nota.getTp_carga());
-			call.setString(20, nota.getCd_uso_gral_not2());
-			call.registerOutParameter(21, OracleTypes.NUMBER);
+			call.setInt(1, nota.getNu_factura()); 					System.out.println(nota.getNu_factura());
+			call.setInt(2, nota.getNu_nota());						System.out.println(nota.getNu_nota());
+			call.setString(3, nota.getTp_nota());					System.out.println(nota.getTp_nota());
+			call.setString(4, nota.getSt_nota());					System.out.println(nota.getSt_nota());
+			call.setString(5, nota.getCd_folio_sat());				System.out.println(nota.getCd_folio_sat());
+			call.setString(6, nota.getNb_servicio());				System.out.println(nota.getNb_servicio());
+			call.setDate(7,  nota.getFh_ini_servicio());			System.out.println(nota.getFh_ini_servicio());
+			call.setDate(8, nota.getFg_fin_servicio());				System.out.println( nota.getFg_fin_servicio());
+			call.setInt(9, nota.getCd_entidad());					System.out.println(nota.getCd_entidad());
+			call.setInt(10, nota.getCd_iva());						System.out.println(nota.getCd_iva());
+			call.setBigDecimal(11, nota.getIm_iva());				System.out.println(nota.getIm_iva());
+			call.setBigDecimal(12, nota.getNu_unidad());			System.out.println(nota.getNu_unidad());
+			call.setBigDecimal(13, nota.getIm_sin_iva());			System.out.println(nota.getIm_sin_iva());
+			call.setBigDecimal(14, nota.getIm_subtotal());			System.out.println(nota.getIm_subtotal());
+			call.setString(15, nota.getNb_motivo());				System.out.println(nota.getNb_motivo());
+			call.setString(16, nota.getCd_usr_modifica());			System.out.println(nota.getCd_usr_modifica());
+			call.setString(17, nota.getNb_nombre_xml());			System.out.println(nota.getNb_nombre_xml());
+			call.setString(18, nota.getNb_nombre_pdf());			System.out.println(nota.getNb_nombre_pdf());
+			call.setString(19, nota.getTp_carga());					System.out.println(nota.getTp_carga());
+			call.setString(20, nota.getCd_uso_gral_not2());			System.out.println(nota.getCd_uso_gral_not2());
+			call.registerOutParameter(21, OracleTypes.NUMBER);	
 			call.registerOutParameter(22, OracleTypes.VARCHAR);
 			call.execute();
 			
-			exito = Integer.parseInt(call.getObject(22).toString());
+			exito = new Integer(call.getObject(21).toString());
 			
 		} catch (Exception e) {
-			LOG.warn("Error: " +e );
+			LOG.warn("Error:       " +e );
 			LOG.warn( call.getObject(22).toString());
 		}finally {
 			closeAll(null, null, null, call, con, obConexion);
