@@ -284,7 +284,7 @@ public class ValidacionDatosCtrol {
 																									rutaArchivoSBKP
 																											+ nuevoNombreArc,
 																									cadenaP,
-																									"[ERROR EN LA LINEA"
+																									"[ERROR DAT EN LA LINEA"
 																											+ lineasProcesar.get(
 																													lineaError)
 																											+ " CONSECUTIVO "
@@ -436,7 +436,7 @@ public class ValidacionDatosCtrol {
 																									rutaArchivoSBKP
 																											+ nuevoNombreArc,
 																									cadenaP,
-																									"[ERROR EN LA LINEA"
+																									"[ERROR DAT EN LA LINEA"
 																											+ lineasProcesar.get(
 																													lineaError)
 																											+ " CONSECUTIVO "
@@ -593,7 +593,7 @@ public class ValidacionDatosCtrol {
 																									rutaArchivoSBKP
 																											+ nuevoNombreArc,
 																									cadenaP,
-																									"[ERROR EN LA LINEA"
+																									"[ERROR DAT EN LA LINEA"
 																											+ lineasProcesar.get(
 																													lineaError)
 																											+ " CONSECUTIVO "
@@ -753,7 +753,7 @@ public class ValidacionDatosCtrol {
 																								rutaArchivoSBKP
 																										+ nuevoNombreArc,
 																								cadenaP,
-																								"[ERROR EN LA LINEA"
+																								"[ERROR DAT EN LA LINEA"
 																										+ lineasProcesar
 																												.get(lineaError)
 																										+ " CONSECUTIVO "
@@ -897,7 +897,7 @@ public class ValidacionDatosCtrol {
 																								rutaArchivoSBKP
 																										+ nuevoNombreArc,
 																								cadenaP,
-																								"[ERROR EN LA LINEA"
+																								"[ERROR DAT EN LA LINEA"
 																										+ lineasProcesar
 																												.get(lineaError)
 																										+ " CONSECUTIVO "
@@ -1023,7 +1023,7 @@ public class ValidacionDatosCtrol {
 
 																			escribirArchivoError(
 																					rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																					"[ERROR EN LA LINEA"
+																					"[ERROR DAT EN LA LINEA"
 																							+ cadenaLinea.get(lineaError)
 																							+ " CONSECUTIVO "
 																							+ cadenasProcesar.get(lineaError)
@@ -1129,7 +1129,7 @@ public class ValidacionDatosCtrol {
 
 																		escribirArchivoError(
 																				rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																				"[ERROR EN LA LINEA"
+																				"[ERROR DAT EN LA LINEA"
 																						+ cadenaLinea.get(lineaError)
 																						+ " CONSECUTIVO "
 																						+ cadenasProcesar.get(lineaError)
@@ -1459,7 +1459,7 @@ public class ValidacionDatosCtrol {
 																										rutaArchivoSBKP
 																												+ nuevoNombreArc,
 																										cadenaP,
-																										"[ERROR EN LA LINEA"
+																										"[ERROR DAT EN LA LINEA"
 																												+ lineasProcesar.get(
 																														lineaError)
 																												+ " CONSECUTIVO "
@@ -1611,7 +1611,7 @@ public class ValidacionDatosCtrol {
 																										rutaArchivoSBKP
 																												+ nuevoNombreArc,
 																										cadenaP,
-																										"[ERROR EN LA LINEA"
+																										"[ERROR DAT EN LA LINEA"
 																												+ lineasProcesar.get(
 																														lineaError)
 																												+ " CONSECUTIVO "
@@ -1768,7 +1768,7 @@ public class ValidacionDatosCtrol {
 																										rutaArchivoSBKP
 																												+ nuevoNombreArc,
 																										cadenaP,
-																										"[ERROR EN LA LINEA"
+																										"[ERROR DAT EN LA LINEA"
 																												+ lineasProcesar.get(
 																														lineaError)
 																												+ " CONSECUTIVO "
@@ -1931,7 +1931,7 @@ public class ValidacionDatosCtrol {
 																									rutaArchivoSBKP
 																											+ nuevoNombreArc,
 																									cadenaP,
-																									"[ERROR EN LA LINEA"
+																									"[ERROR DAT EN LA LINEA"
 																											+ lineasProcesar
 																													.get(lineaError)
 																											+ " CONSECUTIVO "
@@ -2074,7 +2074,7 @@ public class ValidacionDatosCtrol {
 																									rutaArchivoSBKP
 																											+ nuevoNombreArc,
 																									cadenaP,
-																									"[ERROR EN LA LINEA"
+																									"[ERROR DAT EN LA LINEA"
 																											+ lineasProcesar
 																													.get(lineaError)
 																											+ " CONSECUTIVO "
@@ -2202,7 +2202,7 @@ public class ValidacionDatosCtrol {
 
 																				escribirArchivoError(
 																						rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																						"[ERROR EN LA LINEA"
+																						"[ERROR DAT EN LA LINEA"
 																								+ cadenaLinea.get(lineaError)
 																								+ " CONSECUTIVO "
 																								+ cadenasProcesar.get(lineaError)
@@ -2312,7 +2312,7 @@ public class ValidacionDatosCtrol {
 
 																			escribirArchivoError(
 																					rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																					"[ERROR EN LA LINEA"
+																					"[ERROR DAT EN LA LINEA"
 																							+ cadenaLinea.get(lineaError)
 																							+ " CONSECUTIVO "
 																							+ cadenasProcesar.get(lineaError)
@@ -2559,7 +2559,7 @@ public class ValidacionDatosCtrol {
 
 																		escribirArchivoError(
 																				rutaArchivoSBKP + nuevoNombreArc, cadenaP,
-																				"[ERROR EN LA LINEA"
+																				"[ERROR DAT EN LA LINEA"
 																						+ cadenaLinea.get(lineaError)
 																						+ " CONSECUTIVO "
 																						+ cadenasProcesar.get(lineaError)
@@ -2776,7 +2776,7 @@ public class ValidacionDatosCtrol {
 
 				} else {
 					log.info("Longitud incorrecta de caracteres");
-					validaPosicionDato.put(1, "ERROR EN LA LINEA" + linea.get(cont)
+					validaPosicionDato.put(1, "ERROR EST EN LA LINEA" + linea.get(cont)
 							+ " LA LONGUITUD DE CARACTERES NO CORRESPONDE A LA ESTABLECIDA");
 					return validaPosicionDato;
 				}
@@ -2796,40 +2796,40 @@ public class ValidacionDatosCtrol {
 				// log.info("Validar Datos Obligatorios de linea " + linea.get(cont));
 				if (validaCamposObli.size() == 0) {
 					if (cadena.substring(0, 10).trim().equals("")) {
-						validaCamposObli.put(1, "ERROR EN LA LINEA" + linea.get(cont)
+						validaCamposObli.put(1, "ERROR EST EN LA LINEA" + linea.get(cont)
 								+ ", EL CAMPO \"CONSECUTIVO ARCHIVO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(28, 30).trim().equals("")) {
 						validaCamposObli.put(2,
-								"ERROR EN LA LIENA" + linea.get(cont) + ", EL CAMPO \"TIPO REGISTRO\" ES OBLIGATORIO");
+								"ERROR EST EN LA LIENA" + linea.get(cont) + ", EL CAMPO \"TIPO REGISTRO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(30, 34).trim().equals("")) {
-						validaCamposObli.put(3, "ERROR EN LA LINEA" + linea.get(cont)
+						validaCamposObli.put(3, "ERROR EST EN LA LINEA" + linea.get(cont)
 								+ ", EL CAMPO \"CONSECUTIVO NOTA/CONCEPTO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(34, 36).trim().equals("")) {
 						validaCamposObli.put(4,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"TIPO CARTA\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(36, 38).trim().equals("")) {
 						validaCamposObli.put(5,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"TIPO PAGO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(38, 48).trim().equals("")) {
 						validaCamposObli.put(6,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"NUMERO DE PROVEEDOR\" ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2837,28 +2837,28 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(48, 52).trim().equals("")) {
 						validaCamposObli.put(7,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"SOCIEDAD RECEPTORA\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(52, 102).trim().equals("")) {
 						validaCamposObli.put(8,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"GLG\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(157, 160).trim().equals("")) {
 						validaCamposObli.put(9,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"MONEDA\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(182, 192).trim().equals("")) {
 						validaCamposObli.put(10,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"CUENTA GPS(CUENTA DE GASTO)\" ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2866,7 +2866,7 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(192, 202).trim().equals("")) {
 						validaCamposObli.put(11,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"USUARIO CREADOR DE CARTA\" ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2874,14 +2874,14 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(202, 206).trim().equals("") || cadena.substring(202, 206).trim().equals("0")) {
 						validaCamposObli.put(12,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"CENTRO DE COSTOS\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(206, 306).trim().equals("")) {
 						validaCamposObli.put(13,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"DESCRIPCIÓN DEL SERVICIO\" ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2889,7 +2889,7 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(306, 316).trim().equals("")) {
 						validaCamposObli.put(14,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"FECHA INICIO SERVICIO\" ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2897,42 +2897,42 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(316, 326).trim().equals("")) {
 						validaCamposObli.put(15,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"FECHA FIN SERVICIO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(326, 328).trim().equals("")) {
 						validaCamposObli.put(16,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"ESTADO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(328, 340).trim().equals("")) {
 						validaCamposObli.put(17,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"IMPORTE UNITARIO\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(340, 353).trim().equals("")) {
 						validaCamposObli.put(18,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"NÚMERO DE UNIDADES\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(353, 365).trim().equals("")) {
 						validaCamposObli.put(19,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"IVA\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
 
 					if (cadena.substring(425, 427).trim().equals("SI")
 							&& cadena.substring(427, 457).trim().equals("")) {
-						validaCamposObli.put(20, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+						validaCamposObli.put(20, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 								+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
 								+ " EL CAMPO \"NUMERO DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"COMPROBACION\" en la linea: "
 								+ linea);
@@ -2941,7 +2941,7 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(425, 427).trim().equals("SI")
 							&& cadena.substring(457, 467).trim().equals("")) {
-						validaCamposObli.put(21, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+						validaCamposObli.put(21, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 								+ cadena.substring(0, 10) + "/" + cadena.substring(30, 34)
 								+ " EL CAMPO \"FECHA DE ANTICIPO\" es obligatorio, ya que se informo con el valor SI el campo \"COMPROBACION\" en la linea: "
 								+ linea);
@@ -2964,7 +2964,7 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(518, 521).trim().equals("")) {
 						validaCamposObli.put(24,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"ESTATUS FACTURA\" Factura ES OBLIGATORIO");
 						return validaCamposObli;
@@ -2972,7 +2972,7 @@ public class ValidacionDatosCtrol {
 
 					if (cadena.substring(521, 524).trim().equals("")) {
 						validaCamposObli.put(25,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"APLICATIVO ORIGEN\" ES OBLIGATORIO");
 						return validaCamposObli;
 					}
@@ -2997,7 +2997,7 @@ public class ValidacionDatosCtrol {
 				if(!(cadena.substring(145, 157).trim().equals(""))) {
 				boolean validarNuPep = validaNupep(cadena.substring(145, 157).trim());
 					if (validarNuPep) {
-						validaCamposDepen.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+						validaCamposDepen.put(1, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 								+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 								+ " EL VALOR DEL CAMPO \"NUMERO DE PEP\" ES INCORRECTO, YA QUE NO CUMPLE CON EL FORMATO \"00000000-000\"");
 						return validaCamposDepen;
@@ -3005,7 +3005,7 @@ public class ValidacionDatosCtrol {
 				}
 				if ((!cadena.substring(174, 182).trim().equals(""))
 						&& cadena.substring(174, 182).trim().equals(cadena.substring(38, 48).trim())) {
-					validaCamposDepen.put(2, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaCamposDepen.put(2, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO \"RECEPTOR ALTERNATIVO\" DEBE DE SER DIFERENTE AL VALOR DE \"NUMERO DE PROVEEDOR\"");
 					return validaCamposDepen;
@@ -3014,14 +3014,14 @@ public class ValidacionDatosCtrol {
 				boolean validarFechaFin = validaFecha(cadena.substring(306, 316).trim(),
 						cadena.substring(316, 326).trim());
 				if (validarFechaFin) {
-					validaCamposDepen.put(3, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaCamposDepen.put(3, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO \"FECHA FIN SERVICIO\" DEBE DE SER MAYOR AL CAMPO DE \"FECHA INICIO SERVICIO\"");
 					return validaCamposDepen;
 				}
 
 				if (cadena.substring(28, 30).trim().equals("NC") && cadena.substring(425, 427).trim().equals("SI")) {
-					validaCamposDepen.put(4, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaCamposDepen.put(4, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR: \"SI\", DEL CAMPO CAMPO \"COMPROBACION\" SOLO APLICA PARA \"TIPO REGISTRO\": \"NF\"");
 					return validaCamposDepen;
@@ -3029,7 +3029,7 @@ public class ValidacionDatosCtrol {
 
 				if ((cadena.substring(467, 468).trim().equals("") || cadena.substring(467, 468).trim() == null)
 						&& !(cadena.substring(468, 488).trim().equals(""))) {
-					validaCamposDepen.put(5, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaCamposDepen.put(5, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO CAMPO \"CUENTA BANCARIA\" NO PUEDE VENIR INFORMADO, YA QUE SOLO APLICA CUANDO EL CAMPO \"VÍA DE PAGO\": ESTA INFORMADO");
 					return validaCamposDepen;
@@ -3037,7 +3037,7 @@ public class ValidacionDatosCtrol {
 
 				if ((cadena.substring(467, 468).trim().equals("") || cadena.substring(467, 468).trim() == null)
 						&& !(cadena.substring(4488, 498).trim().equals(""))) {
-					validaCamposDepen.put(5, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaCamposDepen.put(5, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadena.substring(0, 10).trim() + "/" + cadena.substring(30, 34).trim()
 							+ " EL VALOR DEL CAMPO CAMPO \"TIPO BANCO\" NO PUEDE VENIR INFORMADO, YA QUE SOLO APLICA CUANDO EL CAMPO \"VÍA DE PAGO\": ESTA INFORMADO");
 					return validaCamposDepen;
@@ -3102,7 +3102,7 @@ public class ValidacionDatosCtrol {
 				if (validaTipoDato.size() == 0) {
 					if (!(isNumeric(cadena.substring(0, 10).trim()))) {
 						validaTipoDato.put(1,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" NO ES NUMERICO");
 						return validaTipoDato;
@@ -3110,21 +3110,21 @@ public class ValidacionDatosCtrol {
 
 					if (!cadena.substring(10, 19).trim().equals("") && !(isNumeric(cadena.substring(10, 19).trim()))) {
 						validaTipoDato.put(2,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE CARTA\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!cadena.substring(19, 28).trim().equals("") && !(isNumeric(cadena.substring(19, 28).trim()))) {
 						validaTipoDato.put(3,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE FACTURA\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!(isNumeric(cadena.substring(30, 34).trim()))) {
 						validaTipoDato.put(4,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"CONSECUTIVO NOTA\\CONCEPTO\" NO ES NUMERICO");
 						return validaTipoDato;
@@ -3132,7 +3132,7 @@ public class ValidacionDatosCtrol {
 
 					if (!(isNumeric(cadena.substring(38, 48).trim()))) {
 						validaTipoDato.put(5,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"NUMERO DE PROVEEDOR\" NO ES NUMERICO");
 						return validaTipoDato;
@@ -3141,7 +3141,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(164, 174).trim().equals("")
 							&& !(isNumeric(cadena.substring(164, 174).trim()))) {
 						validaTipoDato.put(6,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"CONTRATO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3149,7 +3149,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(174, 182).trim().equals("")
 							&& !(isNumeric(cadena.substring(174, 182).trim()))) {
 						validaTipoDato.put(7,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34)
 										+ " EL CAMPO \"RECEPTOR ALTERNATIVO\" NO ES NUMERICO");
 						return validaTipoDato;
@@ -3157,28 +3157,28 @@ public class ValidacionDatosCtrol {
 
 					if (!(isNumeric(cadena.substring(182, 192).trim()))) {
 						validaTipoDato.put(8,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA GPS\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!(isNumeric(cadena.substring(326, 328).trim()))) {
 						validaTipoDato.put(9,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"ESTADO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!(isDecimal(cadena.substring(328, 340).trim()))) {
 						validaTipoDato.put(10,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"IMPORTE UNITARIO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!(isDecimal(cadena.substring(340, 353).trim()))) {
 						validaTipoDato.put(11,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE UNIDADES\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3186,7 +3186,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(365, 377).trim().equals("")
 							&& !(isDecimal(cadena.substring(365, 377).trim()))) {
 						validaTipoDato.put(12,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"ISR RETENIDO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3194,7 +3194,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(377, 389).trim().equals("")
 							&& !(isDecimal(cadena.substring(377, 389).trim()))) {
 						validaTipoDato.put(13,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"IVA RETENIDO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3202,7 +3202,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(389, 401).trim().equals("")
 							&& !(isDecimal(cadena.substring(389, 401).trim()))) {
 						validaTipoDato.put(14,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"IMPUESTO CEDULAR\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3210,7 +3210,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(401, 413).trim().contentEquals("")
 							&& !(isDecimal(cadena.substring(401, 413).trim()))) {
 						validaTipoDato.put(15,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"OTROS IMPUESTOS\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3218,14 +3218,14 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(413, 425).trim().equals("")
 							&& !(isDecimal(cadena.substring(413, 425).trim()))) {
 						validaTipoDato.put(16,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"DESCUENTO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
 
 					if (!(isNumeric(cadena.substring(468, 488).trim()))) {
 						validaTipoDato.put(17,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"CUENTA BANCARIA\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3233,7 +3233,7 @@ public class ValidacionDatosCtrol {
 					if (!cadena.substring(498, 518).trim().equals("")
 							&& !(isNumeric(cadena.substring(498, 518).trim()))) {
 						validaTipoDato.put(18,
-								"ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
+								"ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO " + cadena.substring(0, 10) + "/"
 										+ cadena.substring(30, 34) + " EL CAMPO \"NUMERO DE ACTIVO\" NO ES NUMERICO");
 						return validaTipoDato;
 					}
@@ -3257,7 +3257,7 @@ public class ValidacionDatosCtrol {
 			if (!cadenaAtual.substring(0, 10).trim().equals("")) {
 				if (!(Integer.parseInt((cadenasProcesar.get(0).substring(0, 10).trim().equals("")) ? "0"
 						: cadenasProcesar.get(cont).substring(0, 10).trim()) > consecutivoArchivo)) {
-					validaConsecutivoMayor.put(1, "ERROR EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
+					validaConsecutivoMayor.put(1, "ERROR EST EN LA LINEA" + linea.get(cont) + " CONSECUTIVO "
 							+ cadenaProcesar.substring(0, 10).trim() + "/" + cadenaProcesar.substring(30, 34).trim()
 							+ " EL CAMPO \"CONSECUTIVO ARCHIVO\" ES MENOR AL CONSECUTIVO ARCHIVO DE LA LINEA ANTERIOR ANTERIOR");
 					return validaConsecutivoMayor;
