@@ -32,6 +32,7 @@ public class ControlFlujo {
 
 		if (validacionArchivo != null && validacionArchivo.size() > 0) {
 			log.info("Comienza Procesamiento de Archivos");
+			int contA = 0;
 			for (String archivo : validacionArchivo) {
 				log.info("Archivo a procesar: \n" + archivo);
 				ValidacionDatosCtrol validaD = new ValidacionDatosCtrol();
@@ -41,10 +42,12 @@ public class ControlFlujo {
 					String rutaDirBkpE = properties.getPropertiesFile("archivos_bkpentrada");
 					String rutaDirS = properties.getPropertiesFile("archivos_salida");
 					validaD.procesarDatos(archivo, rutaDirSBKP, rutaDirBkpE, rutaDirS);
+					contA++;
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
+			log.info("Total de archivos procesados:" + contA);
 		} else {
 			log.error("No hay archivos por procesar");
 		}

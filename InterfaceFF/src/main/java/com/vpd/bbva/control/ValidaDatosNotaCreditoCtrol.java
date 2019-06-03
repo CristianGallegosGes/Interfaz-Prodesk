@@ -274,4 +274,37 @@ public class ValidaDatosNotaCreditoCtrol {
 		return validaNotaCreditoConse;
 	}
 	
+	public HashMap<Integer, String> validaNotasFacturaAsociada(ArrayList<BeanFF> listaCadenas, List<Integer> linea) {
+		
+		ArrayList<BeanFF> listaCadena = new ArrayList<BeanFF>();
+		List<Integer> lin = new ArrayList<Integer>();
+		int con = 0;
+		boolean validaNF = false;
+		for(BeanFF listaCa : listaCadenas) {
+			if(validaNF == false) {
+				if(listaCa.getTp_registro().equals("NF")) {
+					validaNF = true;
+				}
+				listaCadena.add(listaCa);
+				lin.add(linea.get(con));
+				con++;
+			}
+		}
+		
+		HashMap<Integer, String> validaNotasFacturaA = new HashMap<Integer, String>();
+		int contLinea = 0;
+		for (int i = 1; i <= listaCadenas.size(); i++) {
+			if(validaNF == false) {
+				validaNotasFacturaA.put(1, "ERROR EST EN LINEA" + lin.get(contLinea) + " CONSECUTIVO  "
+						+ listaCadena.get(contLinea).getConsecArch() + "/"
+						+ listaCadena.get(contLinea).getConsecNota() + " NO SE PUEDE CREAR NOTA DE CREDITO SIN FACTURA");
+				return validaNotasFacturaA;
+			}
+			
+			contLinea++;
+		}
+		
+		return validaNotasFacturaA;
+	}
+	
 }
